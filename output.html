@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>アウトプット月間 | IOB</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@300;400;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green-dark:  #2d5a3d;
+      --green-mid:   #4a7c59;
+      --green-light: #7aaa8a;
+      --green-pale:  #e8f2eb;
+      --beige:       #f7f4ef;
+      --cream:       #fdfcf9;
+      --gold:        #c9a84c;
+      --gold-light:  #e8d5a0;
+      --text-dark:   #1a2e22;
+      --text-mid:    #4a5e52;
+      --text-light:  #8a9e92;
+      --white:       #ffffff;
+      --red:         #c0392b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: var(--beige);
+      color: var(--text-dark);
+      min-height: 100vh;
+    }
+
+    /* ===== HEADER ===== */
+    header {
+      background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%);
+      padding: 20px 24px;
+      text-align: center;
+      box-shadow: 0 2px 16px rgba(45,90,61,0.2);
+    }
+    header .label {
+      color: var(--green-light);
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+    header h1 {
+      color: var(--white);
+      font-size: 18px;
+      font-weight: 400;
+      margin-top: 4px;
+      font-family: 'Noto Serif JP', serif;
+    }
+    .header-nav {
+      margin-top: 12px;
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+    }
+    .header-nav a {
+      color: rgba(255,255,255,0.7);
+      font-size: 12px;
+      text-decoration: none;
+      padding: 4px 12px;
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 100px;
+      transition: all 0.2s;
+    }
+    .header-nav a:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+    /* ===== MAIN ===== */
+    main {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+    }
+
+    /* ===== WEEK BADGE ===== */
+    .week-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--gold);
+      color: var(--white);
+      padding: 6px 16px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+    }
+
+    /* ===== QUESTION CARD ===== */
+    .question-card {
+      background: var(--white);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(45,90,61,0.1);
+      margin-bottom: 28px;
+    }
+    .question-header {
+      background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%);
+      padding: 32px 36px;
+    }
+    .question-header .theme-label {
+      color: var(--green-light);
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .question-header .question-text {
+      color: var(--white);
+      font-size: 19px;
+      font-family: 'Noto Serif JP', serif;
+      font-weight: 400;
+      line-height: 1.7;
+    }
+    .question-header .question-desc {
+      color: rgba(255,255,255,0.65);
+      font-size: 13px;
+      margin-top: 12px;
+      line-height: 1.7;
+    }
+    .question-period {
+      padding: 14px 36px;
+      background: var(--green-pale);
+      font-size: 12px;
+      color: var(--green-mid);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ===== FORM ===== */
+    .form-card {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 36px;
+      box-shadow: 0 4px 24px rgba(45,90,61,0.08);
+    }
+    .form-card h2 {
+      font-size: 16px;
+      color: var(--green-dark);
+      font-weight: 700;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } }
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-mid);
+      margin-bottom: 6px;
+    }
+    .form-group label .required {
+      color: var(--red);
+      margin-left: 4px;
+      font-size: 11px;
+    }
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid #d4e6da;
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: 'Noto Sans JP', sans-serif;
+      color: var(--text-dark);
+      background: var(--cream);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      resize: vertical;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--green-mid);
+      box-shadow: 0 0 0 3px rgba(74,124,89,0.12);
+      background: var(--white);
+    }
+    .form-group textarea { min-height: 180px; line-height: 1.8; }
+    .char-count {
+      font-size: 11px;
+      color: var(--text-light);
+      text-align: right;
+      margin-top: 4px;
+    }
+
+    /* ===== SUBMIT BUTTON ===== */
+    .btn-submit {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%);
+      color: var(--white);
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: opacity 0.2s, transform 0.1s;
+      letter-spacing: 1px;
+    }
+    .btn-submit:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-submit:active { transform: translateY(0); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    /* ===== EMPTY STATE ===== */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      background: var(--white);
+      border-radius: 20px;
+      box-shadow: 0 4px 24px rgba(45,90,61,0.08);
+    }
+    .empty-state .icon { font-size: 56px; margin-bottom: 16px; }
+    .empty-state h2 { font-size: 18px; color: var(--green-dark); margin-bottom: 8px; }
+    .empty-state p { font-size: 14px; color: var(--text-light); line-height: 1.7; }
+
+    /* ===== SUCCESS STATE ===== */
+    #success-screen {
+      display: none;
+      text-align: center;
+      padding: 60px 20px;
+      background: var(--white);
+      border-radius: 20px;
+      box-shadow: 0 8px 40px rgba(45,90,61,0.12);
+    }
+    #success-screen .icon { font-size: 64px; margin-bottom: 20px; }
+    #success-screen h2 {
+      font-size: 22px;
+      color: var(--green-dark);
+      font-family: 'Noto Serif JP', serif;
+      font-weight: 400;
+      margin-bottom: 12px;
+    }
+    #success-screen p { font-size: 14px; color: var(--text-mid); line-height: 1.8; }
+    .btn-back {
+      display: inline-block;
+      margin-top: 28px;
+      padding: 12px 32px;
+      background: var(--green-pale);
+      color: var(--green-dark);
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-back:hover { background: #d0e8d6; }
+
+    /* ===== LOADING ===== */
+    .loading {
+      text-align: center;
+      padding: 60px;
+      color: var(--text-light);
+      font-size: 14px;
+    }
+
+    /* ===== ERROR ===== */
+    .error-msg {
+      background: #fdf2f2;
+      border: 1.5px solid #e8b5b5;
+      color: var(--red);
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      margin-top: 12px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <p class="label">Organic Business Institute</p>
+  <h1>アウトプット月間</h1>
+  <nav class="header-nav">
+    <a href="output-mypage.html">📋 マイページ（過去の回答）</a>
+  </nav>
+</header>
+
+<main>
+  <!-- ローディング -->
+  <div id="loading" class="loading">読み込み中...</div>
+
+  <!-- 問いなし -->
+  <div id="no-question" style="display:none;">
+    <div class="empty-state">
+      <div class="icon">🌱</div>
+      <h2>今週の問いはまだ設定されていません</h2>
+      <p>次のアウトプット月間が始まるまでお待ちください。<br>毎週月曜日に新しい問いが届きます。</p>
+    </div>
+  </div>
+
+  <!-- 問いあり + フォーム -->
+  <div id="question-form" style="display:none;">
+    <div class="week-badge">
+      <span>📅</span>
+      <span id="week-label">第1週</span>
+    </div>
+
+    <div class="question-card">
+      <div class="question-header">
+        <p class="theme-label" id="theme-label">テーマ</p>
+        <p class="question-text" id="question-text">問いが表示されます</p>
+        <p class="question-desc" id="question-desc"></p>
+      </div>
+      <div class="question-period">
+        <span>📆</span>
+        <span id="period-text">期間</span>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <h2>✏️ あなたの回答を書いてください</h2>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>お名前<span class="required">必須</span></label>
+          <input type="text" id="input-name" placeholder="山田 花子" maxlength="50">
+        </div>
+        <div class="form-group">
+          <label>部署名<span class="required">必須</span></label>
+          <input type="text" id="input-dept" placeholder="例: 営業部、企画部" maxlength="50">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>メールアドレス<span style="color:var(--text-light); font-size:11px; margin-left:6px;">（マイページで回答を確認するときに使います）</span></label>
+        <input type="email" id="input-email" placeholder="example@company.com" maxlength="100">
+      </div>
+
+      <div class="form-group">
+        <label>あなたの回答<span class="required">必須</span></label>
+        <textarea id="input-answer" placeholder="自由に書いてください。正解はありません。思ったこと、気づいたことをそのまま書くだけでOKです。"></textarea>
+        <div class="char-count"><span id="char-count">0</span> 文字</div>
+      </div>
+
+      <div class="error-msg" id="error-msg"></div>
+
+      <button class="btn-submit" id="btn-submit" onclick="submitAnswer()">回答を送信する</button>
+    </div>
+  </div>
+
+  <!-- 送信完了 -->
+  <div id="success-screen">
+    <div class="icon">🌿</div>
+    <h2>回答を受け付けました！</h2>
+    <p id="success-msg">ありがとうございます。<br>あなたのアウトプットが届きました。</p>
+    <button class="btn-back" onclick="resetForm()">別の回答をする</button>
+  </div>
+</main>
+
+<script>
+  let currentQuestion = null;
+
+  // ===== 初期化 =====
+  window.addEventListener('DOMContentLoaded', loadCurrentQuestion);
+
+  async function loadCurrentQuestion() {
+    try {
+      const res = await fetch('/api/output/question/current');
+      const data = await res.json();
+      document.getElementById('loading').style.display = 'none';
+
+      if (!data.question) {
+        document.getElementById('no-question').style.display = 'block';
+        return;
+      }
+
+      currentQuestion = data.question;
+      renderQuestion(currentQuestion);
+      document.getElementById('question-form').style.display = 'block';
+    } catch (e) {
+      document.getElementById('loading').textContent = '読み込みに失敗しました。ページを再読み込みしてください。';
+    }
+  }
+
+  function renderQuestion(q) {
+    document.getElementById('week-label').textContent = `第${q.weekNumber}週：${q.monthLabel}`;
+    document.getElementById('theme-label').textContent = q.theme || 'テーマ';
+    document.getElementById('question-text').textContent = q.question;
+    const desc = document.getElementById('question-desc');
+    desc.textContent = q.description || '';
+    desc.style.display = q.description ? 'block' : 'none';
+
+    const start = formatDate(q.startDate);
+    const end   = formatDate(q.endDate);
+    document.getElementById('period-text').textContent = `回答期間：${start} 〜 ${end}`;
+  }
+
+  function formatDate(str) {
+    const d = new Date(str);
+    return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
+  }
+
+  // 文字数カウント
+  document.getElementById('input-answer').addEventListener('input', function() {
+    document.getElementById('char-count').textContent = this.value.length;
+  });
+
+  // ===== 送信 =====
+  async function submitAnswer() {
+    const name   = document.getElementById('input-name').value.trim();
+    const dept   = document.getElementById('input-dept').value.trim();
+    const email  = document.getElementById('input-email').value.trim();
+    const answer = document.getElementById('input-answer').value.trim();
+    const errEl  = document.getElementById('error-msg');
+
+    errEl.style.display = 'none';
+
+    if (!name) return showError('お名前を入力してください');
+    if (!dept) return showError('部署名を入力してください');
+    if (!answer) return showError('回答を入力してください');
+
+    const btn = document.getElementById('btn-submit');
+    btn.disabled = true;
+    btn.textContent = '送信中...';
+
+    try {
+      const res = await fetch('/api/output/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          email,
+          department: dept,
+          questionId: currentQuestion.id,
+          answer
+        })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || '送信に失敗しました');
+
+      document.getElementById('question-form').style.display = 'none';
+      const successMsg = document.getElementById('success-msg');
+      successMsg.innerHTML = `${name}さん、ありがとうございます！<br>あなたのアウトプットがしっかり届きました。<br>引き続き学びを続けていきましょう。`;
+      document.getElementById('success-screen').style.display = 'block';
+    } catch (e) {
+      showError(e.message);
+      btn.disabled = false;
+      btn.textContent = '回答を送信する';
+    }
+  }
+
+  function showError(msg) {
+    const el = document.getElementById('error-msg');
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+
+  function resetForm() {
+    document.getElementById('input-name').value = '';
+    document.getElementById('input-dept').value = '';
+    document.getElementById('input-email').value = '';
+    document.getElementById('input-answer').value = '';
+    document.getElementById('char-count').textContent = '0';
+    document.getElementById('error-msg').style.display = 'none';
+    document.getElementById('btn-submit').disabled = false;
+    document.getElementById('btn-submit').textContent = '回答を送信する';
+    document.getElementById('success-screen').style.display = 'none';
+    document.getElementById('question-form').style.display = 'block';
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>管理画面 | IOB 事前診断</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green-dark:  #2d5a3d;
+      --green-mid:   #4a7c59;
+      --green-light: #7aaa8a;
+      --green-pale:  #e8f2eb;
+      --beige:       #f7f4ef;
+      --cream:       #fdfcf9;
+      --gold:        #c9a84c;
+      --text-dark:   #1a2e22;
+      --text-mid:    #4a5e52;
+      --text-light:  #8a9e92;
+      --white:       #ffffff;
+      --red:         #c0392b;
+      --red-pale:    #fdf2f2;
+      --orange:      #d68910;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: var(--beige);
+      color: var(--text-dark);
+      min-height: 100vh;
+    }
+
+    /* ===== LOGIN ===== */
+    #login-screen {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .login-card {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 8px 40px rgba(45,90,61,0.15);
+      text-align: center;
+    }
+    .login-card .leaf { font-size: 48px; margin-bottom: 16px; }
+    .login-card h1 { font-size: 20px; color: var(--green-dark); font-weight: 700; }
+    .login-card p { font-size: 13px; color: var(--text-light); margin-top: 8px; }
+    .login-card input {
+      width: 100%;
+      margin-top: 24px;
+      padding: 14px 16px;
+      border: 1.5px solid #d4e6da;
+      border-radius: 10px;
+      font-size: 15px;
+      font-family: 'Noto Sans JP', sans-serif;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .login-card input:focus { border-color: var(--green-mid); }
+    .login-err { color: var(--red); font-size: 13px; margin-top: 8px; min-height: 20px; }
+    .btn-login {
+      width: 100%;
+      margin-top: 16px;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%);
+      color: var(--white);
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .btn-login:hover { transform: translateY(-2px); }
+
+    /* ===== ADMIN LAYOUT ===== */
+    #admin-screen { display: none; }
+    .admin-header {
+      background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%);
+      padding: 20px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .admin-header-left h1 {
+      color: var(--white);
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .admin-header-left p { color: var(--green-light); font-size: 13px; }
+    .header-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn-action {
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: opacity 0.2s;
+    }
+    .btn-action:hover { opacity: 0.85; }
+    .btn-csv { background: var(--gold); color: var(--white); }
+    .btn-refresh { background: rgba(255,255,255,0.15); color: var(--white); border: 1px solid rgba(255,255,255,0.3); }
+    .btn-logout { background: rgba(255,255,255,0.1); color: var(--white); border: 1px solid rgba(255,255,255,0.2); }
+
+    /* ===== STATS CARDS ===== */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+      padding: 24px 32px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .stat-card {
+      background: var(--white);
+      border-radius: 14px;
+      padding: 20px 24px;
+      box-shadow: 0 2px 12px rgba(45,90,61,0.08);
+    }
+    .stat-card .stat-label { font-size: 12px; color: var(--text-light); letter-spacing: 1px; }
+    .stat-card .stat-value { font-size: 32px; font-weight: 700; color: var(--green-dark); margin-top: 4px; }
+    .stat-card .stat-sub { font-size: 12px; color: var(--text-mid); margin-top: 2px; }
+
+    /* ===== TABLE ===== */
+    .table-section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 32px 80px;
+    }
+    .table-section h2 {
+      font-size: 16px;
+      color: var(--green-dark);
+      font-weight: 700;
+      margin-bottom: 16px;
+      padding-left: 12px;
+      border-left: 4px solid var(--green-mid);
+    }
+    .table-wrap {
+      background: var(--white);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 16px rgba(45,90,61,0.08);
+    }
+    .search-bar {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--green-pale);
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .search-bar input {
+      flex: 1;
+      padding: 10px 14px;
+      border: 1.5px solid #d4e6da;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: 'Noto Sans JP', sans-serif;
+      outline: none;
+    }
+    .search-bar input:focus { border-color: var(--green-mid); }
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      background: var(--green-dark);
+      color: var(--white);
+      padding: 14px 16px;
+      text-align: left;
+      font-size: 13px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    tbody tr {
+      border-bottom: 1px solid var(--green-pale);
+      transition: background 0.15s;
+      cursor: pointer;
+    }
+    tbody tr:hover { background: var(--green-pale); }
+    tbody tr.expanded { background: #f0f8f3; }
+    tbody td {
+      padding: 14px 16px;
+      font-size: 13px;
+      color: var(--text-dark);
+    }
+    .score-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .score-high { background: var(--green-pale); color: var(--green-dark); }
+    .score-mid  { background: #fef9e7; color: var(--orange); }
+    .score-low  { background: var(--red-pale); color: var(--red); }
+
+    /* ===== DETAIL ROW ===== */
+    .detail-row { display: none; }
+    .detail-row.show { display: table-row; }
+    .detail-cell {
+      padding: 0 !important;
+      background: #f8fdf9;
+    }
+    .detail-inner {
+      padding: 24px 28px;
+      border-top: 2px solid var(--green-light);
+    }
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .detail-section h4 {
+      font-size: 13px;
+      color: var(--text-light);
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+    .domain-mini {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 10px;
+      border-radius: 6px;
+      margin-bottom: 6px;
+      font-size: 12px;
+    }
+    .domain-mini-good { background: var(--green-pale); color: var(--green-dark); }
+    .domain-mini-mid  { background: #fef9e7; color: var(--orange); }
+    .domain-mini-low  { background: var(--red-pale); color: var(--red); }
+    .detail-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--green-pale);
+    }
+    .btn-del {
+      padding: 8px 16px;
+      border-radius: 8px;
+      background: var(--red-pale);
+      color: var(--red);
+      border: 1px solid var(--red);
+      font-size: 12px;
+      font-family: 'Noto Sans JP', sans-serif;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-del:hover { background: var(--red); color: var(--white); }
+
+    /* ===== EMPTY STATE ===== */
+    .empty-state {
+      padding: 60px 20px;
+      text-align: center;
+      color: var(--text-light);
+    }
+    .empty-state .empty-icon { font-size: 48px; margin-bottom: 16px; }
+    .empty-state p { font-size: 14px; }
+
+    /* ===== DOMAIN CHART ===== */
+    .domain-avg-section {
+      max-width: 1200px;
+      margin: 0 auto 24px;
+      padding: 0 32px;
+    }
+    .domain-avg-card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 28px 32px;
+      box-shadow: 0 2px 16px rgba(45,90,61,0.08);
+    }
+    .domain-avg-card h2 {
+      font-size: 16px;
+      color: var(--green-dark);
+      font-weight: 700;
+      margin-bottom: 20px;
+      padding-left: 12px;
+      border-left: 4px solid var(--gold);
+    }
+    .avg-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+    }
+    .avg-item { }
+    .avg-name { font-size: 12px; color: var(--text-mid); margin-bottom: 6px; }
+    .avg-bar-bg { height: 8px; background: var(--green-pale); border-radius: 4px; overflow: hidden; }
+    .avg-bar-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+    .avg-pct { font-size: 14px; font-weight: 700; color: var(--green-dark); margin-top: 4px; }
+
+    @media (max-width: 700px) {
+      .admin-header { flex-direction: column; align-items: flex-start; padding: 16px 20px; }
+      .stats-row, .table-section, .domain-avg-section { padding: 16px 16px; }
+      .detail-grid { grid-template-columns: 1fr; }
+      table { font-size: 12px; }
+      thead th, tbody td { padding: 10px 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ==================== ログイン ==================== -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="leaf">🔐</div>
+    <h1>管理者ログイン</h1>
+    <p>IOB 事前診断アセスメント 管理画面</p>
+    <input type="password" id="password-input" placeholder="パスワードを入力" onkeydown="if(event.key==='Enter') login()">
+    <div class="login-err" id="login-err"></div>
+    <button class="btn-login" onclick="login()">ログイン</button>
+  </div>
+</div>
+
+<!-- ==================== 管理画面 ==================== -->
+<div id="admin-screen">
+  <div class="admin-header">
+    <div class="admin-header-left">
+      <h1>📊 事前診断アセスメント 管理画面</h1>
+      <p id="last-updated">読み込み中...</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-action btn-refresh" onclick="loadResponses()">🔄 更新</button>
+      <button class="btn-action btn-csv" onclick="exportCSV()">📥 CSVダウンロード</button>
+      <button class="btn-action btn-logout" onclick="logout()">ログアウト</button>
+    </div>
+  </div>
+
+  <!-- 統計カード -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-label">TOTAL</div>
+      <div class="stat-value" id="stat-total">—</div>
+      <div class="stat-sub">受験者数</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">AVG SCORE</div>
+      <div class="stat-value" id="stat-avg">—</div>
+      <div class="stat-sub">平均スコア</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">HIGH (≥80%)</div>
+      <div class="stat-value" id="stat-high">—</div>
+      <div class="stat-sub">高スコア者</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">NEEDS SUPPORT</div>
+      <div class="stat-value" id="stat-low">—</div>
+      <div class="stat-sub">要サポート（＜50%）</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">LATEST</div>
+      <div class="stat-value" id="stat-latest" style="font-size:16px; margin-top:8px;">—</div>
+      <div class="stat-sub">最新受験日</div>
+    </div>
+  </div>
+
+  <!-- 分野別平均 -->
+  <div class="domain-avg-section">
+    <div class="domain-avg-card">
+      <h2>📈 分野別平均正解率（全受験者）</h2>
+      <div class="avg-grid" id="avg-grid">
+        <div style="color:var(--text-light); font-size:13px;">データを読み込み中...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 回答一覧テーブル -->
+  <div class="table-section">
+    <h2>📋 受験者一覧</h2>
+    <div class="table-wrap">
+      <div class="search-bar">
+        <input type="text" id="search-input" placeholder="🔍 名前・メール・職業で絞り込み" oninput="filterTable()">
+        <span id="filter-count" style="font-size:13px; color:var(--text-light); white-space:nowrap;"></span>
+      </div>
+      <div style="overflow-x:auto;">
+        <table id="responses-table">
+          <thead>
+            <tr>
+              <th>受験日時</th>
+              <th>名前</th>
+              <th>メール</th>
+              <th>職業</th>
+              <th>スコア</th>
+              <th>正解数</th>
+              <th>詳細</th>
+            </tr>
+          </thead>
+          <tbody id="table-body">
+            <tr><td colspan="7" style="padding:40px; text-align:center; color:var(--text-light);">読み込み中...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======== Firebase SDK ======== -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+// ======== Firebase 設定 ========
+// ※ なっちゃんの firebaseConfig をここに貼り付けてください
+const firebaseConfig = {
+  apiKey: "AIzaSyB9MDI8rsd1NRscUtUt0sbXLP_4HVZwXEA",
+  authDomain: "organic-knowledge-assessment.firebaseapp.com",
+  projectId: "organic-knowledge-assessment",
+  storageBucket: "organic-knowledge-assessment.firebasestorage.app",
+  messagingSenderId: "522044690677",
+  appId: "1:522044690677:web:eadb0e866fecd525c835bc"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// ======== 管理パスワード ========
+// ※ 変更したい場合はこちらを書き換えてください
+const ADMIN_PASSWORD = 'iob-admin-2024';
+</script>
+
+<script>
+const DOMAIN_LABELS = {
+  basics:        { label: 'オーガニックの基礎',  icon: '🌱', color: '#2d5a3d' },
+  chemicals:     { label: '有害化学物質',         icon: '⚠️', color: '#8b5e3c' },
+  certification: { label: '認証制度',             icon: '🏅', color: '#c9a84c' },
+  cosmetics:     { label: 'オーガニックコスメ',   icon: '💄', color: '#9b59b6' },
+  science:       { label: '栄養素',               icon: '🔬', color: '#2471a3' },
+  disease:       { label: '病気の予防リスク',     icon: '🩺', color: '#c0392b' },
+  environment:   { label: '環境・エシカル・SDGs', icon: '🌍', color: '#1a7a4a' }
+};
+
+let adminPassword = '';
+let allResponses = [];
+let expandedId = null;
+
+// ========================================
+// ログイン（クライアントサイド認証）
+// ========================================
+async function login() {
+  const pw = document.getElementById('password-input').value;
+  if (!pw) return;
+
+  if (pw !== ADMIN_PASSWORD) {
+    document.getElementById('login-err').textContent = 'パスワードが違います。';
+    return;
+  }
+
+  adminPassword = pw;
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('admin-screen').style.display = 'block';
+  await loadResponses();
+}
+
+function logout() {
+  adminPassword = '';
+  allResponses = [];
+  document.getElementById('password-input').value = '';
+  document.getElementById('login-err').textContent = '';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('admin-screen').style.display = 'none';
+}
+
+// ========================================
+// データ更新（Firebase Firestore）
+// ========================================
+async function loadResponses() {
+  try {
+    const snapshot = await db.collection('responses')
+      .orderBy('timestamp', 'desc')
+      .get();
+    allResponses = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    renderAll();
+  } catch (err) {
+    console.error('データ取得エラー:', err);
+    alert('データの読み込みに失敗しました。ページを再読み込みしてください。');
+  }
+}
+
+// ========================================
+// 全体レンダリング
+// ========================================
+function renderAll() {
+  document.getElementById('last-updated').textContent =
+    `最終更新: ${new Date().toLocaleString('ja-JP')}`;
+  renderStats();
+  renderDomainAvg();
+  renderTable(allResponses);
+}
+
+// ========================================
+// 統計カード
+// ========================================
+function renderStats() {
+  const total = allResponses.length;
+  document.getElementById('stat-total').textContent = total;
+
+  if (total === 0) {
+    document.getElementById('stat-avg').textContent = '—';
+    document.getElementById('stat-high').textContent = '—';
+    document.getElementById('stat-low').textContent = '—';
+    document.getElementById('stat-latest').textContent = '—';
+    return;
+  }
+
+  const avg = Math.round(allResponses.reduce((s, r) => s + r.score.percentage, 0) / total);
+  const high = allResponses.filter(r => r.score.percentage >= 80).length;
+  const low  = allResponses.filter(r => r.score.percentage < 50).length;
+  const latest = new Date(allResponses[0].timestamp).toLocaleDateString('ja-JP');
+
+  document.getElementById('stat-avg').textContent = avg + '%';
+  document.getElementById('stat-high').textContent = high + '人';
+  document.getElementById('stat-low').textContent  = low + '人';
+  document.getElementById('stat-latest').textContent = latest;
+}
+
+// ========================================
+// 分野別平均
+// ========================================
+function renderDomainAvg() {
+  if (allResponses.length === 0) {
+    document.getElementById('avg-grid').innerHTML = '<div style="color:var(--text-light); font-size:13px;">まだデータがありません。</div>';
+    return;
+  }
+
+  let html = '';
+  Object.entries(DOMAIN_LABELS).forEach(([key, domain]) => {
+    const vals = allResponses
+      .filter(r => r.domainScores && r.domainScores[key])
+      .map(r => r.domainScores[key].correct / r.domainScores[key].total * 100);
+    const avg = vals.length > 0 ? Math.round(vals.reduce((a, b) => a + b, 0) / vals.length) : 0;
+    const barColor = avg >= 70 ? '#2d5a3d' : avg >= 50 ? '#c9a84c' : '#c0392b';
+
+    html += `
+      <div class="avg-item">
+        <div class="avg-name">${domain.icon} ${domain.label}</div>
+        <div class="avg-bar-bg">
+          <div class="avg-bar-fill" style="width:0%; background:${barColor};" data-w="${avg}%"></div>
+        </div>
+        <div class="avg-pct" style="color:${barColor};">${avg}%</div>
+      </div>
+    `;
+  });
+  document.getElementById('avg-grid').innerHTML = html;
+  setTimeout(() => {
+    document.querySelectorAll('.avg-bar-fill').forEach(el => {
+      el.style.width = el.dataset.w;
+    });
+  }, 100);
+}
+
+// ========================================
+// テーブルレンダリング
+// ========================================
+function renderTable(responses) {
+  const tbody = document.getElementById('table-body');
+  document.getElementById('filter-count').textContent =
+    responses.length === allResponses.length
+      ? `全${allResponses.length}件`
+      : `${responses.length} / ${allResponses.length}件`;
+
+  if (responses.length === 0) {
+    tbody.innerHTML = `
+      <tr><td colspan="7">
+        <div class="empty-state">
+          <div class="empty-icon">📭</div>
+          <p>まだ受験データがありません</p>
+        </div>
+      </td></tr>`;
+    return;
+  }
+
+  let html = '';
+  responses.forEach(r => {
+    const dt = new Date(r.timestamp);
+    const dateStr = dt.toLocaleDateString('ja-JP') + ' ' + dt.toLocaleTimeString('ja-JP', {hour:'2-digit', minute:'2-digit'});
+    const pct = r.score.percentage;
+    const badgeClass = pct >= 80 ? 'score-high' : pct >= 50 ? 'score-mid' : 'score-low';
+
+    html += `
+      <tr onclick="toggleDetail('${r.id}')" id="row-${r.id}">
+        <td>${dateStr}</td>
+        <td><strong>${escHtml(r.name)}</strong></td>
+        <td>${escHtml(r.email || '—')}</td>
+        <td>${escHtml(r.occupation || '—')}</td>
+        <td><span class="score-badge ${badgeClass}">${pct}%</span></td>
+        <td>${r.score.correct} / ${r.score.total}問</td>
+        <td style="color:var(--green-mid);">▼ 詳細</td>
+      </tr>
+      <tr class="detail-row" id="detail-${r.id}">
+        <td colspan="7" class="detail-cell">
+          <div class="detail-inner">
+            ${buildDetailHtml(r)}
+          </div>
+        </td>
+      </tr>
+    `;
+  });
+  tbody.innerHTML = html;
+}
+
+// ========================================
+// 詳細HTML生成
+// ========================================
+function buildDetailHtml(r) {
+  let domainHtml = '';
+  Object.entries(DOMAIN_LABELS).forEach(([key, domain]) => {
+    const d = r.domainScores ? r.domainScores[key] : null;
+    if (!d) return;
+    const pct = Math.round((d.correct / d.total) * 100);
+    const cls = pct >= 70 ? 'domain-mini-good' : pct >= 50 ? 'domain-mini-mid' : 'domain-mini-low';
+    domainHtml += `
+      <div class="domain-mini ${cls}">
+        <span>${domain.icon} ${domain.label}</span>
+        <strong>${pct}% (${d.correct}/${d.total})</strong>
+      </div>
+    `;
+  });
+
+  return `
+    <div class="detail-grid">
+      <div class="detail-section">
+        <h4>基本情報</h4>
+        <p style="font-size:13px; line-height:2;">
+          <strong>名前：</strong>${escHtml(r.name)}<br>
+          <strong>メール：</strong>${escHtml(r.email || '—')}<br>
+          <strong>職業：</strong>${escHtml(r.occupation || '—')}<br>
+          <strong>受験日時：</strong>${new Date(r.timestamp).toLocaleString('ja-JP')}<br>
+          <strong>総合スコア：</strong><span style="font-weight:700; color:var(--green-dark);">${r.score.percentage}% (${r.score.correct}/${r.score.total}問)</span>
+        </p>
+      </div>
+      <div class="detail-section">
+        <h4>分野別スコア</h4>
+        ${domainHtml}
+      </div>
+    </div>
+    <div class="detail-actions">
+      <button class="btn-del" onclick="deleteResponse('${r.id}', event)">🗑️ この回答を削除</button>
+    </div>
+  `;
+}
+
+// ========================================
+// 詳細行トグル
+// ========================================
+function toggleDetail(id) {
+  const detail = document.getElementById('detail-' + id);
+  const row    = document.getElementById('row-' + id);
+  const isOpen = detail.classList.contains('show');
+
+  // 全部閉じる
+  document.querySelectorAll('.detail-row').forEach(el => el.classList.remove('show'));
+  document.querySelectorAll('tbody tr').forEach(el => el.classList.remove('expanded'));
+
+  if (!isOpen) {
+    detail.classList.add('show');
+    row.classList.add('expanded');
+    expandedId = id;
+  } else {
+    expandedId = null;
+  }
+}
+
+// ========================================
+// 検索絞り込み
+// ========================================
+function filterTable() {
+  const q = document.getElementById('search-input').value.toLowerCase();
+  const filtered = q
+    ? allResponses.filter(r =>
+        r.name.toLowerCase().includes(q) ||
+        (r.email || '').toLowerCase().includes(q) ||
+        (r.occupation || '').toLowerCase().includes(q)
+      )
+    : allResponses;
+  renderTable(filtered);
+}
+
+// ========================================
+// 削除（Firebase Firestore）
+// ========================================
+async function deleteResponse(id, event) {
+  event.stopPropagation();
+  if (!confirm('この回答データを削除してよいですか？元に戻せません。')) return;
+
+  try {
+    await db.collection('responses').doc(id).delete();
+    allResponses = allResponses.filter(r => r.id !== id);
+    renderAll();
+  } catch (err) {
+    console.error('削除エラー:', err);
+    alert('削除に失敗しました。');
+  }
+}
+
+// ========================================
+// CSVエクスポート（クライアントサイド生成）
+// ========================================
+function exportCSV() {
+  if (allResponses.length === 0) { alert('データがありません。'); return; }
+
+  const domainKeys = Object.keys(DOMAIN_LABELS);
+  const headers = [
+    '受験日時', '名前', 'メール', '部署',
+    '総合スコア(%)', '正解数', '全問数',
+    ...domainKeys.map(d => `${DOMAIN_LABELS[d].label}(%)`),
+    ...domainKeys.map(d => `${DOMAIN_LABELS[d].label}(正解/全問)`),
+  ];
+
+  const rows = [headers];
+  allResponses.forEach(r => {
+    const dt = new Date(r.timestamp).toLocaleString('ja-JP');
+    const ds = r.domainScores || {};
+    const row = [
+      dt, r.name || '', r.email || '', r.occupation || '',
+      r.score?.percentage ?? '', r.score?.correct ?? '', r.score?.total ?? '',
+    ];
+    domainKeys.forEach(d => {
+      const dd = ds[d] || {};
+      row.push(dd.correct != null && dd.total ? Math.round(dd.correct / dd.total * 100) : '');
+    });
+    domainKeys.forEach(d => {
+      const dd = ds[d] || {};
+      row.push(dd.correct != null ? `${dd.correct}/${dd.total}` : '');
+    });
+    rows.push(row);
+  });
+
+  const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
+  const bom = '\uFEFF';
+  const blob = new Blob([bom + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `iob-quiz-${new Date().toISOString().slice(0, 10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ========================================
+// XSS対策
+// ========================================
+function escHtml(str) {
+  if (!str) return '';
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+</script>
+</body>
+</html>

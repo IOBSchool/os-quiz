@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>管理画面 | IOB アウトプット月間</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green-dark:  #2d5a3d;
+      --green-mid:   #4a7c59;
+      --green-light: #7aaa8a;
+      --green-pale:  #e8f2eb;
+      --beige:       #f7f4ef;
+      --cream:       #fdfcf9;
+      --gold:        #c9a84c;
+      --text-dark:   #1a2e22;
+      --text-mid:    #4a5e52;
+      --text-light:  #8a9e92;
+      --white:       #ffffff;
+      --red:         #c0392b;
+      --red-pale:    #fdf2f2;
+      --orange:      #d68910;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Noto Sans JP', sans-serif; background: var(--beige); color: var(--text-dark); min-height: 100vh; }
+
+    /* ===== LOGIN ===== */
+    #login-screen { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+    .login-card {
+      background: var(--white); border-radius: 20px; padding: 48px 40px;
+      width: 100%; max-width: 420px; box-shadow: 0 8px 40px rgba(45,90,61,0.15); text-align: center;
+    }
+    .login-card .leaf { font-size: 48px; margin-bottom: 16px; }
+    .login-card h1 { font-size: 20px; color: var(--green-dark); font-weight: 700; }
+    .login-card p { font-size: 13px; color: var(--text-light); margin-top: 8px; }
+    .login-card input {
+      width: 100%; margin-top: 24px; padding: 14px 16px;
+      border: 1.5px solid #d4e6da; border-radius: 10px; font-size: 15px;
+      font-family: 'Noto Sans JP', sans-serif; color: var(--text-dark); background: var(--cream);
+    }
+    .login-card input:focus { outline: none; border-color: var(--green-mid); }
+    .login-error { color: var(--red); font-size: 13px; margin-top: 10px; display: none; }
+    .btn-login {
+      width: 100%; margin-top: 16px; padding: 14px;
+      background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
+      color: var(--white); border: none; border-radius: 10px; font-size: 15px;
+      font-weight: 700; cursor: pointer; transition: opacity 0.2s;
+    }
+    .btn-login:hover { opacity: 0.9; }
+
+    /* ===== MAIN LAYOUT ===== */
+    #main-screen { display: none; }
+    header {
+      background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
+      padding: 16px 28px; display: flex; align-items: center; justify-content: space-between;
+      box-shadow: 0 2px 12px rgba(45,90,61,0.2);
+    }
+    .header-left .label { color: var(--green-light); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; }
+    .header-left h1 { color: var(--white); font-size: 16px; font-weight: 700; margin-top: 2px; }
+    .btn-logout {
+      background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.8); border: 1px solid rgba(255,255,255,0.3);
+      padding: 6px 16px; border-radius: 100px; font-size: 12px; cursor: pointer;
+    }
+    .btn-logout:hover { background: rgba(255,255,255,0.25); }
+
+    /* ===== TABS ===== */
+    .tabs { background: var(--white); border-bottom: 1px solid #e0ede4; display: flex; overflow-x: auto; }
+    .tab-btn {
+      padding: 14px 22px; font-size: 13px; font-weight: 500; color: var(--text-mid);
+      background: none; border: none; border-bottom: 3px solid transparent;
+      cursor: pointer; white-space: nowrap; transition: all 0.15s;
+    }
+    .tab-btn:hover { color: var(--green-dark); }
+    .tab-btn.active { color: var(--green-dark); border-bottom-color: var(--green-dark); font-weight: 700; }
+
+    /* ===== TAB CONTENT ===== */
+    .tab-content { display: none; max-width: 900px; margin: 0 auto; padding: 28px 20px 80px; }
+    .tab-content.active { display: block; }
+
+    /* ===== SECTION TITLE ===== */
+    .section-title {
+      font-size: 15px; font-weight: 700; color: var(--green-dark);
+      margin-bottom: 18px; display: flex; align-items: center; gap: 8px;
+    }
+
+    /* ===== CARD ===== */
+    .card {
+      background: var(--white); border-radius: 16px; padding: 24px;
+      box-shadow: 0 2px 12px rgba(45,90,61,0.07); margin-bottom: 20px;
+    }
+
+    /* ===== FORM ===== */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { margin-bottom: 12px; }
+    .form-group label { display: block; font-size: 12px; font-weight: 500; color: var(--text-mid); margin-bottom: 5px; }
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%; padding: 10px 12px; border: 1.5px solid #d4e6da; border-radius: 8px;
+      font-size: 13px; font-family: 'Noto Sans JP', sans-serif; color: var(--text-dark);
+      background: var(--cream); resize: vertical;
+    }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+      outline: none; border-color: var(--green-mid); background: var(--white);
+    }
+    .form-group textarea { min-height: 80px; }
+    .form-full { grid-column: 1 / -1; }
+
+    /* ===== BUTTONS ===== */
+    .btn { padding: 9px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: opacity 0.15s; }
+    .btn:hover { opacity: 0.85; }
+    .btn-primary { background: var(--green-dark); color: var(--white); }
+    .btn-danger { background: var(--red-pale); color: var(--red); border: 1px solid #e8b5b5; }
+    .btn-secondary { background: var(--green-pale); color: var(--green-dark); }
+    .btn-gold { background: var(--gold); color: var(--white); }
+    .btn-sm { padding: 5px 12px; font-size: 12px; }
+
+    /* ===== QUESTION LIST ===== */
+    .question-item {
+      border: 1.5px solid #d4e6da; border-radius: 12px; padding: 18px 20px;
+      margin-bottom: 12px; background: var(--cream); position: relative;
+    }
+    .question-item.current { border-color: var(--gold); background: #fdf9ee; }
+    .question-item .qi-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; }
+    .qi-badge {
+      background: var(--green-pale); color: var(--green-dark);
+      padding: 3px 10px; border-radius: 100px; font-size: 11px; font-weight: 700; white-space: nowrap;
+    }
+    .qi-badge.current-badge { background: var(--gold); color: var(--white); }
+    .qi-question { font-size: 14px; color: var(--text-dark); line-height: 1.6; flex: 1; }
+    .qi-meta { font-size: 11px; color: var(--text-light); margin-bottom: 10px; }
+    .qi-actions { display: flex; gap: 8px; }
+
+    /* ===== FILTERS ===== */
+    .filter-bar {
+      display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+      background: var(--white); border-radius: 12px; padding: 16px 20px;
+      margin-bottom: 16px; box-shadow: 0 2px 8px rgba(45,90,61,0.06);
+    }
+    .filter-bar select, .filter-bar input {
+      padding: 8px 12px; border: 1.5px solid #d4e6da; border-radius: 8px;
+      font-size: 13px; font-family: 'Noto Sans JP', sans-serif; color: var(--text-dark);
+      background: var(--cream); min-width: 160px;
+    }
+    .filter-bar select:focus, .filter-bar input:focus { outline: none; border-color: var(--green-mid); }
+
+    /* ===== RESPONSE TABLE ===== */
+    .resp-table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { background: var(--green-dark); color: var(--white); padding: 10px 14px; text-align: left; font-weight: 500; white-space: nowrap; }
+    td { padding: 10px 14px; border-bottom: 1px solid var(--green-pale); vertical-align: top; }
+    tr:hover td { background: #f5fbf7; }
+    .td-answer { max-width: 280px; white-space: pre-wrap; word-break: break-word; line-height: 1.6; }
+    .td-dept { white-space: nowrap; }
+    .tag-dept {
+      display: inline-block; background: var(--green-pale); color: var(--green-mid);
+      padding: 2px 8px; border-radius: 100px; font-size: 11px;
+    }
+
+    /* ===== STATS ===== */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .stat-card {
+      background: var(--white); border-radius: 14px; padding: 20px 22px;
+      box-shadow: 0 2px 12px rgba(45,90,61,0.07); text-align: center;
+    }
+    .stat-card .stat-label { font-size: 11px; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+    .stat-card .stat-value { font-size: 36px; font-weight: 700; color: var(--green-dark); line-height: 1; }
+    .stat-card .stat-sub { font-size: 12px; color: var(--text-light); margin-top: 4px; }
+    .stat-card.gold .stat-value { color: var(--gold); }
+
+    .question-stat {
+      background: var(--white); border-radius: 14px; padding: 22px 24px;
+      box-shadow: 0 2px 12px rgba(45,90,61,0.07); margin-bottom: 16px;
+    }
+    .qs-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+    .qs-week { background: var(--gold); color: var(--white); padding: 3px 10px; border-radius: 100px; font-size: 11px; font-weight: 700; }
+    .qs-title { font-size: 14px; color: var(--text-dark); line-height: 1.5; flex: 1; }
+
+    .rate-bar-wrap { margin-bottom: 16px; }
+    .rate-bar-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-mid); margin-bottom: 6px; }
+    .rate-bar-track { background: var(--green-pale); border-radius: 100px; height: 10px; overflow: hidden; }
+    .rate-bar-fill { height: 100%; background: var(--green-mid); border-radius: 100px; transition: width 0.6s ease; }
+
+    .dept-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .dept-table th { background: var(--green-pale); color: var(--green-dark); padding: 8px 14px; text-align: left; font-weight: 600; }
+    .dept-table td { padding: 8px 14px; border-bottom: 1px solid var(--green-pale); }
+    .dept-table tr:last-child td { border-bottom: none; }
+    .rate-pill {
+      display: inline-block; padding: 2px 10px; border-radius: 100px; font-size: 11px; font-weight: 700;
+    }
+    .rate-high { background: #e8f2eb; color: #2d5a3d; }
+    .rate-mid  { background: #fef9e7; color: #c9a84c; }
+    .rate-low  { background: #fdf2f2; color: #c0392b; }
+    .rate-none { background: #f0f0f0; color: #8a9e92; }
+
+    /* ===== SETTINGS ===== */
+    .settings-section { margin-bottom: 28px; }
+    .settings-section h3 { font-size: 14px; font-weight: 700; color: var(--green-dark); margin-bottom: 14px; }
+    .dept-settings-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .dept-settings-row input[type="text"] { flex: 1; }
+    .dept-settings-row input[type="number"] { width: 100px; }
+
+    /* ===== MISC ===== */
+    .empty { text-align: center; padding: 40px; color: var(--text-light); font-size: 13px; }
+    .success-toast {
+      position: fixed; bottom: 24px; right: 24px; background: var(--green-dark);
+      color: var(--white); padding: 12px 24px; border-radius: 12px; font-size: 13px;
+      font-weight: 500; box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      transform: translateY(80px); opacity: 0; transition: all 0.3s; z-index: 1000;
+    }
+    .success-toast.show { transform: translateY(0); opacity: 1; }
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+      z-index: 500; justify-content: center; align-items: flex-start; padding: 40px 20px; overflow-y: auto;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--white); border-radius: 20px; padding: 32px; width: 100%; max-width: 560px;
+      box-shadow: 0 16px 60px rgba(0,0,0,0.2); margin: auto;
+    }
+    .modal h3 { font-size: 16px; color: var(--green-dark); font-weight: 700; margin-bottom: 20px; }
+    .modal-footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+  </style>
+</head>
+<body>
+
+<!-- ===== LOGIN ===== -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="leaf">🌿</div>
+    <h1>アウトプット月間 管理画面</h1>
+    <p>IOB スタッフ専用</p>
+    <input type="password" id="login-pw" placeholder="管理者パスワード" onkeydown="if(event.key==='Enter')doLogin()">
+    <p class="login-error" id="login-error">パスワードが違います</p>
+    <button class="btn-login" onclick="doLogin()">ログイン</button>
+  </div>
+</div>
+
+<!-- ===== MAIN ===== -->
+<div id="main-screen">
+  <header>
+    <div class="header-left">
+      <p class="label">IOB — Admin</p>
+      <h1>アウトプット月間 管理画面</h1>
+    </div>
+    <button class="btn-logout" onclick="doLogout()">ログアウト</button>
+  </header>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('questions')">📋 問い管理</button>
+    <button class="tab-btn" onclick="switchTab('responses')">💬 回答一覧</button>
+    <button class="tab-btn" onclick="switchTab('stats')">📊 参加率</button>
+    <button class="tab-btn" onclick="switchTab('settings')">⚙️ 設定</button>
+  </div>
+
+  <!-- ===== TAB: 問い管理 ===== -->
+  <div id="tab-questions" class="tab-content active">
+    <div class="card">
+      <p class="section-title">➕ 新しい問いを追加</p>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>月ラベル（例: 2026年6月）</label>
+          <input type="text" id="q-month" placeholder="2026年6月">
+        </div>
+        <div class="form-group">
+          <label>週番号（1〜4）</label>
+          <select id="q-week">
+            <option value="1">第1週</option>
+            <option value="2">第2週</option>
+            <option value="3">第3週</option>
+            <option value="4">第4週</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>開始日</label>
+          <input type="date" id="q-start">
+        </div>
+        <div class="form-group">
+          <label>終了日</label>
+          <input type="date" id="q-end">
+        </div>
+        <div class="form-group">
+          <label>テーマ（例: オーガニックの基礎）</label>
+          <input type="text" id="q-theme" placeholder="オーガニックの基礎">
+        </div>
+        <div class="form-group form-full">
+          <label>問い（受講者に見せる質問文）</label>
+          <textarea id="q-text" rows="3" placeholder="例: あなたの担当業務と「オーガニック」の接点を探してみましょう…"></textarea>
+        </div>
+        <div class="form-group form-full">
+          <label>補足説明（任意）</label>
+          <input type="text" id="q-desc" placeholder="例: 正解はありません。自由に書いてください。">
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="createQuestion()">問いを追加する</button>
+    </div>
+
+    <p class="section-title">📅 登録済みの問い</p>
+    <div id="questions-list">
+      <div class="empty">読み込み中...</div>
+    </div>
+  </div>
+
+  <!-- ===== TAB: 回答一覧 ===== -->
+  <div id="tab-responses" class="tab-content">
+    <div class="filter-bar">
+      <select id="filter-question" onchange="loadResponses()">
+        <option value="">すべての問い</option>
+      </select>
+      <select id="filter-dept" onchange="loadResponses()">
+        <option value="">すべての部署</option>
+      </select>
+      <span id="resp-count" style="font-size:13px; color:var(--text-light); margin-left:auto;"></span>
+      <button class="btn btn-gold btn-sm" onclick="exportCsv()">📥 CSV出力</button>
+    </div>
+    <div class="card" style="padding:0; overflow:hidden;">
+      <div class="resp-table-wrap">
+        <table id="resp-table">
+          <thead>
+            <tr>
+              <th>日時</th>
+              <th>名前</th>
+              <th>部署</th>
+              <th>週</th>
+              <th>回答</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="resp-tbody">
+            <tr><td colspan="6" class="empty">読み込み中...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TAB: 参加率 ===== -->
+  <div id="tab-stats" class="tab-content">
+    <div id="stats-container">
+      <div class="empty">読み込み中...</div>
+    </div>
+  </div>
+
+  <!-- ===== TAB: 設定 ===== -->
+  <div id="tab-settings" class="tab-content">
+    <div class="card">
+      <div class="settings-section">
+        <h3>📩 メールレッスン受講者の総数</h3>
+        <div style="display:flex; gap:12px; align-items:center;">
+          <input type="number" id="setting-total" placeholder="例: 100" style="width:150px; padding:10px 12px; border:1.5px solid #d4e6da; border-radius:8px; font-size:14px; font-family:'Noto Sans JP',sans-serif;">
+          <span style="font-size:13px; color:var(--text-light);">人</span>
+        </div>
+        <p style="font-size:12px; color:var(--text-light); margin-top:8px;">参加率の計算に使います（例: 100人中30人が回答 = 30%）</p>
+      </div>
+
+      <div class="settings-section">
+        <h3>🏢 部署別の受講者数</h3>
+        <p style="font-size:12px; color:var(--text-light); margin-bottom:14px;">部署ごとの参加率を計算するために設定します。未設定の部署は「－」と表示されます。</p>
+        <div id="dept-rows"></div>
+        <button class="btn btn-secondary btn-sm" onclick="addDeptRow()" style="margin-top:8px;">＋ 部署を追加</button>
+      </div>
+
+      <button class="btn btn-primary" onclick="saveSettings()">設定を保存する</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 回答詳細モーダル ===== -->
+<div class="modal-overlay" id="resp-modal">
+  <div class="modal">
+    <h3>💬 回答の詳細</h3>
+    <div id="modal-content"></div>
+    <div class="modal-footer">
+      <button class="btn btn-danger" id="modal-delete-btn">削除</button>
+      <button class="btn btn-secondary" onclick="closeModal()">閉じる</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TOAST ===== -->
+<div class="success-toast" id="toast"></div>
+
+<script>
+  let adminPw = '';
+  let allResponses = [];
+  let allQuestions = [];
+  let currentRespId = null;
+
+  // ===== AUTH =====
+  function doLogin() {
+    const pw = document.getElementById('login-pw').value;
+    fetch('/api/admin/output/questions', { headers: { 'x-admin-password': pw } })
+      .then(r => {
+        if (!r.ok) { document.getElementById('login-error').style.display = 'block'; return; }
+        adminPw = pw;
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('main-screen').style.display = 'block';
+        loadAll();
+      });
+  }
+
+  function doLogout() {
+    adminPw = '';
+    document.getElementById('main-screen').style.display = 'none';
+    document.getElementById('login-screen').style.display = 'flex';
+    document.getElementById('login-pw').value = '';
+    document.getElementById('login-error').style.display = 'none';
+  }
+
+  // ===== TABS =====
+  function switchTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    event.target.classList.add('active');
+    document.getElementById('tab-' + tab).classList.add('active');
+    if (tab === 'responses') loadResponses();
+    if (tab === 'stats') loadStats();
+    if (tab === 'settings') loadSettings();
+  }
+
+  // ===== LOAD ALL =====
+  async function loadAll() {
+    await loadQuestions();
+    populateQuestionFilter();
+  }
+
+  // ===== QUESTIONS =====
+  async function loadQuestions() {
+    const r = await apiFetch('/api/admin/output/questions');
+    allQuestions = await r.json();
+    renderQuestions();
+  }
+
+  function renderQuestions() {
+    const today = new Date().toISOString().slice(0, 10);
+    const container = document.getElementById('questions-list');
+    if (!allQuestions.length) {
+      container.innerHTML = '<div class="empty">問いがまだ登録されていません</div>';
+      return;
+    }
+    container.innerHTML = allQuestions.map(q => {
+      const isCurrent = q.startDate <= today && today <= q.endDate;
+      return `<div class="question-item ${isCurrent ? 'current' : ''}">
+        <div class="qi-header">
+          <span class="qi-badge ${isCurrent ? 'current-badge' : ''}">${isCurrent ? '▶ 今週' : '第'+q.weekNumber+'週'}</span>
+          <div>
+            <div class="qi-question">${escHtml(q.question)}</div>
+            <div class="qi-meta" style="margin-top:6px;">${escHtml(q.monthLabel)} ／ テーマ: ${escHtml(q.theme||'―')} ／ 期間: ${q.startDate} 〜 ${q.endDate}</div>
+            ${q.description ? `<div style="font-size:12px;color:var(--text-light);margin-top:2px;">補足: ${escHtml(q.description)}</div>` : ''}
+          </div>
+        </div>
+        <div class="qi-actions">
+          <button class="btn btn-secondary btn-sm" onclick="openEditModal('${q.id}')">編集</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteQuestion('${q.id}')">削除</button>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  async function createQuestion() {
+    const body = {
+      monthLabel: document.getElementById('q-month').value.trim(),
+      weekNumber: document.getElementById('q-week').value,
+      startDate: document.getElementById('q-start').value,
+      endDate: document.getElementById('q-end').value,
+      theme: document.getElementById('q-theme').value.trim(),
+      question: document.getElementById('q-text').value.trim(),
+      description: document.getElementById('q-desc').value.trim()
+    };
+    if (!body.question || !body.startDate || !body.endDate) return showToast('問い・開始日・終了日は必須です', true);
+    const r = await apiFetch('/api/admin/output/questions', 'POST', body);
+    if (r.ok) {
+      showToast('問いを追加しました');
+      document.getElementById('q-text').value = '';
+      document.getElementById('q-desc').value = '';
+      await loadQuestions();
+      populateQuestionFilter();
+    }
+  }
+
+  async function deleteQuestion(id) {
+    if (!confirm('この問いを削除しますか？')) return;
+    const r = await apiFetch('/api/admin/output/questions/' + id, 'DELETE');
+    if (r.ok) { showToast('削除しました'); await loadQuestions(); populateQuestionFilter(); }
+  }
+
+  // 編集モーダル（インライン）
+  function openEditModal(id) {
+    const q = allQuestions.find(x => x.id === id);
+    if (!q) return;
+    const fields = [
+      { id:'eq-month', label:'月ラベル', value: q.monthLabel, type:'text' },
+      { id:'eq-week', label:'週番号', value: q.weekNumber, type:'number' },
+      { id:'eq-start', label:'開始日', value: q.startDate, type:'date' },
+      { id:'eq-end', label:'終了日', value: q.endDate, type:'date' },
+      { id:'eq-theme', label:'テーマ', value: q.theme||'', type:'text' },
+      { id:'eq-desc', label:'補足説明', value: q.description||'', type:'text' }
+    ];
+    const modal = document.getElementById('resp-modal');
+    document.getElementById('modal-content').innerHTML = `
+      ${fields.map(f => `<div class="form-group"><label>${f.label}</label><input type="${f.type}" id="${f.id}" value="${escHtml(String(f.value||''))}"></div>`).join('')}
+      <div class="form-group"><label>問い</label><textarea id="eq-text" rows="3">${escHtml(q.question)}</textarea></div>
+    `;
+    document.getElementById('modal-delete-btn').style.display = 'none';
+    document.querySelector('.modal h3').textContent = '✏️ 問いを編集';
+    const footer = document.querySelector('.modal-footer');
+    footer.innerHTML = `
+      <button class="btn btn-primary" onclick="saveEditQuestion('${id}')">保存する</button>
+      <button class="btn btn-secondary" onclick="closeModal()">キャンセル</button>
+    `;
+    modal.classList.add('open');
+  }
+
+  async function saveEditQuestion(id) {
+    const body = {
+      monthLabel: document.getElementById('eq-month').value.trim(),
+      weekNumber: document.getElementById('eq-week').value,
+      startDate: document.getElementById('eq-start').value,
+      endDate: document.getElementById('eq-end').value,
+      theme: document.getElementById('eq-theme').value.trim(),
+      question: document.getElementById('eq-text').value.trim(),
+      description: document.getElementById('eq-desc').value.trim()
+    };
+    const r = await apiFetch('/api/admin/output/questions/' + id, 'PUT', body);
+    if (r.ok) {
+      showToast('更新しました');
+      closeModal();
+      await loadQuestions();
+      populateQuestionFilter();
+    }
+  }
+
+  // ===== RESPONSES =====
+  function populateQuestionFilter() {
+    const sel = document.getElementById('filter-question');
+    const cur = sel.value;
+    sel.innerHTML = '<option value="">すべての問い</option>' +
+      allQuestions.map(q => `<option value="${q.id}">${q.monthLabel} 第${q.weekNumber}週: ${q.question.slice(0,25)}…</option>`).join('');
+    sel.value = cur;
+  }
+
+  async function loadResponses() {
+    const qid  = document.getElementById('filter-question').value;
+    const dept = document.getElementById('filter-dept').value;
+    let url = '/api/admin/output/responses?';
+    if (qid)  url += `questionId=${encodeURIComponent(qid)}&`;
+    if (dept) url += `department=${encodeURIComponent(dept)}&`;
+    const r = await apiFetch(url);
+    allResponses = await r.json();
+
+    // 部署フィルター更新
+    const depts = [...new Set(allResponses.map(x => x.department))].sort();
+    const deptSel = document.getElementById('filter-dept');
+    const curDept = deptSel.value;
+    deptSel.innerHTML = '<option value="">すべての部署</option>' + depts.map(d => `<option value="${d}">${d}</option>`).join('');
+    if (depts.includes(curDept)) deptSel.value = curDept;
+
+    document.getElementById('resp-count').textContent = `${allResponses.length}件`;
+    renderResponses(allResponses);
+  }
+
+  function renderResponses(data) {
+    const tbody = document.getElementById('resp-tbody');
+    if (!data.length) { tbody.innerHTML = '<tr><td colspan="6" class="empty">回答がありません</td></tr>'; return; }
+    tbody.innerHTML = data.map(r => `
+      <tr>
+        <td style="font-size:11px;white-space:nowrap;">${formatDate(r.timestamp)}</td>
+        <td style="white-space:nowrap;">${escHtml(r.name)}</td>
+        <td class="td-dept"><span class="tag-dept">${escHtml(r.department)}</span></td>
+        <td style="white-space:nowrap;font-size:12px;">第${r.weekNumber}週</td>
+        <td class="td-answer">${escHtml(r.answer.slice(0,80))}${r.answer.length>80?'…':''}</td>
+        <td><button class="btn btn-secondary btn-sm" onclick="openRespDetail('${r.id}')">詳細</button></td>
+      </tr>
+    `).join('');
+  }
+
+  function openRespDetail(id) {
+    const r = allResponses.find(x => x.id === id);
+    if (!r) return;
+    currentRespId = id;
+    document.querySelector('.modal h3').textContent = '💬 回答の詳細';
+    document.getElementById('modal-content').innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+        <div><p style="font-size:11px;color:var(--text-light);">名前</p><p style="font-size:14px;">${escHtml(r.name)}</p></div>
+        <div><p style="font-size:11px;color:var(--text-light);">部署</p><p style="font-size:14px;">${escHtml(r.department)}</p></div>
+        <div><p style="font-size:11px;color:var(--text-light);">メール</p><p style="font-size:12px;color:var(--text-mid);">${escHtml(r.email||'―')}</p></div>
+        <div><p style="font-size:11px;color:var(--text-light);">日時</p><p style="font-size:12px;color:var(--text-mid);">${formatDate(r.timestamp)}</p></div>
+      </div>
+      <div style="margin-bottom:14px;">
+        <p style="font-size:11px;color:var(--text-light);margin-bottom:6px;">問い（第${r.weekNumber}週 / ${escHtml(r.monthLabel||'')}）</p>
+        <p style="font-size:13px;color:var(--text-mid);line-height:1.6;padding:12px;background:var(--green-pale);border-radius:8px;">${escHtml(r.questionText||'')}</p>
+      </div>
+      <div>
+        <p style="font-size:11px;color:var(--text-light);margin-bottom:6px;">回答</p>
+        <p style="font-size:14px;line-height:1.8;padding:14px;background:var(--cream);border-radius:8px;border:1px solid #d4e6da;white-space:pre-wrap;">${escHtml(r.answer)}</p>
+      </div>
+    `;
+    document.getElementById('modal-delete-btn').style.display = 'inline-block';
+    document.getElementById('modal-delete-btn').onclick = () => deleteResp(id);
+    document.querySelector('.modal-footer').innerHTML = `
+      <button class="btn btn-danger" onclick="deleteResp('${id}')">削除</button>
+      <button class="btn btn-secondary" onclick="closeModal()">閉じる</button>
+    `;
+    document.getElementById('resp-modal').classList.add('open');
+  }
+
+  async function deleteResp(id) {
+    if (!confirm('この回答を削除しますか？')) return;
+    const r = await apiFetch('/api/admin/output/responses/' + id, 'DELETE');
+    if (r.ok) { showToast('削除しました'); closeModal(); await loadResponses(); }
+  }
+
+  async function exportCsv() {
+    const url = '/api/admin/output/export-csv';
+    const r = await fetch(url, { headers: { 'x-admin-password': adminPw } });
+    if (!r.ok) return showToast('エクスポート失敗', true);
+    const blob = await r.blob();
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `iob-output-${Date.now()}.csv`;
+    a.click();
+  }
+
+  // ===== STATS =====
+  async function loadStats() {
+    const r = await apiFetch('/api/admin/output/stats');
+    const data = await r.json();
+    renderStats(data);
+  }
+
+  function renderStats(data) {
+    const container = document.getElementById('stats-container');
+    if (!data.byQuestion.length) {
+      container.innerHTML = '<div class="empty">問いが登録されていません</div>';
+      return;
+    }
+
+    const totalAnswers = data.byQuestion.reduce((s, q) => s + q.totalAnswers, 0);
+    const overallRate = data.settings.totalRecipients
+      ? Math.round((totalAnswers / data.settings.totalRecipients) * 100) : null;
+
+    let html = `
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">総回答数</div>
+          <div class="stat-value">${totalAnswers}</div>
+          <div class="stat-sub">件</div>
+        </div>
+        <div class="stat-card gold">
+          <div class="stat-label">全体参加率</div>
+          <div class="stat-value">${overallRate !== null ? overallRate + '%' : '―'}</div>
+          <div class="stat-sub">${data.settings.totalRecipients ? '受講者 ' + data.settings.totalRecipients + '人中' : '設定で受講者数を入力してください'}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">登録済みの問い</div>
+          <div class="stat-value">${data.byQuestion.length}</div>
+          <div class="stat-sub">問</div>
+        </div>
+      </div>`;
+
+    html += data.byQuestion.map(q => {
+      const rate = q.participationRate;
+      const rateLabel = rate !== null ? rate + '%' : '―';
+      const rateClass = rate === null ? 'rate-none' : rate >= 70 ? 'rate-high' : rate >= 40 ? 'rate-mid' : 'rate-low';
+      const deptRows = q.byDepartment.length
+        ? q.byDepartment.map(d => {
+            const dr = d.rate;
+            const dc = dr === null ? 'rate-none' : dr >= 70 ? 'rate-high' : dr >= 40 ? 'rate-mid' : 'rate-low';
+            return `<tr>
+              <td>${escHtml(d.department)}</td>
+              <td>${d.count}件</td>
+              <td>${d.total ? d.total + '人' : '―'}</td>
+              <td><span class="rate-pill ${dc}">${dr !== null ? dr + '%' : '―'}</span></td>
+            </tr>`;
+          }).join('')
+        : '<tr><td colspan="4" style="text-align:center;color:var(--text-light);padding:16px;">まだ回答がありません</td></tr>';
+
+      return `
+        <div class="question-stat">
+          <div class="qs-header">
+            <span class="qs-week">第${q.weekNumber}週</span>
+            <span class="qs-title">${escHtml(q.question)}</span>
+            <span class="rate-pill ${rateClass}" style="white-space:nowrap;">${rateLabel}</span>
+          </div>
+          <div class="rate-bar-wrap">
+            <div class="rate-bar-label">
+              <span>${q.totalAnswers}件回答</span>
+              <span>${q.totalRecipients ? q.totalRecipients + '人中' : '受講者数未設定'}</span>
+            </div>
+            <div class="rate-bar-track">
+              <div class="rate-bar-fill" style="width:${rate !== null ? rate : 0}%"></div>
+            </div>
+          </div>
+          <table class="dept-table">
+            <thead><tr><th>部署</th><th>回答数</th><th>受講者数</th><th>参加率</th></tr></thead>
+            <tbody>${deptRows}</tbody>
+          </table>
+        </div>`;
+    }).join('');
+
+    container.innerHTML = html;
+  }
+
+  // ===== SETTINGS =====
+  async function loadSettings() {
+    const r = await apiFetch('/api/admin/output/settings');
+    const s = await r.json();
+    document.getElementById('setting-total').value = s.totalRecipients || '';
+    const deptContainer = document.getElementById('dept-rows');
+    deptContainer.innerHTML = '';
+    Object.entries(s.departmentRecipients || {}).forEach(([dept, count]) => {
+      addDeptRow(dept, count);
+    });
+  }
+
+  function addDeptRow(dept = '', count = '') {
+    const row = document.createElement('div');
+    row.className = 'dept-settings-row';
+    row.innerHTML = `
+      <input type="text" placeholder="部署名（例: 営業部）" value="${escHtml(String(dept))}" class="dept-name">
+      <input type="number" placeholder="人数" value="${count}" class="dept-count" min="0">
+      <button class="btn btn-danger btn-sm" onclick="this.parentElement.remove()">削除</button>
+    `;
+    document.getElementById('dept-rows').appendChild(row);
+  }
+
+  async function saveSettings() {
+    const total = parseInt(document.getElementById('setting-total').value) || 0;
+    const deptMap = {};
+    document.querySelectorAll('.dept-settings-row').forEach(row => {
+      const name  = row.querySelector('.dept-name').value.trim();
+      const count = parseInt(row.querySelector('.dept-count').value) || 0;
+      if (name) deptMap[name] = count;
+    });
+    const r = await apiFetch('/api/admin/output/settings', 'PUT', {
+      totalRecipients: total, departmentRecipients: deptMap
+    });
+    if (r.ok) showToast('設定を保存しました');
+  }
+
+  // ===== MODAL =====
+  function closeModal() {
+    document.getElementById('resp-modal').classList.remove('open');
+  }
+  document.getElementById('resp-modal').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('resp-modal')) closeModal();
+  });
+
+  // ===== UTILS =====
+  function apiFetch(url, method = 'GET', body = null) {
+    const opts = { method, headers: { 'x-admin-password': adminPw } };
+    if (body) { opts.headers['Content-Type'] = 'application/json'; opts.body = JSON.stringify(body); }
+    return fetch(url, opts);
+  }
+
+  function formatDate(iso) {
+    const d = new Date(iso);
+    return `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+  }
+
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  let toastTimer;
+  function showToast(msg, isError = false) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.style.background = isError ? 'var(--red)' : 'var(--green-dark)';
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
+  }
+</script>
+</body>
+</html>
