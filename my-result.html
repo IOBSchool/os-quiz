@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>あなたの診断結果マイページ | IOB</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@300;400;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green-dark:  #2d5a3d;
+      --green-mid:   #4a7c59;
+      --green-light: #7aaa8a;
+      --green-pale:  #e8f2eb;
+      --beige:       #f7f4ef;
+      --cream:       #fdfcf9;
+      --gold:        #c9a84c;
+      --gold-light:  #e8d5a0;
+      --text-dark:   #1a2e22;
+      --text-mid:    #4a5e52;
+      --text-light:  #8a9e92;
+      --white:       #ffffff;
+      --red:         #c0392b;
+      --red-pale:    #fdf2f2;
+      --orange:      #d68910;
+      --orange-pale: #fef9e7;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: var(--beige);
+      color: var(--text-dark);
+      min-height: 100vh;
+    }
+
+    /* ======= HEADER ======= */
+    header {
+      background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%);
+      padding: 20px 24px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 16px rgba(45,90,61,0.2);
+    }
+    header .label {
+      color: var(--green-light);
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+    header h1 {
+      color: var(--white);
+      font-size: 18px;
+      font-weight: 400;
+      margin-top: 4px;
+      font-family: 'Noto Serif JP', serif;
+    }
+
+    /* ======= PROGRESS BAR ======= */
+    #progress-bar-wrap {
+      background: rgba(255,255,255,0.2);
+      height: 4px;
+      margin-top: 12px;
+      border-radius: 2px;
+    }
+    #progress-bar {
+      background: var(--gold);
+      height: 100%;
+      border-radius: 2px;
+      transition: width 0.4s ease;
+      width: 0%;
+    }
+    #progress-text {
+      color: var(--gold-light);
+      font-size: 12px;
+      margin-top: 6px;
+    }
+
+    /* ======= SCREENS ======= */
+    .screen {
+      display: none;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+    }
+    .screen.active { display: block; }
+
+    /* ======= INTRO ======= */
+    #screen-intro .hero {
+      background: var(--white);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(45,90,61,0.12);
+    }
+    .hero-top {
+      background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%);
+      padding: 48px 40px;
+      text-align: center;
+    }
+    .hero-top .leaf-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+    .hero-top h2 {
+      color: var(--white);
+      font-family: 'Noto Serif JP', serif;
+      font-weight: 400;
+      font-size: 24px;
+      line-height: 1.6;
+    }
+    .hero-top p {
+      color: var(--green-light);
+      margin-top: 12px;
+      font-size: 14px;
+    }
+    .hero-body {
+      padding: 40px;
+    }
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .info-card {
+      background: var(--green-pale);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+    .info-card .num { font-size: 32px; font-weight: 700; color: var(--green-dark); }
+    .info-card .lbl { font-size: 13px; color: var(--text-mid); margin-top: 4px; }
+    .domain-list {
+      margin-bottom: 32px;
+    }
+    .domain-list h3 {
+      font-size: 14px;
+      color: var(--text-mid);
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+    .domain-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .domain-tag {
+      background: var(--white);
+      border: 1px solid var(--green-light);
+      color: var(--green-dark);
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 13px;
+    }
+
+    /* ======= FORM ======= */
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      color: var(--text-mid);
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    .form-group .required {
+      color: var(--red);
+      margin-left: 4px;
+      font-size: 12px;
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1.5px solid #d4e6da;
+      border-radius: 10px;
+      font-size: 15px;
+      font-family: 'Noto Sans JP', sans-serif;
+      color: var(--text-dark);
+      background: var(--white);
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    .form-group input:focus, .form-group select:focus {
+      border-color: var(--green-mid);
+      box-shadow: 0 0 0 3px rgba(74,124,89,0.1);
+    }
+    .form-note {
+      font-size: 12px;
+      color: var(--text-light);
+      margin-top: 6px;
+    }
+
+    /* ======= BUTTONS ======= */
+    .btn-primary {
+      display: block;
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%);
+      color: var(--white);
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-align: center;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(45,90,61,0.3);
+    }
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: var(--white);
+      color: var(--green-dark);
+      border: 1.5px solid var(--green-mid);
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-secondary:hover { background: var(--green-pale); }
+
+    /* ======= QUIZ SCREEN ======= */
+    #screen-quiz .domain-section {
+      margin-bottom: 40px;
+    }
+    .domain-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 20px;
+      background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%);
+      border-radius: 12px 12px 0 0;
+    }
+    .domain-header .domain-icon { font-size: 22px; }
+    .domain-header .domain-name {
+      color: var(--white);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .domain-header .domain-count {
+      margin-left: auto;
+      color: var(--green-light);
+      font-size: 13px;
+    }
+    .question-card {
+      background: var(--white);
+      border-left: 1px solid #d4e6da;
+      border-right: 1px solid #d4e6da;
+      border-bottom: 1px solid #d4e6da;
+      padding: 28px 28px 24px;
+    }
+    .question-card:last-child {
+      border-radius: 0 0 12px 12px;
+    }
+    .question-card + .question-card {
+      border-top: 1px solid var(--green-pale);
+    }
+    .question-number {
+      font-size: 12px;
+      color: var(--text-light);
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+    .question-text {
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--text-dark);
+      font-weight: 500;
+      margin-bottom: 18px;
+    }
+    .choices {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .choice-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      border: 1.5px solid #d4e6da;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: var(--cream);
+    }
+    .choice-label:hover {
+      border-color: var(--green-mid);
+      background: var(--green-pale);
+    }
+    .choice-label input[type="radio"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--green-dark);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .choice-label.selected {
+      border-color: var(--green-dark);
+      background: var(--green-pale);
+    }
+    .choice-text { font-size: 14px; line-height: 1.6; color: var(--text-dark); }
+
+    /* 回答後の正解表示 */
+    .choice-label.correct {
+      border-color: var(--green-dark);
+      background: var(--green-pale);
+    }
+    .choice-label.wrong {
+      border-color: var(--red);
+      background: var(--red-pale);
+    }
+    .feedback-text {
+      display: none;
+      margin-top: 12px;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    .feedback-text.show { display: block; }
+    .feedback-text.correct-fb {
+      background: var(--green-pale);
+      color: var(--green-dark);
+      border-left: 3px solid var(--green-dark);
+    }
+    .feedback-text.wrong-fb {
+      background: var(--red-pale);
+      color: #922b21;
+      border-left: 3px solid var(--red);
+    }
+
+    /* ======= SUBMIT SECTION ======= */
+    .submit-section {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 4px 20px rgba(45,90,61,0.08);
+      margin-top: 16px;
+    }
+    .submit-section h3 {
+      font-size: 16px;
+      color: var(--green-dark);
+      margin-bottom: 20px;
+    }
+    .email-toggle {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px;
+      background: var(--green-pale);
+      border-radius: 10px;
+      cursor: pointer;
+      margin-bottom: 16px;
+    }
+    .email-toggle input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--green-dark);
+      cursor: pointer;
+    }
+    .email-toggle span {
+      font-size: 14px;
+      color: var(--text-dark);
+      font-weight: 500;
+    }
+    #email-field { display: none; margin-bottom: 16px; }
+    #email-field.show { display: block; }
+
+    /* ======= RESULTS ======= */
+    #screen-results .result-hero {
+      background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%);
+      border-radius: 20px 20px 0 0;
+      padding: 48px 40px;
+      text-align: center;
+    }
+    .result-label {
+      color: var(--green-light);
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+    .result-score-big {
+      font-size: 72px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1;
+      margin: 16px 0 8px;
+    }
+    .result-score-big span { font-size: 36px; }
+    .result-correct {
+      color: var(--green-light);
+      font-size: 16px;
+    }
+    .result-level-badge {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 28px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: var(--white);
+      border-radius: 100px;
+      font-size: 15px;
+      letter-spacing: 1px;
+    }
+
+    .result-body {
+      background: var(--white);
+      border-radius: 0 0 20px 20px;
+      box-shadow: 0 8px 40px rgba(45,90,61,0.12);
+    }
+
+    /* 分野別スコア */
+    .domain-scores {
+      padding: 40px 40px 0;
+    }
+    .domain-scores h3 {
+      font-size: 16px;
+      color: var(--green-dark);
+      font-weight: 700;
+      margin-bottom: 20px;
+      padding-left: 12px;
+      border-left: 4px solid var(--green-mid);
+    }
+    .domain-score-item {
+      margin-bottom: 16px;
+    }
+    .domain-score-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .domain-score-name { font-size: 14px; color: var(--text-dark); font-weight: 500; }
+    .domain-score-num { font-size: 13px; color: var(--text-mid); }
+    .domain-bar-bg {
+      height: 10px;
+      background: var(--green-pale);
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    .domain-bar-fill {
+      height: 100%;
+      border-radius: 5px;
+      transition: width 1s ease;
+    }
+    .domain-score-badge {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 3px 12px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .badge-good { background: var(--green-pale); color: var(--green-dark); }
+    .badge-mid  { background: var(--orange-pale); color: var(--orange); }
+    .badge-low  { background: var(--red-pale); color: var(--red); }
+
+    /* アドバイス */
+    .advice-section {
+      padding: 32px 40px;
+      border-top: 1px solid var(--green-pale);
+    }
+    .advice-section h3 {
+      font-size: 16px;
+      color: var(--green-dark);
+      font-weight: 700;
+      margin-bottom: 16px;
+      padding-left: 12px;
+      border-left: 4px solid var(--gold);
+    }
+    .advice-card {
+      padding: 16px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+    .advice-card + .advice-card { margin-top: 10px; }
+    .advice-weak {
+      background: #fdf6e3;
+      border-left: 3px solid var(--gold);
+      color: #7d5a00;
+    }
+    .advice-strong {
+      background: var(--green-pale);
+      border-left: 3px solid var(--green-mid);
+      color: var(--green-dark);
+    }
+    .advice-msg {
+      background: var(--beige);
+      border-radius: 12px;
+      padding: 20px 24px;
+      font-size: 14px;
+      line-height: 1.9;
+      color: var(--text-mid);
+      margin-top: 16px;
+    }
+
+    /* メール結果送信 */
+    .result-email-section {
+      padding: 0 40px 40px;
+      border-top: 1px solid var(--green-pale);
+      margin-top: 0;
+    }
+    .result-email-section h3 {
+      font-size: 16px;
+      color: var(--green-dark);
+      font-weight: 700;
+      margin: 32px 0 16px;
+      padding-left: 12px;
+      border-left: 4px solid var(--green-mid);
+    }
+    .result-actions {
+      padding: 32px 40px 40px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* 正解確認 */
+    .review-section {
+      padding: 0 40px 40px;
+      border-top: 1px solid var(--green-pale);
+    }
+    .review-section h3 {
+      font-size: 16px;
+      color: var(--green-dark);
+      font-weight: 700;
+      margin: 32px 0 16px;
+      padding-left: 12px;
+      border-left: 4px solid var(--green-mid);
+    }
+    .review-toggle {
+      width: 100%;
+      padding: 14px;
+      background: var(--green-pale);
+      color: var(--green-dark);
+      border: 1.5px solid var(--green-mid);
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-align: center;
+    }
+    .review-toggle:hover { background: #d0e8d8; }
+    #review-list { display: none; margin-top: 16px; }
+    #review-list.show { display: block; }
+    .review-item {
+      padding: 16px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    .review-correct { background: var(--green-pale); border-left: 3px solid var(--green-mid); }
+    .review-wrong { background: var(--red-pale); border-left: 3px solid var(--red); }
+    .review-q { font-weight: 700; color: var(--text-dark); margin-bottom: 6px; }
+    .review-your { color: var(--red); }
+    .review-ans { color: var(--green-dark); font-weight: 700; }
+
+    /* ======= COMPLETION MESSAGE ======= */
+    #screen-complete {
+      text-align: center;
+    }
+    #screen-complete .card {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 60px 40px;
+      box-shadow: 0 8px 40px rgba(45,90,61,0.12);
+    }
+    #screen-complete .big-check { font-size: 60px; margin-bottom: 20px; }
+    #screen-complete h2 { color: var(--green-dark); font-family: 'Noto Serif JP', serif; font-weight: 400; font-size: 22px; }
+    #screen-complete p { color: var(--text-mid); margin-top: 12px; font-size: 14px; line-height: 1.8; }
+
+    /* ======= RESPONSIVE ======= */
+    @media (max-width: 600px) {
+      .info-grid { grid-template-columns: 1fr 1fr; }
+      .hero-body, .domain-scores, .advice-section, .result-actions, .result-email-section, .review-section { padding: 24px 20px; }
+      .result-hero { padding: 36px 24px; }
+      .result-score-big { font-size: 60px; }
+      .question-card { padding: 20px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="label">オーガニック専門家認定コース</div>
+  <h1>あなたの診断結果マイページ</h1>
+  <div id="progress-bar-wrap" style="display:none;">
+    <div id="progress-bar"></div>
+  </div>
+  <div id="progress-text" style="display:none;"></div>
+</header>
+
+<!-- ==================== LOOKUP ==================== -->
+<div id="screen-intro" class="screen active">
+  <div class="hero">
+    <div class="hero-top">
+      <div class="leaf-icon">🌿</div>
+      <h2>あなたの診断結果を表示します</h2>
+      <p>受診時に入力したメールアドレスを入力してください</p>
+    </div>
+    <div class="hero-body">
+      <div class="form-group">
+        <label>受診時のメールアドレス<span class="required">＊必須</span></label>
+        <input type="email" id="input-email" placeholder="例：hanako@example.com" autocomplete="email">
+        <p class="form-note">診断受診時に入力したメールアドレスを入力してください。最新の結果が表示されます。</p>
+      </div>
+      <div id="lookup-error" style="display:none; color:var(--red); font-size:14px; margin-bottom:14px; padding:12px 16px; background:var(--red-pale); border-radius:8px;"></div>
+      <button class="btn-primary" onclick="lookupByEmail()" id="lookup-btn">結果を見る →</button>
+      <p class="form-note" style="margin-top:20px; text-align:center;">まだ診断を受けていない方は<br><a href="assessment.html" style="color:var(--green-dark); font-weight:600;">こちらから受診</a>してください（所要時間：約10分）</p>
+      <div style="display:none;">
+      <div class="form-group">
+        <label>（非表示・後方互換）部署</label>
+        <select id="input-occupation">
+          <option value="">── 部署を選択してください ──</option>
+          <option value="経営会議メンバー">経営会議メンバー</option>
+          <option value="商品部（商品・コーディネーター）">商品部（商品・コーディネーター）</option>
+          <option value="輸入・物流部（物流・輸入・BtoB）">輸入・物流部（物流・輸入・BtoB）</option>
+          <option value="営業企画部（EC・マーケティング）">営業企画部（EC・マーケティング）</option>
+          <option value="店舗開発部">店舗開発部</option>
+          <option value="経営企画部（経営企画・システム）">経営企画部（経営企画・システム）</option>
+          <option value="管理部（人事総務）">管理部（人事総務）</option>
+          <option value="店舗運営部（店舗運営・店舗・エリアマネージャー・業務推進）">店舗運営部（店舗運営・店舗・エリアマネージャー・業務推進）</option>
+          <option value="" disabled>── 店舗 ──</option>
+          <option value="外苑西通り店">外苑西通り店</option>
+          <option value="骨董通り店">骨董通り店</option>
+          <option value="東武池袋店">東武池袋店</option>
+          <option value="ルミネ立川店">ルミネ立川店</option>
+          <option value="恵比寿店">恵比寿店</option>
+          <option value="旗の台店">旗の台店</option>
+          <option value="四谷三丁目店">四谷三丁目店</option>
+          <option value="武蔵小山店">武蔵小山店</option>
+          <option value="富ヶ谷店">富ヶ谷店</option>
+          <option value="たまプラーザ テラス店">たまプラーザ テラス店</option>
+          <option value="新百合ヶ丘店">新百合ヶ丘店</option>
+          <option value="町田東急ツインズ店">町田東急ツインズ店</option>
+          <option value="ジョイナス店">ジョイナス店</option>
+          <option value="小田急藤沢店">小田急藤沢店</option>
+          <option value="自由が丘店">自由が丘店</option>
+          <option value="武蔵小杉店">武蔵小杉店</option>
+          <option value="横浜元町店">横浜元町店</option>
+          <option value="コレットマーレ店">コレットマーレ店</option>
+          <option value="日本橋髙島屋S.C.店">日本橋髙島屋S.C.店</option>
+          <option value="GINZA SIX店">GINZA SIX店</option>
+          <option value="麻布十番店">麻布十番店</option>
+          <option value="代々木上原店">代々木上原店</option>
+          <option value="中目黒店">中目黒店</option>
+          <option value="二子玉川東急フードショー店">二子玉川東急フードショー店</option>
+        </select>
+      </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 診断情報（追加・結果画面上部） ==================== -->
+<style>
+.result-meta { background: var(--cream); padding: 16px 20px; border-radius: 12px; margin: 0 0 20px; font-size: 14px; color: var(--text-mid); border: 1px solid var(--green-pale); }
+.result-meta-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
+.result-meta-row:last-child { margin-bottom: 0; }
+.result-meta-label { color: var(--text-mid); }
+.result-meta-val { color: var(--text-dark); font-weight: 600; }
+</style>
+
+<!-- ==================== QUIZ ==================== -->
+<div id="screen-quiz" class="screen">
+  <div id="quiz-container"></div>
+
+  <div class="submit-section">
+    <h3>✅ 全問回答できたら送信してください</h3>
+    <div id="unanswered-warn" style="display:none; color: var(--red); font-size:13px; margin-bottom:12px; padding:10px 14px; background:var(--red-pale); border-radius:8px;">
+      ⚠️ まだ回答していない問題があります。全問回答してから送信してください。
+    </div>
+
+    <label class="email-toggle" onclick="toggleEmailField()">
+      <input type="checkbox" id="send-email-check">
+      <span>📧 結果をメールで受け取る</span>
+    </label>
+    <div id="email-field" class="email-field">
+      <div class="form-group">
+        <input type="email" id="result-email" placeholder="メールアドレスを入力">
+      </div>
+    </div>
+
+    <button class="btn-primary" id="submit-btn" onclick="submitQuiz()">結果を見る →</button>
+  </div>
+</div>
+
+<!-- ==================== RESULTS ==================== -->
+<div id="screen-results" class="screen">
+  <div class="result-meta" style="margin: 20px 20px 0;">
+    <div class="result-meta-row"><span class="result-meta-label">受診日時</span><span class="result-meta-val" id="meta-date">—</span></div>
+    <div class="result-meta-row"><span class="result-meta-label">お名前</span><span class="result-meta-val" id="meta-name">—</span></div>
+    <div class="result-meta-row"><span class="result-meta-label">部署</span><span class="result-meta-val" id="meta-occupation">—</span></div>
+  </div>
+
+  <div class="result-hero">
+    <div class="result-label">Your Score</div>
+    <div class="result-score-big" id="result-score">0<span>%</span></div>
+    <div class="result-correct" id="result-correct">— 問正解 / 全20問</div>
+    <div class="result-level-badge" id="result-level">初級レベル</div>
+  </div>
+
+  <div class="result-body">
+    <!-- 分野別スコア -->
+    <div class="domain-scores">
+      <h3>📊 分野別スコア</h3>
+      <div id="domain-score-list"></div>
+    </div>
+
+    <!-- アドバイス -->
+    <div class="advice-section">
+      <h3>💡 あなたへのアドバイス</h3>
+      <div id="advice-content"></div>
+      <div class="advice-msg">
+        このアセスメントは現在地を確認するためのものです。スコアに関わらず、コースを通じてオーガニック専門家として必要な知識をしっかり身につけていただけます。一緒に学んでいきましょう！
+      </div>
+    </div>
+
+    <!-- 正解確認 -->
+    <div class="review-section">
+      <h3>🔍 問題の正解を確認する</h3>
+      <button class="review-toggle" onclick="toggleReview()">▼ 全問の正解・解説を見る</button>
+      <div id="review-list"></div>
+    </div>
+
+    <!-- メール送信 -->
+    <div class="result-email-section" id="email-send-section" style="display:none;">
+      <h3>📧 結果をメールで受け取る</h3>
+      <div class="form-group">
+        <input type="email" id="result-email-2" placeholder="メールアドレスを入力">
+      </div>
+      <button class="btn-primary" onclick="sendEmailFromResult()" style="margin-top:0;">メールを送信する</button>
+      <div id="email-result-msg" style="margin-top:10px; font-size:13px;"></div>
+    </div>
+
+    <!-- アクションボタン -->
+    <div class="result-actions">
+      <button class="btn-secondary" onclick="location.href='assessment.html'">🔄 もう一度受診する</button>
+      <button class="btn-secondary" onclick="location.reload()">↩ 別のメールで検索</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== COMPLETE ==================== -->
+<div id="screen-complete" class="screen">
+  <div class="card">
+    <div class="big-check">✅</div>
+    <h2>送信完了しました！</h2>
+    <p>回答をお送りいただきありがとうございます。<br>スコアと分野別診断結果をご確認ください。</p>
+    <button class="btn-primary" onclick="showResults()" style="margin-top:32px;">結果を見る →</button>
+  </div>
+</div>
+
+<!-- ======== Firebase SDK ======== -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+// ======== Firebase 設定 ========
+// ※ なっちゃんの firebaseConfig をここに貼り付けてください
+const firebaseConfig = {
+  apiKey: "AIzaSyB9MDI8rsd1NRscUtUt0sbXLP_4HVZwXEA",
+  authDomain: "organic-knowledge-assessment.firebaseapp.com",
+  projectId: "organic-knowledge-assessment",
+  storageBucket: "organic-knowledge-assessment.firebasestorage.app",
+  messagingSenderId: "522044690677",
+  appId: "1:522044690677:web:eadb0e866fecd525c835bc"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+</script>
+
+<script>
+// ========================================
+// クイズデータ（20問・7分野）
+// IOB講座ナレッジベースより作成
+// ========================================
+const DOMAINS = {
+  basics:        { label: 'オーガニックの基礎',   icon: '🌱', color: '#2d5a3d' },
+  chemicals:     { label: '有害化学物質',          icon: '⚠️', color: '#8b5e3c' },
+  certification: { label: '認証制度',              icon: '🏅', color: '#c9a84c' },
+  cosmetics:     { label: 'オーガニックコスメ',    icon: '💄', color: '#9b59b6' },
+  health:        { label: '健康',                  icon: '🩺', color: '#2471a3' },
+  environment:   { label: '環境・エシカル・SDGs',  icon: '🌍', color: '#1a7a4a' }
+};
+
+const QUESTIONS = [
+  // ---- 分野①：オーガニックの基礎・定義 (Q1〜Q4) ----
+  {
+    id: 1, domain: 'basics',
+    text: 'オーガニック（有機）農業の基本原則として最も正しいものはどれですか？',
+    choices: [
+      '化学合成農薬・化学肥料を使わず、生態系と調和した方法で生産する',  // ← 正解 A
+      '認定機関から許可を得た化学農薬であれば、有機農業でも必要に応じて使用できる',
+      '化学肥料は使わないが、収量確保のため農薬は必要最小限の使用が認められている',
+      '環境への影響が小さいと認められた合成農薬は、収量確保のため例外的に有機農業でも使用できる'
+    ],
+    correct: 0,
+    explanation: '有機農業は化学合成農薬・化学肥料を使用せず、土壌・生態系・生物多様性を維持する農業です。一部の天然由来農薬（除虫菊など）は認められる場合がありますが、化学合成農薬はいかなる場合も使用できません。IFOAM（国際有機農業運動連盟）が世界共通の定義を定めています。'
+  },
+  {
+    id: 2, domain: 'basics',
+    text: '日本の有機JAS規格において「オーガニック」と表示できる条件として正しいのはどれですか？',
+    choices: [
+      '「自然」「無添加」と書いてあれば有機JASと同等の表示が可能',
+      '有機JAS認証を取得した製品のみ「オーガニック」と表示できる',  // ← 正解 B
+      '「無農薬」という表示は有機JAS認証と同じ意味を持つ',
+      '環境に配慮していれば認証なしでも「オーガニック」と表示できる'
+    ],
+    correct: 1,
+    explanation: '日本では農林水産省の有機JAS認証を取得した製品のみ「有機」「オーガニック」と表示できます。認証なしでのオーガニック表示はJAS法違反になります。'
+  },
+  {
+    id: 3, domain: 'basics',
+    text: 'オーガニックの世界的な定義を定めている代表的な機関として正しいのはどれですか？',
+    choices: [
+      'WHO（世界保健機関）単独',
+      '各国の農林水産省が独自に定義する',
+      'IFOAM（国際有機農業運動連盟）とCODEX（国際食品規格委員会）',  // ← 正解 C
+      '国連環境計画（UNEP）のみ'
+    ],
+    correct: 2,
+    explanation: 'IFOAMは世界100ヵ国以上の有機農業団体が加盟する国際的な組織で、オーガニックの基本原則を定めています。CODEXは食品の国際規格を定める機関です。'
+  },
+  {
+    id: 4, domain: 'basics',
+    text: 'オーガニック農業における土壌管理の説明として、正しくないものはどれですか？',
+    choices: [
+      '豊かな土壌微生物が窒素固定・リン酸溶解などを通じて植物の養分を供給し、化学肥料なしでも作物が育つ環境をつくる',
+      '土壌有機物（腐植）が増えると保水性・通気性が改善され、干ばつや豪雨にも強い根の発育環境が整う',
+      '土壌が健全であれば、有機JAS認証の規格内で認められた化学農薬を少量使用することが許容されている',  // ← 正解 C（誤った記述）
+      '健全な土壌は生物多様性を支え、病害虫への自然な抵抗力が高まることで農薬に頼らない生産が可能になる'
+    ],
+    correct: 2,
+    explanation: 'オーガニック農業では化学農薬の使用は量を問わず禁止されています。「健全な土壌なら少量の化学農薬が許容される」という規定は存在しません。豊かな微生物生態系・腐植の増加・生物多様性の維持がオーガニック農業における土壌管理の本質です。'
+  },
+
+  // ---- 分野②：有害化学物質 (Q5〜Q6) ----
+  {
+    id: 5, domain: 'chemicals',
+    text: '食品中の残留農薬リスクについて、正しくない説明はどれですか？',
+    choices: [
+      '多くの農薬は脂溶性で体の脂肪組織に蓄積しやすく、少量でも長期的に摂り続けることでホルモンバランスや免疫機能に影響する可能性が指摘されている',
+      '残留農薬基準値（ADI）は単一農薬・単独摂取を想定した数値であり、複数農薬の複合曝露や子どもへの影響を完全に保証するものではない',
+      '浸透性農薬は皮むきでは除去できず、加熱調理によって水分が蒸発し農薬濃度が上昇するケースもある',
+      '国が定める残留農薬の基準値は「毎日一生涯食べ続けても健康への影響が出ない量」として設定されており、基準値以内の食品を食べる限り長期的な慢性疾患リスクはないと国際的に認められている'  // ← 正解 D（誤った記述）
+    ],
+    correct: 3,
+    explanation: '少量・長期曝露の安全性は科学的に「確立されている」とはいえません。農薬の多くは脂溶性で蓄積しやすく、基準値（ADI）は複合曝露や感受性の高い子どもへの影響を完全には網羅していません。皮むき・加熱でも浸透性農薬は残留します。長期曝露リスクは現在も研究が続いており、オーガニックを選ぶ重要な理由の一つです。'
+  },
+  {
+    id: 6, domain: 'chemicals',
+    text: '遺伝子組み換え作物（GMO）について、正しくない説明はどれですか？',
+    choices: [
+      'GMO作物の多くは除草剤耐性・害虫耐性を付与するために開発されており、世界のオーガニック認証ではGMO種子・技術の使用が禁じられている',
+      'GMO種子は特許で管理されており、農家は毎年種苗会社から購入する契約を結ぶケースが多く、自家採種は原則として禁止されている',
+      '除草剤耐性GMO作物の普及に伴い、対応する除草剤（グリホサートなど）の農地への使用量が増加したとする研究が複数ある',
+      'GMO技術は従来の交配育種と本質的に同じ原理であり、遺伝子の変化は自然界でも起こりうる範囲に収まっているため、国際機関は生物学的リスクは同等と結論づけている'  // ← 正解 D（誤った記述）
+    ],
+    correct: 3,
+    explanation: 'GMO（遺伝子組み換え）は特定の遺伝子を別の生物から切り取って挿入する技術であり、自然の交配育種とは原理が根本的に異なります。「国際機関が生物学的リスクは同等と結論づけている」という事実はなく、多くの国際機関はGMOを従来品種とは別の枠組みで扱っています。GMO種子の自家採種禁止・除草剤使用量の増加はいずれも実際に報告されている問題です。'
+  },
+  {
+    id: 7, domain: 'health',
+    text: '農薬・有害化学物質への長期的な健康影響について、正しくない説明はどれですか？',
+    choices: [
+      'パーキンソン病・乳がん・前立腺がん・小児の発達障害など、複数の慢性疾患との関連が研究で報告されている',
+      '農薬の多くは脂溶性で体の脂肪組織に蓄積しやすく、基準値以内でも長期・複合曝露の影響については研究が続いている',
+      '農薬ごとに国が定める一日許容摂取量（ADI）は、単一農薬を対象とした安全基準であり、複数の農薬を同時に摂取した場合の複合曝露リスクを完全にカバーする数値ではない',
+      '農薬の健康リスクは農薬散布作業者のような職業的高濃度曝露に限られ、食品経由の微量摂取で慢性疾患との関連は科学的に否定されている'  // ← 正解 D（誤った記述）
+    ],
+    correct: 3,
+    explanation: '農薬の多くは脂溶性で体内に蓄積しやすく、基準値以内でも長期・複合曝露の影響については研究が続いています。パーキンソン病・乳がん・前立腺がん・小児の発達障害との関連が複数の研究で報告されており、IOB講座10「オーガニックと疾病予防」でも詳しく扱っています。'
+  },
+
+  // ---- 分野③：認証制度 (Q8〜Q11) ----
+  {
+    id: 8, domain: 'certification',
+    text: 'オーガニックテキスタイルの国際認証「GOTS（グローバル オーガニック テキスタイル スタンダード）」の説明として正しいのはどれですか？',
+    choices: [
+      '原料の有機栽培から加工・縫製・流通まで全工程でオーガニック基準への適合を求める国際規格',
+      '有機農業で栽培された天然繊維の原料証明のみを行う認証で、製品の加工・縫製工程は審査対象外',
+      'コスメ認証「COSMOS」のテキスタイル版として開発された認証で、繊維製品の成分安全基準を定めている',
+      '有機認証済みの繊維原料を使用した紡績・染色・縫製などの加工工程を主な審査対象とし、環境基準に加えて労働者の権利・労働環境まで含む国際認証規格'  // ← 正解 D
+    ],
+    correct: 3,
+    explanation: 'GOTSは農場での有機栽培自体は認証せず、有機認証済みの繊維原料を使った加工工程（紡績・染色・縫製・流通など）を審査します。環境基準だけでなく労働者の権利・労働環境も審査対象に含む点が特徴です。取得にはオーガニック繊維70%以上の使用が必要で、COSMOSとは独立した機関が管理しています。Aの「有機栽培から」という表現は誤りで、GOTSは栽培工程を認証しません。'
+  },
+  {
+    id: 9, domain: 'certification',
+    text: '有機JAS認証を取得するために農家が必要な条件として正しいのはどれですか？',
+    choices: [
+      '転換期間は6ヶ月で、その後すぐに有機JASを申請・取得できる',
+      '一度取得すれば永続的に有効で、毎年の更新審査は不要',
+      '天然由来であれば農薬・肥料の種類を問わず使用可能で、化学合成でないものすべてが許容される',
+      '化学合成農薬・化学肥料を使わずに管理した農地で（転換期間を経て）生産する'  // ← 正解 D
+    ],
+    correct: 3,
+    explanation: '有機JAS認証取得には、一年生作物は播種前2年以上、多年生作物は3年以上の転換期間が必要です。認証は毎年更新審査が必要で、使用できる農薬・肥料は許可リストに限定されており、天然由来でも使用できないものがあります。'
+  },
+  {
+    id: 10, domain: 'certification',
+    text: 'ビオホテル（Biohotel）認証の特徴として正しいのはどれですか？',
+    choices: [
+      'オーガニック食材の使用比率が100%でなければ取得できないため、ビュッフェ形式のホテルには適用外とされる認証',
+      'EU加盟国の観光省が発行するエコツーリズム認証の一種で、自然体験プログラムの充実度を評価する',
+      '食材のオーガニック調達・環境配慮・ゲストのCO2排出量管理まで含むホテル向けの総合オーガニック認証',  // ← 正解 C
+      'COSMOSと同じ認証機関が運営するホスピタリティ部門の認証で、客室に置くアメニティ（シャンプー・ソープ・バスローブ等）のオーガニック率を審査する'
+    ],
+    correct: 2,
+    explanation: 'ビオホテル認証は、食材の有機調達（オーガニック率75%以上）、環境への取り組み、従業員への研修など多面的な基準を持つホテル向けオーガニック認証です。欧州を中心に広まっています。'
+  },
+  {
+    id: 11, domain: 'certification',
+    text: 'PGS（参加型保証システム）の説明として最も正確なものはどれですか？',
+    choices: [
+      '農家・消費者・NGOなどが共同で有機を保証する地域密着型の認証方式',  // ← 正解 A
+      '農家同士が互いの農場を訪問・確認し合うピアレビュー方式で、取得後はIFOAMデータベースへの登録と年次報告書の提出が義務づけられている',
+      '農家と行政の二者間合意によって認証を付与する公的保証制度で、第三者審査より審査基準が高い',
+      '政府機関が運営し農家が費用負担なしで取得できる制度'
+    ],
+    correct: 0,
+    explanation: 'PGSは第三者機関による審査ではなく、地域コミュニティ（農家・消費者・支援者）が一体となって有機農業を確認・保証する仕組みです。認証コストが低く、小規模農家に多く活用されています。'
+  },
+
+  // ---- 分野④：オーガニックコスメ (Q12〜Q14) ----
+  {
+    id: 12, domain: 'cosmetics',
+    text: 'オーガニックコスメの成分基準について、正しくない説明はどれですか？',
+    choices: [
+      'オーガニックコスメは植物由来成分を主体とし、鉱物油や合成香料の使用を制限・禁止している',
+      'COSMOSなどの認証規格では使用できる合成成分をポジティブリストで管理しており、一部の合成防腐剤は認められている',
+      'オーガニックコスメは天然成分のみで作られているため、肌トラブルやアレルギーを引き起こすことはない',  // ← 正解 C（誤った記述）
+      '日本にはオーガニックコスメの法的定義がなく、認証なしでも「オーガニック」と表示できる場合がある'
+    ],
+    correct: 2,
+    explanation: '天然成分であってもアレルギーや肌トラブルを引き起こす可能性はあります。精油・植物エキスなど天然由来成分でも感作（アレルギー反応）の原因となる場合があり、「天然＝安全」とは言い切れません。また、COSMOSなどの認証ではポジティブリストにより一部の合成防腐剤が認められており、「合成成分ゼロ」ではありません。'
+  },
+  {
+    id: 13, domain: 'cosmetics',
+    text: 'ナチュラルコスメとオーガニックコスメの違いについて、正しくない説明はどれですか？',
+    choices: [
+      '「ナチュラルコスメ」には法的・統一的な定義がなく、メーカーが独自の基準で自由に名乗ることができる',
+      'オーガニックコスメの認証（COSMOSなど）では、有機栽培原料の配合比率や製造工程まで第三者機関が審査する',
+      'ナチュラルコスメの中にも独自の厳格な基準を設けているブランドがあり、一概にオーガニックコスメより基準が低いとは言えない',
+      '日本では薬機法により「オーガニックコスメ」の表示には厚生労働省への届出が義務づけられており、無届けでの表示は違法とされている'  // ← 正解 D（誤った記述）
+    ],
+    correct: 3,
+    explanation: '日本の薬機法にはオーガニックコスメの表示に関する届出義務や定義は存在しません。「オーガニックコスメ」も「ナチュラルコスメ」も日本では法的定義がなく、認証なしで表示できます。信頼できる根拠を示すには、COSMOSなどの第三者認証の取得が有効です。'
+  },
+  {
+    id: 14, domain: 'cosmetics',
+    text: '経皮吸収とオーガニックコスメの関係について、正しくない説明はどれですか？',
+    choices: [
+      '一部の化粧品成分は皮膚を透過して血中に入ることが確認されており、成分選びが肌だけでなく体全体の健康に関わる',
+      'オーガニックコスメの植物由来成分も経皮吸収され、健康被害となる可能性がある',
+      '経皮吸収率は成分の分子量・脂溶性・塗布する部位によって異なり、すべての成分が同じように吸収されるわけではない',
+      'オーガニックコスメは植物由来の天然成分のみを使用しているため、経皮吸収されても体内で安全に代謝され健康リスクはない'  // ← 正解 D（誤った記述）
+    ],
+    correct: 3,
+    explanation: '「天然成分だから経皮吸収されても安全」は誤りです。植物由来の精油・植物エキスなども皮膚を透過して体内に入ることがあり、アレルギー反応やホルモン様作用を引き起こす成分も存在します。「天然＝無害」ではなく、成分の種類・量・個人の体質によってリスクは異なります。だからこそ認証規格による成分管理が重要です。'
+  },
+
+  // ---- 分野⑤：環境・SDGs・エシカル (Q15〜Q17) ----
+  {
+    id: 15, domain: 'environment',
+    text: '有機農業が気候変動対策に貢献できる主な理由として正しいのはどれですか？',
+    choices: [
+      '土壌への炭素固定（カーボンシーケストレーション）を促進し、化学肥料製造時のCO₂排出を削減できる',  // ← 正解 A
+      '有機農業では堆肥を大量に使うため腐敗によるメタンガスが増え、実際には温室効果ガスが増加する',
+      '農薬・化学肥料を一切使わないため、CO₂を排出しない完全カーボンニュートラルな農業として国際条約で認定されている',
+      '有機農業は慣行農業より収量が低く、同じ食料量を確保するため農地拡大が必要になり、結果的に温室効果ガスが増える'
+    ],
+    correct: 0,
+    explanation: '有機農業は堆肥・緑肥で土壌有機物を増やし、大気中のCO₂を土壌に固定します。また化学肥料（製造時に大量エネルギーを消費）を使わないことでGHG削減に貢献します。収量の問題は課題としてありますが、土壌炭素固定効果は気候変動対策として重要視されています。'
+  },
+  {
+    id: 16, domain: 'environment',
+    text: 'SDGsとオーガニック農業の関係について正しいのはどれですか？',
+    choices: [
+      'SDGsと農業分野は直接関係がない',
+      'オーガニックはSDGs17目標のうちの３目標に貢献する',
+      '「食と農」がSDGsの中心テーマとされており、有機農業は複数のSDGs目標達成に貢献できる',  // ← 正解 C
+      'SDGsは先進国の大量消費への反省として生まれた枠組みで、農業分野よりエネルギー・工業分野での取り組みを優先している'
+    ],
+    correct: 2,
+    explanation: 'IOBが指摘する通り、国際機関やSDGs専門家は「食と農はSDGsの中心テーマ」と主張します。有機農業は目標2（飢餓ゼロ）・3（健康）・13（気候変動）・14・15（生態系）など複数目標に貢献します。'
+  },
+  {
+    id: 17, domain: 'environment',
+    text: 'オーガニック・フェアトレード・エシカル消費の関係について、正しくない説明はどれですか？',
+    choices: [
+      'エシカル消費はオーガニックやフェアトレードを含む幅広い概念で、人・社会・環境・地域への影響を総合的に考慮する消費行動を指す',
+      'フェアトレードは主に発展途上国の生産者・労働者への公正な対価と労働環境の保障を目的とした仕組みで、必ずしもオーガニック認証とセットではない',
+      '有機JASやUSDA Organicなど食品分野のオーガニック認証は農法・原料を審査するが、生産者の労働条件や賃金の公正性は審査対象外である',
+      'フェアトレード認証を取得した農産物はすべてオーガニック農法で生産されており、オーガニック認証との同時取得が国際ルールで義務づけられている'  // ← 正解 D（誤った記述）
+    ],
+    correct: 3,
+    explanation: 'フェアトレードとオーガニックは別々の認証制度であり、同時取得の義務はありません。フェアトレード認証は「誰が・どんな条件で作ったか（人・労働）」を問い、有機JASなど食品分野のオーガニック認証は「どのように栽培したか（農法・環境）」を問います。なお繊維分野のGOTSは農法と労働条件の両方を審査します。エシカル消費はこれらを含む最も広い概念で、動物福祉・地産地消・エコラベルなど多様な選択肢がその実践例です。'
+  },
+
+  // ---- 分野⑥：病気の予防リスク (Q7・Q19) ／ 分野⑦：栄養素 (Q18・Q20) ----
+  {
+    id: 18, domain: 'health',
+    text: 'オーガニック農産物の方が慣行農産物より含有量が多いとする、複数のメタ分析で報告されているものはどれですか？',
+    choices: [
+      'タンパク質',
+      'カルシウム',
+      '抗酸化物質（ポリフェノール・カロテノイド等）',  // ← 正解 C
+      '鉄分'
+    ],
+    correct: 2,
+    explanation: '英ニューカッスル大学のメタ分析（2014年）など複数の研究で、オーガニック作物は抗酸化物質（ポリフェノール・カロテノイド等）が19〜69%多い傾向が報告されています。タンパク質・カルシウム・鉄分については、オーガニックが優れているとする信頼性の高いエビデンスは現時点では限られています。'
+  },
+  {
+    id: 19, domain: 'health',
+    text: 'オーガニック食品を多く摂ることが疾病予防に役立つとされる主な理由として、最も正しいのはどれですか？',
+    choices: [
+      '有機JAS認証を取得した食品には公式に疾病予防効果が認められており、医師も治療に活用している',
+      'オーガニック食品は農薬を一切使用しないため、慣行農産物と比べてビタミン・ミネラルが常に2倍以上豊富に含まれる',
+      'オーガニック食品を毎日食べると免疫力が向上し、感染症・生活習慣病・がんなどを予防できることが臨床試験で証明されている',
+      '農薬・重金属などの有害物質への曝露が減り、抗酸化物質が豊富なため、がん・心疾患・内分泌系疾患のリスク低下が期待される'  // ← 正解 D
+    ],
+    correct: 3,
+    explanation: 'IOB講座10「オーガニックと疾病予防」で学ぶとおり、オーガニック食品は農薬・重金属・抗菌剤などの危険物質への曝露を減らし、かつ抗酸化物質が豊富です。フランスのBioNutriNet研究など複数の大規模調査で、オーガニック食品の摂取とがんリスク低下・心疾患リスク低下の関連が報告されています。'
+  },
+  {
+    id: 20, domain: 'environment',
+    text: 'バイオダイナミック農法について、正しくない説明はどれですか？',
+    choices: [
+      '1924年にルドルフ・シュタイナーが提唱した農法で、農場全体を一つの生命体として捉え、自給自足的に循環させることを基本とする',
+      '月の満ち欠けや天体のリズムに合わせた農事歴（播種日カレンダー）に従って、種まき・収穫・土壌管理などの農作業を行う',
+      '1990年代にEUの公的なオーガニック基準がゆるすぎると危惧した民間生産者たちの声から生まれた認証制度で、既存の有機農業規格を補完する形で広まった',  // ← 正解 C（誤った記述）
+      'デメター認証は1928年に設立された世界最古の有機農業認証の一つであり、農場全体での認証取得が求められる'
+    ],
+    correct: 2,
+    explanation: 'バイオダイナミック農法は1924年にルドルフ・シュタイナーが提唱したもので、EUが制度化したわけではありません。また有機JASより基準が厳しく、農薬・化学肥料不使用に加えて農事歴の活用・独自調剤の使用・農場全体の循環など、オーガニック認証を超えた独自の実践が求められます。国際認証はデメター協会が管理しています。'
+  }
+];
+
+// ========================================
+// 状態管理
+// ========================================
+let userName = '';
+let userEmail = '';
+let userOccupation = '';
+let currentAnswers = {}; // { questionId: choiceIndex }
+let finalScore = null;
+let finalDomainScores = null;
+let submissionId = null;
+let emailSentFromResult = false;
+
+// ========================================
+// 画面遷移
+// ========================================
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ========================================
+// クイズ開始
+// ========================================
+function startQuiz() {
+  userName = document.getElementById('input-name').value.trim();
+  userEmail = document.getElementById('input-email').value.trim();
+  userOccupation = document.getElementById('input-occupation').value.trim();
+
+  if (!userName) {
+    alert('お名前を入力してください。');
+    document.getElementById('input-name').focus();
+    return;
+  }
+  if (!userOccupation) {
+    alert('部署を選択してください。');
+    document.getElementById('input-occupation').focus();
+    return;
+  }
+
+  buildQuiz();
+  showScreen('quiz');
+
+  // プログレスバー表示
+  document.getElementById('progress-bar-wrap').style.display = 'block';
+  document.getElementById('progress-text').style.display = 'block';
+  updateProgress();
+}
+
+// ========================================
+// クイズHTML生成
+// ========================================
+function buildQuiz() {
+  const container = document.getElementById('quiz-container');
+  const byDomain = {};
+
+  QUESTIONS.forEach(q => {
+    if (!byDomain[q.domain]) byDomain[q.domain] = [];
+    byDomain[q.domain].push(q);
+  });
+
+  let html = '';
+  Object.entries(byDomain).forEach(([domainKey, questions]) => {
+    const domain = DOMAINS[domainKey];
+    html += `
+      <div class="domain-section">
+        <div class="domain-header">
+          <span class="domain-icon">${domain.icon}</span>
+          <span class="domain-name">${domain.label}</span>
+          <span class="domain-count">${questions.length}問</span>
+        </div>
+    `;
+    questions.forEach((q, i) => {
+      html += `
+        <div class="question-card" id="qcard-${q.id}">
+          <div class="question-number">Q${q.id}</div>
+          <div class="question-text">${q.text}</div>
+          <div class="choices">
+            ${q.choices.map((c, ci) => `
+              <label class="choice-label" id="choice-${q.id}-${ci}" onclick="selectAnswer(${q.id}, ${ci})">
+                <input type="radio" name="q${q.id}" value="${ci}">
+                <span class="choice-text">${String.fromCharCode(65 + ci)}. ${c}</span>
+              </label>
+            `).join('')}
+          </div>
+          <div class="feedback-text" id="feedback-${q.id}"></div>
+        </div>
+      `;
+    });
+    html += `</div>`;
+  });
+
+  container.innerHTML = html;
+}
+
+// ========================================
+// 回答選択
+// ========================================
+function selectAnswer(qId, choiceIdx) {
+  currentAnswers[qId] = choiceIdx;
+  updateProgress();
+
+  // 選択ハイライト
+  const q = QUESTIONS.find(q => q.id === qId);
+  q.choices.forEach((_, ci) => {
+    const lbl = document.getElementById(`choice-${qId}-${ci}`);
+    lbl.classList.remove('selected');
+  });
+  document.getElementById(`choice-${qId}-${choiceIdx}`).classList.add('selected');
+
+  document.getElementById('unanswered-warn').style.display = 'none';
+}
+
+// ========================================
+// プログレスバー更新
+// ========================================
+function updateProgress() {
+  const answered = Object.keys(currentAnswers).length;
+  const total = QUESTIONS.length;
+  const pct = Math.round((answered / total) * 100);
+  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = `${answered} / ${total} 問回答済み`;
+}
+
+// ========================================
+// メールフィールド表示
+// ========================================
+function toggleEmailField() {
+  const check = document.getElementById('send-email-check');
+  const field = document.getElementById('email-field');
+  if (check.checked) {
+    field.classList.add('show');
+    if (userEmail) document.getElementById('result-email').value = userEmail;
+  } else {
+    field.classList.remove('show');
+  }
+}
+
+// ========================================
+// クイズ送信
+// ========================================
+async function submitQuiz() {
+  // 未回答チェック
+  const unanswered = QUESTIONS.filter(q => currentAnswers[q.id] === undefined);
+  if (unanswered.length > 0) {
+    document.getElementById('unanswered-warn').style.display = 'block';
+    document.getElementById('unanswered-warn').textContent =
+      `⚠️ ${unanswered.length}問が未回答です（Q${unanswered.map(q=>q.id).join('・Q')}）。全問回答してから送信してください。`;
+    document.getElementById('unanswered-warn').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.textContent = '送信中...';
+
+  // スコア計算
+  const scoreData = calcScore();
+
+  // メール送信設定
+  const sendEmail = document.getElementById('send-email-check').checked;
+  const emailForResult = document.getElementById('result-email').value.trim() || userEmail;
+
+  // Firebase Firestore に保存
+  try {
+    const docRef = await db.collection('responses').add({
+      timestamp: new Date().toISOString(),
+      name: userName,
+      email: emailForResult || '',
+      occupation: userOccupation,
+      answers: currentAnswers,
+      score: scoreData.score,
+      domainScores: scoreData.domainScores,
+    });
+    submissionId = docRef.id;
+  } catch (err) {
+    console.error('保存エラー:', err);
+    // エラーでも結果は表示する
+  }
+
+  // プログレスバー非表示
+  document.getElementById('progress-bar-wrap').style.display = 'none';
+  document.getElementById('progress-text').style.display = 'none';
+
+  // 結果表示
+  finalScore = scoreData.score;
+  finalDomainScores = scoreData.domainScores;
+  buildResults(scoreData);
+  showScreen('results');
+}
+
+// ========================================
+// スコア計算
+// ========================================
+function calcScore() {
+  let totalCorrect = 0;
+  const domainScores = {};
+
+  Object.keys(DOMAINS).forEach(d => { domainScores[d] = { correct: 0, total: 0, wrong: [] }; });
+
+  QUESTIONS.forEach(q => {
+    const answered = currentAnswers[q.id];
+    domainScores[q.domain].total++;
+    if (answered === q.correct) {
+      totalCorrect++;
+      domainScores[q.domain].correct++;
+    } else {
+      domainScores[q.domain].wrong.push(q.id);
+    }
+  });
+
+  const percentage = Math.round((totalCorrect / QUESTIONS.length) * 100);
+
+  return {
+    score: { correct: totalCorrect, total: QUESTIONS.length, percentage },
+    domainScores
+  };
+}
+
+// ========================================
+// 結果画面構築
+// ========================================
+function buildResults({ score, domainScores }) {
+  // スコア表示
+  document.getElementById('result-score').innerHTML = `${score.percentage}<span>%</span>`;
+  document.getElementById('result-correct').textContent = `${score.correct}問正解 / 全${score.total}問中`;
+
+  // レベル判定
+  let level;
+  if (score.percentage >= 80) level = '専門家レベル 🏆';
+  else if (score.percentage >= 60) level = '中級レベル ⭐';
+  else if (score.percentage >= 40) level = '初中級レベル 📚';
+  else level = '入門レベル 🌱';
+  document.getElementById('result-level').textContent = level;
+
+  // 分野別スコア
+  let domainHtml = '';
+  Object.entries(domainScores).forEach(([key, data]) => {
+    const pct = Math.round((data.correct / data.total) * 100);
+    const domain = DOMAINS[key];
+    let barColor, badgeClass, badgeText;
+    if (pct >= 75) { barColor = '#2d5a3d'; badgeClass = 'badge-good'; badgeText = '得意 ✓'; }
+    else if (pct >= 50) { barColor = '#c9a84c'; badgeClass = 'badge-mid';  badgeText = 'まずまず'; }
+    else { barColor = '#c0392b'; badgeClass = 'badge-low';  badgeText = '要強化 ▲'; }
+
+    domainHtml += `
+      <div class="domain-score-item">
+        <div class="domain-score-top">
+          <span class="domain-score-name">${domain.icon} ${domain.label}</span>
+          <span class="domain-score-num">${data.correct}/${data.total}問</span>
+        </div>
+        <div class="domain-bar-bg">
+          <div class="domain-bar-fill" style="width:0%; background:${barColor};" data-width="${pct}%"></div>
+        </div>
+        <span class="domain-score-badge ${badgeClass}">${pct}% ${badgeText}</span>
+      </div>
+    `;
+  });
+  document.getElementById('domain-score-list').innerHTML = domainHtml;
+
+  // バーアニメーション
+  setTimeout(() => {
+    document.querySelectorAll('.domain-bar-fill').forEach(el => {
+      el.style.width = el.dataset.width;
+    });
+  }, 100);
+
+  // アドバイス
+  const weak = Object.entries(domainScores)
+    .filter(([_, d]) => Math.round((d.correct / d.total) * 100) < 50)
+    .map(([key]) => DOMAINS[key].label);
+  const strong = Object.entries(domainScores)
+    .filter(([_, d]) => Math.round((d.correct / d.total) * 100) >= 75)
+    .map(([key]) => DOMAINS[key].label);
+
+  let adviceHtml = '';
+  if (weak.length > 0) {
+    adviceHtml += `<div class="advice-card advice-weak">📌 <strong>重点強化分野：</strong>${weak.join('・')}<br>コースではこれらの分野を丁寧に学べます。受講後の変化を楽しみにしてください！</div>`;
+  }
+  if (strong.length > 0) {
+    adviceHtml += `<div class="advice-card advice-strong">🌟 <strong>すでに得意な分野：</strong>${strong.join('・')}<br>基礎がある分野です。コースではさらに深い知識と実践スキルが得られます！</div>`;
+  }
+  if (weak.length === 0 && strong.length === 0) {
+    adviceHtml += `<div class="advice-card advice-strong">バランスよく知識がついています！コースで全分野の知識をさらに深めましょう。</div>`;
+  }
+  document.getElementById('advice-content').innerHTML = adviceHtml;
+
+  // 正解一覧
+  buildReview();
+
+  // メールが未入力ならメール入力フィールドを表示ボタンとして用意
+  if (!userEmail) {
+    document.getElementById('email-toggle-btn').style.display = 'inline-flex';
+  } else {
+    document.getElementById('result-email-2').value = userEmail;
+  }
+}
+
+// ========================================
+// 正解確認一覧
+// ========================================
+function buildReview() {
+  let html = '';
+  QUESTIONS.forEach(q => {
+    const answered = currentAnswers[q.id];
+    const isCorrect = answered === q.correct;
+    const itemClass = isCorrect ? 'review-correct' : 'review-wrong';
+    const icon = isCorrect ? '✅' : '❌';
+    html += `
+      <div class="review-item ${itemClass}">
+        <div class="review-q">${icon} Q${q.id}. ${q.text}</div>
+        ${!isCorrect ? `<div class="review-your">あなたの回答：${String.fromCharCode(65 + answered)}. ${q.choices[answered]}</div>` : ''}
+        <div class="review-ans">正解：${String.fromCharCode(65 + q.correct)}. ${q.choices[q.correct]}</div>
+        <div style="margin-top:6px; color:#4a5e52; font-size:12px;">💡 ${q.explanation}</div>
+      </div>
+    `;
+  });
+  document.getElementById('review-list').innerHTML = html;
+}
+
+function toggleReview() {
+  const list = document.getElementById('review-list');
+  const btn = document.querySelector('.review-toggle');
+  if (list.classList.contains('show')) {
+    list.classList.remove('show');
+    btn.textContent = '▼ 全問の正解・解説を見る';
+  } else {
+    list.classList.add('show');
+    btn.textContent = '▲ 閉じる';
+  }
+}
+
+// ========================================
+// メール送信（結果画面から）
+// ========================================
+function toggleEmailSection() {
+  const sec = document.getElementById('email-send-section');
+  const btn = document.getElementById('email-toggle-btn');
+  if (sec.style.display === 'none') {
+    sec.style.display = 'block';
+    btn.style.display = 'none';
+    sec.scrollIntoView({ behavior: 'smooth' });
+  } else {
+    sec.style.display = 'none';
+  }
+}
+
+async function sendEmailFromResult() {
+  // メール送信機能は現在準備中です（GitHub Pages 版）
+  document.getElementById('email-result-msg').style.color = 'var(--text-mid)';
+  document.getElementById('email-result-msg').textContent = '📋 結果はこの画面でご確認ください。スクリーンショットを保存することをおすすめします。';
+}
+
+function showResults() {
+  showScreen('results');
+}
+
+// ========================================
+// マイページ機能：メール検索 or ?id= で結果表示
+// ========================================
+async function lookupByEmail() {
+  const email = document.getElementById('input-email').value.trim().toLowerCase();
+  const errBox = document.getElementById('lookup-error');
+  errBox.style.display = 'none';
+
+  if (!email || !email.includes('@')) {
+    errBox.textContent = '⚠️ 有効なメールアドレスを入力してください';
+    errBox.style.display = 'block';
+    return;
+  }
+
+  const btn = document.getElementById('lookup-btn');
+  btn.disabled = true;
+  btn.textContent = '検索中...';
+
+  try {
+    const snap = await db.collection('responses')
+      .where('email', '==', email)
+      .orderBy('timestamp', 'desc')
+      .limit(1)
+      .get();
+
+    if (snap.empty) {
+      errBox.innerHTML = '⚠️ このメールアドレスで受診した記録が見つかりませんでした。<br>メールアドレスが正しいかご確認いただくか、<a href="assessment.html" style="color:var(--green-dark);font-weight:600;">こちらから受診</a>してください。';
+      errBox.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = '結果を見る →';
+      return;
+    }
+
+    const doc = snap.docs[0];
+    renderResultFromDoc(doc.id, doc.data());
+
+  } catch (err) {
+    console.error('検索エラー:', err);
+    errBox.textContent = '⚠️ 検索中にエラーが発生しました。時間をおいて再度お試しください。';
+    errBox.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = '結果を見る →';
+  }
+}
+
+async function lookupById(id) {
+  try {
+    const doc = await db.collection('responses').doc(id).get();
+    if (!doc.exists) {
+      document.getElementById('lookup-error').textContent = '⚠️ 指定されたIDの診断結果が見つかりませんでした。';
+      document.getElementById('lookup-error').style.display = 'block';
+      return;
+    }
+    renderResultFromDoc(doc.id, doc.data());
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+function renderResultFromDoc(docId, data) {
+  // メタ情報を埋め込む
+  const ts = data.timestamp ? new Date(data.timestamp) : null;
+  const dateStr = ts ? ts.toLocaleString('ja-JP', { year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit' }) : '—';
+  document.getElementById('meta-date').textContent = dateStr;
+  document.getElementById('meta-name').textContent = data.name || '—';
+  document.getElementById('meta-occupation').textContent = data.occupation || '—';
+
+  // currentAnswers を復元して buildResults が使えるようにする
+  currentAnswers = data.answers || {};
+
+  // スコアデータを構築
+  const scoreData = {
+    score: data.score,
+    domainScores: data.domainScores
+  };
+
+  buildResults(scoreData);
+  showScreen('results');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ページロード時：?id= パラメータがあれば直接表示
+window.addEventListener('DOMContentLoaded', () => {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+  if (id) {
+    lookupById(id);
+  }
+});
+</script>
+</body>
+</html>
