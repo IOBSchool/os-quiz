@@ -527,6 +527,43 @@
       padding-left: 12px;
       border-left: 4px solid var(--green-mid);
     }
+    .mypage-section {
+      padding: 0 40px 32px;
+      border-top: 1px solid var(--green-pale);
+      margin-top: 0;
+    }
+    .mypage-section h3 {
+      font-size: 16px;
+      color: var(--green-dark);
+      font-weight: 700;
+      margin: 32px 0 12px;
+      padding-left: 12px;
+      border-left: 4px solid var(--gold);
+    }
+    .mypage-url-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--green-pale);
+      border: 1px solid var(--green-light);
+      border-radius: 10px;
+      padding: 12px 16px;
+    }
+    .mypage-url-box span { flex: 1; }
+    .copy-btn {
+      flex-shrink: 0;
+      background: var(--green-mid);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-family: 'Noto Sans JP', sans-serif;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      white-space: nowrap;
+    }
+    .copy-btn:hover { opacity: 0.8; }
     .result-actions {
       padding: 32px 40px 40px;
       display: flex;
@@ -761,6 +798,18 @@
       </div>
       <button class="btn-primary" onclick="sendEmailFromResult()" style="margin-top:0;">メールを送信する</button>
       <div id="email-result-msg" style="margin-top:10px; font-size:13px;"></div>
+    </div>
+
+    <!-- マイページURL -->
+    <div class="mypage-section" id="mypage-section" style="display:none;">
+      <h3>🔖 マイページ — いつでも見返せます</h3>
+      <p style="font-size:13px; color:var(--text-mid); margin-bottom:12px;">
+        下のURLをブックマークするか、メールで受け取っておくといつでも結果を確認できます。
+      </p>
+      <div class="mypage-url-box">
+        <span id="mypage-url-text" style="font-size:12px; word-break:break-all; color:var(--green-dark);"></span>
+        <button class="copy-btn" onclick="copyMypageUrl()" id="copy-btn">コピー</button>
+      </div>
     </div>
 
     <!-- アクションボタン -->
@@ -1247,6 +1296,13 @@ async function submitQuiz() {
     // エラーでも結果は表示する
   }
 
+  // マイページURL生成
+  const BASE_URL = 'https://iobschool.github.io/os-quiz/my-result.html';
+  let mypageUrl = '';
+  if (submissionId) {
+    mypageUrl = `${BASE_URL}?id=${submissionId}`;
+  }
+
   // プログレスバー非表示
   document.getElementById('progress-bar-wrap').style.display = 'none';
   document.getElementById('progress-text').style.display = 'none';
@@ -1254,7 +1310,7 @@ async function submitQuiz() {
   // 結果表示
   finalScore = scoreData.score;
   finalDomainScores = scoreData.domainScores;
-  buildResults(scoreData);
+  buildResults(scoreData, mypageUrl);
   showScreen('results');
 }
 
@@ -1289,7 +1345,7 @@ function calcScore() {
 // ========================================
 // 結果画面構築
 // ========================================
-function buildResults({ score, domainScores }) {
+function buildResults({ score, domainScores }, mypageUrl = '') {
   // スコア表示
   document.getElementById('result-score').innerHTML = `${score.percentage}<span>%</span>`;
   document.getElementById('result-correct').textContent = `${score.correct}問正解 / 全${score.total}問中`;
@@ -1357,6 +1413,14 @@ function buildResults({ score, domainScores }) {
   // 正解一覧
   buildReview();
 
+  // マイページURL表示
+  if (mypageUrl) {
+    document.getElementById('mypage-section').style.display = 'block';
+    document.getElementById('mypage-url-text').textContent = mypageUrl;
+    // グローバルに保持（コピー用）
+    window._mypageUrl = mypageUrl;
+  }
+
   // メールが未入力ならメール入力フィールドを表示ボタンとして用意
   if (!userEmail) {
     document.getElementById('email-toggle-btn').style.display = 'inline-flex';
@@ -1414,10 +1478,57 @@ function toggleEmailSection() {
   }
 }
 
+// マイページURLコピー
+function copyMypageUrl() {
+  const url = window._mypageUrl || '';
+  if (!url) return;
+  navigator.clipboard.writeText(url).then(() => {
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = 'コピーしました！';
+    setTimeout(() => { btn.textContent = 'コピー'; }, 2000);
+  });
+}
+
+// GASへの送信（GAS WebアプリURLをここに設定）
+const GAS_URL = ''; // ← GASデプロイ後にURLを入れる
+
 async function sendEmailFromResult() {
-  // メール送信機能は現在準備中です（GitHub Pages 版）
-  document.getElementById('email-result-msg').style.color = 'var(--text-mid)';
-  document.getElementById('email-result-msg').textContent = '📋 結果はこの画面でご確認ください。スクリーンショットを保存することをおすすめします。';
+  const email = document.getElementById('result-email-2').value.trim() || userEmail;
+  if (!email) {
+    document.getElementById('email-result-msg').style.color = 'var(--red)';
+    document.getElementById('email-result-msg').textContent = 'メールアドレスを入力してください。';
+    return;
+  }
+  if (!GAS_URL) {
+    document.getElementById('email-result-msg').style.color = 'var(--text-mid)';
+    document.getElementById('email-result-msg').textContent = '📋 メール送信の準備中です。マイページURLをブックマークしておいてください。';
+    return;
+  }
+
+  const msgEl = document.getElementById('email-result-msg');
+  msgEl.style.color = 'var(--text-mid)';
+  msgEl.textContent = '送信中...';
+
+  try {
+    await fetch(GAS_URL, {
+      method: 'POST',
+      body: JSON.stringify({
+        name:         userName,
+        email:        email,
+        occupation:   userOccupation,
+        score:        finalScore.correct,
+        total:        finalScore.total,
+        percentage:   finalScore.percentage,
+        domainScores: finalDomainScores,
+        mypageUrl:    window._mypageUrl || ''
+      })
+    });
+    msgEl.style.color = 'var(--green-dark)';
+    msgEl.textContent = '✅ 送信しました！メールをご確認ください。';
+  } catch (e) {
+    msgEl.style.color = 'var(--red)';
+    msgEl.textContent = '送信に失敗しました。もう一度お試しください。';
+  }
 }
 
 function showResults() {
