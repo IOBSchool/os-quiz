@@ -2,6 +2,13 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
+    <script>
+    (function () {
+      if (Date.now() >= new Date('2026-06-01T00:00:00+09:00').getTime()) {
+        location.replace('closed.html');
+      }
+    })();
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>オーガニック知識 事前診断 | IOB</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
