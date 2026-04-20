@@ -1312,6 +1312,24 @@ async function submitQuiz() {
   finalDomainScores = scoreData.domainScores;
   buildResults(scoreData, mypageUrl);
   showScreen('results');
+
+  // メールアドレスがあれば自動送信
+  if (emailForResult && GAS_URL) {
+    fetch(GAS_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: JSON.stringify({
+        name:         userName,
+        email:        emailForResult,
+        occupation:   userOccupation,
+        score:        scoreData.score.correct,
+        total:        scoreData.score.total,
+        percentage:   scoreData.score.percentage,
+        domainScores: scoreData.domainScores,
+        mypageUrl:    mypageUrl
+      })
+    }).catch(err => console.error('自動メール送信エラー:', err));
+  }
 }
 
 // ========================================
@@ -1512,6 +1530,7 @@ async function sendEmailFromResult() {
   try {
     await fetch(GAS_URL, {
       method: 'POST',
+      mode: 'no-cors',
       body: JSON.stringify({
         name:         userName,
         email:        email,
