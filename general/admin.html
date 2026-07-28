@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>オーガニッククイズ 管理画面</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Zen+Old+Mincho:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--orange:#f26b3b;--brown:#553727;--cream:#f9f7ef;--blue:#0085c9;--tan:#85634b;--line:#e6ded0;--ok:#2e9e63;--ng:#d9534f;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--cream);color:var(--brown);line-height:1.75;font-size:15px;}
+.wrap{max-width:900px;margin:0 auto;padding:0 18px 70px;}
+h1{font-family:'Zen Old Mincho',serif;font-size:22px;}
+h2{font-size:17px;margin:30px 0 12px;}
+
+/* login */
+#login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+#login .box{background:#fff;border:1px solid var(--line);border-radius:16px;padding:32px 26px;max-width:380px;width:100%;text-align:center;}
+input[type=password],input[type=text]{
+  width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:10px;
+  font-family:inherit;font-size:15px;background:var(--cream);color:var(--brown);margin-top:14px;
+}
+input:focus{outline:none;border-color:var(--orange);}
+button{
+  font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;border:none;
+  background:var(--orange);color:#fff;padding:13px 22px;border-radius:99px;margin-top:14px;
+}
+button.ghost{background:#fff;color:var(--brown);border:1.5px solid var(--line);}
+.err{color:var(--ng);font-size:13px;margin-top:10px;min-height:18px;}
+
+/* admin */
+#admin{display:none;}
+header{display:flex;align-items:center;justify-content:space-between;padding:22px 0;border-bottom:1px solid var(--line);flex-wrap:wrap;gap:10px;}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:22px;}
+.stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 16px;text-align:center;}
+.stat .n{font-family:'Zen Old Mincho',serif;font-size:32px;font-weight:700;color:var(--orange);line-height:1.2;}
+.stat .l{font-size:12.5px;color:var(--tan);}
+.panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;}
+.qrow{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px dashed var(--line);font-size:13.5px;}
+.qrow:last-child{border-bottom:none;}
+.qrow .qid{width:38px;flex-shrink:0;font-weight:700;color:var(--tan);}
+.qrow .qbar{flex:1;height:9px;background:#efe8dc;border-radius:99px;overflow:hidden;}
+.qrow .qbar i{display:block;height:100%;border-radius:99px;background:var(--blue);}
+.qrow .qpct{width:52px;text-align:right;font-weight:700;flex-shrink:0;}
+.qrow .qtxt{flex:2;color:var(--tan);font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.hist{display:flex;align-items:flex-end;gap:6px;height:130px;margin-top:6px;}
+.hist .col{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:5px;}
+.hist .col i{display:block;width:100%;background:var(--orange);border-radius:5px 5px 0 0;min-height:2px;}
+.hist .col span{font-size:11px;color:var(--tan);}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:6px;}
+th,td{padding:9px 8px;text-align:left;border-bottom:1px solid var(--line);}
+th{font-size:12px;color:var(--tan);font-weight:500;}
+td.score{font-weight:700;}
+.scroll{overflow-x:auto;}
+.note{font-size:12.5px;color:var(--tan);margin-top:8px;}
+</style>
+</head>
+<body>
+
+<div id="login">
+  <div class="box">
+    <h1>クイズ管理画面</h1>
+    <input type="password" id="pw" placeholder="パスワード" onkeydown="if(event.key==='Enter')login()">
+    <div class="err" id="err"></div>
+    <button onclick="login()">ログイン</button>
+  </div>
+</div>
+
+<div id="admin">
+  <div class="wrap">
+    <header>
+      <h1>オーガニッククイズ 集計</h1>
+      <div>
+        <button class="ghost" onclick="loadData()">更新</button>
+        <button class="ghost" onclick="downloadCsv()">CSV</button>
+      </div>
+    </header>
+
+    <div class="stats">
+      <div class="stat"><div class="n" id="s-count">0</div><div class="l">回答数</div></div>
+      <div class="stat"><div class="n" id="s-avg">0</div><div class="l">平均点</div></div>
+      <div class="stat"><div class="n" id="s-med">0</div><div class="l">中央値</div></div>
+      <div class="stat"><div class="n" id="s-max">0</div><div class="l">最高点</div></div>
+      <div class="stat"><div class="n" id="s-mail">0</div><div class="l">メール登録</div></div>
+    </div>
+
+    <h2>📊 点数の分布</h2>
+    <div class="panel">
+      <div class="hist" id="hist"></div>
+      <p class="note">目標：平均30点前後。40点以上に山が寄っていたら問題がやさしすぎる合図です。</p>
+    </div>
+
+    <h2>🎯 問題ごとの正答率</h2>
+    <div class="panel" id="qstats"></div>
+    <p class="note">正答率が70%を超える問題は簡単すぎ、10%を切る問題は選択肢に問題がある可能性があります。</p>
+
+    <h2>📝 回答一覧</h2>
+    <div class="panel scroll">
+      <table>
+        <thead><tr><th>日時</th><th>点数</th><th>正解数</th><th>メール</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="questions.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyB9MDI8rsd1NRscUtUt0sbXLP_4HVZwXEA",
+  authDomain: "organic-knowledge-assessment.firebaseapp.com",
+  projectId: "organic-knowledge-assessment",
+  storageBucket: "organic-knowledge-assessment.firebasestorage.app",
+  messagingSenderId: "522044690677",
+  appId: "1:522044690677:web:eadb0e866fecd525c835bc"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const COLLECTION = 'public-quiz-responses';
+const ADMIN_PASSWORD = 'iob-quiz-admin';
+
+let rows = [];
+
+function login(){
+  const v = document.getElementById('pw').value;
+  if (v !== ADMIN_PASSWORD){
+    document.getElementById('err').textContent = 'パスワードが違います。';
+    return;
+  }
+  document.getElementById('login').style.display='none';
+  document.getElementById('admin').style.display='block';
+  loadData();
+}
+
+async function loadData(){
+  try{
+    const snap = await db.collection(COLLECTION).orderBy('timestamp','desc').get();
+    rows = snap.docs.map(d=>({id:d.id, ...d.data()}));
+    render();
+  }catch(e){
+    console.error(e);
+    alert('データの取得に失敗しました：'+e.message);
+  }
+}
+
+function render(){
+  const n = rows.length;
+  const scores = rows.map(r=>r.score||0).sort((a,b)=>a-b);
+  const avg = n ? Math.round(scores.reduce((a,b)=>a+b,0)/n) : 0;
+  const med = n ? (n%2 ? scores[(n-1)/2] : Math.round((scores[n/2-1]+scores[n/2])/2)) : 0;
+
+  document.getElementById('s-count').textContent = n;
+  document.getElementById('s-avg').textContent = avg;
+  document.getElementById('s-med').textContent = med;
+  document.getElementById('s-max').textContent = n ? scores[n-1] : 0;
+  document.getElementById('s-mail').textContent = rows.filter(r=>r.email).length;
+
+  // histogram 0-19,20-39,...
+  const buckets = [0,0,0,0,0];
+  scores.forEach(s=>{ buckets[Math.min(4, Math.floor(s/20))]++; });
+  const peak = Math.max(1, ...buckets);
+  const labels = ['0-19','20-39','40-59','60-79','80-100'];
+  document.getElementById('hist').innerHTML = buckets.map((b,i)=>
+    '<div class="col"><span>'+b+'人</span><i style="height:'+Math.round(b/peak*88)+'px"></i><span>'+labels[i]+'</span></div>'
+  ).join('');
+
+  // per-question correct rate
+  document.getElementById('qstats').innerHTML = QUESTIONS.map((q,i)=>{
+    let tried=0, ok=0;
+    rows.forEach(r=>{
+      const a = r.answers && r.answers[q.id];
+      if (a === undefined || a === null) return;
+      tried++;
+      if (a === q.correct) ok++;
+    });
+    const pct = tried ? Math.round(ok/tried*100) : 0;
+    const color = pct>=70 ? '#d9534f' : (pct<10 ? '#c9a84c' : '#0085c9');
+    return '<div class="qrow"><span class="qid">Q'+(i+1)+'</span>'
+      + '<span class="qbar"><i style="width:'+pct+'%;background:'+color+'"></i></span>'
+      + '<span class="qpct">'+pct+'%</span>'
+      + '<span class="qtxt">'+q.q.slice(0,26)+'…</span></div>';
+  }).join('');
+
+  document.getElementById('rows').innerHTML = rows.map(r=>{
+    const t = r.timestamp ? new Date(r.timestamp).toLocaleString('ja-JP') : '—';
+    return '<tr><td>'+t+'</td><td class="score">'+(r.score||0)+'点</td><td>'+(r.correct||0)+'/'+(r.total||20)+'</td><td>'+(r.email||'—')+'</td></tr>';
+  }).join('');
+}
+
+function downloadCsv(){
+  const head = ['日時','点数','正解数','メール'].concat(QUESTIONS.map((q,i)=>'Q'+(i+1)));
+  const lines = [head.join(',')];
+  rows.forEach(r=>{
+    const cells = [
+      r.timestamp||'', r.score||0, r.correct||0, r.email||''
+    ].concat(QUESTIONS.map(q=>{
+      const a = r.answers ? r.answers[q.id] : undefined;
+      if (a === undefined || a === null) return '';
+      return (a === q.correct ? '○' : '×') + String.fromCharCode(65+a);
+    }));
+    lines.push(cells.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(','));
+  });
+  const blob = new Blob(['﻿'+lines.join('\n')], {type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'organic-quiz-results.csv';
+  a.click();
+}
+</script>
+</body>
+</html>

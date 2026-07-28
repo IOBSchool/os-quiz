@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>オーガニック理解度クイズ 〜わかってるつもり度チェック〜</title>
+<meta name="description" content="全20問4択。どれも聞いたことがある身近な話。あなたのオーガニック理解度は何点？">
+<meta property="og:title" content="オーガニック理解度クイズ 〜わかってるつもり度チェック〜">
+<meta property="og:description" content="全20問4択。どれも聞いたことがある身近な話。あなたのオーガニック理解度は何点？">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Zen+Old+Mincho:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --orange:#f26b3b;
+  --brown:#553727;
+  --cream:#f9f7ef;
+  --blue:#0085c9;
+  --tan:#85634b;
+  --ok:#2e9e63;
+  --ng:#d9534f;
+  --line:#e6ded0;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{
+  font-family:'Noto Sans JP',sans-serif;
+  background:var(--cream);
+  color:var(--brown);
+  line-height:1.8;
+  font-size:16px;
+  padding-bottom:60px;
+}
+.wrap{max-width:640px;margin:0 auto;padding:0 18px;}
+h1,h2,.serif{font-family:'Zen Old Mincho',serif;}
+
+/* ===== progress ===== */
+#progress-wrap{
+  position:sticky;top:0;z-index:50;
+  background:rgba(249,247,239,.96);
+  backdrop-filter:blur(6px);
+  padding:12px 0 10px;
+  border-bottom:1px solid var(--line);
+  display:none;
+}
+.bar-bg{height:8px;background:#eae3d6;border-radius:99px;overflow:hidden;}
+.bar-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--orange),#f79b6d);border-radius:99px;transition:width .35s ease;}
+.bar-text{font-size:12.5px;color:var(--tan);margin-top:6px;display:flex;justify-content:space-between;}
+
+/* ===== screens ===== */
+.screen{display:none;}
+.screen.active{display:block;animation:fade .35s ease;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+
+/* ===== start ===== */
+.hero{text-align:center;padding:48px 0 8px;}
+.hero .badge{
+  display:inline-block;background:var(--orange);color:#fff;
+  font-size:12px;font-weight:700;letter-spacing:.08em;
+  padding:5px 14px;border-radius:99px;margin-bottom:20px;
+}
+.hero h1{font-size:27px;line-height:1.5;font-weight:700;margin-bottom:6px;}
+.hero .sub{font-size:15px;color:var(--tan);margin-bottom:26px;}
+.card{
+  background:#fff;border:1px solid var(--line);border-radius:16px;
+  padding:26px 22px;box-shadow:0 2px 14px rgba(85,55,39,.05);
+}
+.lead{font-size:15.5px;margin-bottom:0;}
+.lead p{margin-bottom:12px;}
+.lead p:last-child{margin-bottom:0;}
+.btn{
+  display:block;width:100%;border:none;cursor:pointer;
+  font-family:inherit;font-size:17px;font-weight:700;
+  background:var(--orange);color:#fff;
+  padding:17px;border-radius:99px;margin-top:26px;
+  box-shadow:0 4px 14px rgba(242,107,59,.3);
+  transition:transform .12s ease,box-shadow .12s ease;
+}
+.btn:active{transform:translateY(2px);box-shadow:0 2px 8px rgba(242,107,59,.3);}
+.btn.sub{background:#fff;color:var(--brown);border:1.5px solid var(--line);box-shadow:none;font-size:15px;padding:14px;}
+.btn:disabled{opacity:.5;cursor:default;}
+
+/* ===== question ===== */
+.q-head{display:flex;align-items:center;gap:10px;margin:26px 0 14px;}
+.q-num{
+  background:var(--brown);color:#fff;font-weight:700;font-size:13px;
+  padding:4px 12px;border-radius:99px;letter-spacing:.04em;flex-shrink:0;
+}
+.q-text{font-size:19px;font-weight:700;line-height:1.65;margin-bottom:20px;}
+.choices{display:flex;flex-direction:column;gap:11px;}
+.choice{
+  display:flex;gap:12px;align-items:flex-start;
+  background:#fff;border:1.5px solid var(--line);border-radius:13px;
+  padding:15px 16px;cursor:pointer;font-size:15.5px;line-height:1.65;
+  transition:border-color .15s ease,background .15s ease,transform .1s ease;
+  text-align:left;font-family:inherit;color:var(--brown);width:100%;
+}
+.choice:active{transform:scale(.99);}
+.choice .mark{
+  flex-shrink:0;width:26px;height:26px;border-radius:50%;
+  background:var(--cream);border:1.5px solid var(--line);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;color:var(--tan);margin-top:1px;
+}
+.choice:not(.locked):hover{border-color:var(--orange);}
+.choice.correct{border-color:var(--ok);background:#f0faf4;}
+.choice.correct .mark{background:var(--ok);border-color:var(--ok);color:#fff;}
+.choice.wrong{border-color:var(--ng);background:#fdf3f2;}
+.choice.wrong .mark{background:var(--ng);border-color:var(--ng);color:#fff;}
+.choice.locked{cursor:default;}
+.choice.dim{opacity:.55;}
+
+/* ===== feedback ===== */
+.fb{margin-top:18px;display:none;}
+.fb.show{display:block;animation:fade .3s ease;}
+.fb-head{display:flex;align-items:center;gap:9px;font-weight:700;font-size:17px;margin-bottom:9px;}
+.fb-head.ok{color:var(--ok);}
+.fb-head.ng{color:var(--ng);}
+.fb-body{
+  background:#fff;border-left:4px solid var(--orange);
+  border-radius:0 12px 12px 0;padding:16px 17px;
+  font-size:14.5px;line-height:1.85;
+}
+
+/* ===== result ===== */
+.result-hero{
+  background:linear-gradient(160deg,var(--brown),#6d4a35);
+  color:#fff;border-radius:20px;padding:38px 24px 32px;text-align:center;margin-top:30px;
+}
+.result-hero .label{font-size:12px;letter-spacing:.14em;opacity:.75;}
+.score-big{font-family:'Zen Old Mincho',serif;font-size:76px;font-weight:700;line-height:1.1;margin:4px 0;}
+.score-big span{font-size:26px;margin-left:3px;}
+.score-sub{font-size:14px;opacity:.85;margin-bottom:20px;}
+.level-badge{
+  display:inline-block;background:var(--orange);
+  padding:9px 22px;border-radius:99px;font-weight:700;font-size:16px;
+}
+.level-msg{font-size:14.5px;margin-top:16px;opacity:.95;line-height:1.8;}
+h2.sec{font-size:19px;margin:34px 0 14px;font-weight:700;}
+.review-item{
+  background:#fff;border:1px solid var(--line);border-radius:13px;
+  padding:16px 17px;margin-bottom:11px;
+}
+.review-q{font-weight:700;font-size:15px;margin-bottom:9px;display:flex;gap:9px;}
+.review-q .ico{flex-shrink:0;}
+.review-ans{font-size:14px;color:var(--tan);margin-bottom:8px;}
+.review-ans b{color:var(--ok);}
+.review-exp{font-size:14px;line-height:1.8;padding-top:9px;border-top:1px dashed var(--line);}
+.share-row{display:flex;gap:10px;margin-top:14px;}
+.share-btn{
+  flex:1;text-align:center;text-decoration:none;
+  border-radius:99px;padding:13px 6px;font-size:14px;font-weight:700;
+  border:1.5px solid var(--line);background:#fff;color:var(--brown);
+}
+.cta{background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px 22px;margin-top:16px;}
+.cta p{font-size:14.5px;margin-bottom:14px;}
+.link-list{list-style:none;font-size:14.5px;}
+.link-list li{margin-bottom:9px;}
+.link-list a{color:var(--blue);text-decoration:none;font-weight:500;}
+.mail-box{margin-top:14px;}
+.mail-box input{
+  width:100%;padding:14px 15px;border:1.5px solid var(--line);border-radius:11px;
+  font-family:inherit;font-size:15px;color:var(--brown);background:var(--cream);
+}
+.mail-box input:focus{outline:none;border-color:var(--orange);}
+.mini{font-size:12.5px;color:var(--tan);margin-top:8px;line-height:1.7;}
+.msg{font-size:13.5px;margin-top:10px;}
+.msg.ok{color:var(--ok);}
+.msg.ng{color:var(--ng);}
+footer{text-align:center;font-size:12px;color:var(--tan);margin-top:44px;line-height:2;}
+footer a{color:var(--tan);}
+</style>
+</head>
+<body>
+
+<div id="progress-wrap">
+  <div class="wrap">
+    <div class="bar-bg"><div class="bar-fill" id="bar"></div></div>
+    <div class="bar-text"><span id="bar-count">1 / 20問</span><span id="bar-score">正解 0</span></div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ============ START ============ -->
+  <div class="screen active" id="screen-start">
+    <div class="hero">
+      <span class="badge">ORGANIC QUIZ</span>
+      <h1>オーガニック<br>理解度クイズ</h1>
+      <p class="sub">〜 わかってるつもり度チェック 〜</p>
+    </div>
+    <div class="card lead">
+      <p>全20問、ぜんぶ4択です。</p>
+      <p>どれも「聞いたことある」身近な話ばかり。</p>
+      <p>半分わかったら、かなりのオーガニック通。気楽に直感で答えてみてください。</p>
+      <p>最後に解説がつくので、受け終わるころには周りの人にちょっと話したくなるはずです。</p>
+      <button class="btn" onclick="startQuiz()">はじめる</button>
+    </div>
+    <footer>
+      監修：レムケなつこ（オーガニックビジネス研究所）<br>
+      <a href="https://iob.bio/" target="_blank" rel="noopener">iob.bio</a>
+    </footer>
+  </div>
+
+  <!-- ============ QUIZ ============ -->
+  <div class="screen" id="screen-quiz">
+    <div class="q-head">
+      <span class="q-num" id="q-num">Q1</span>
+    </div>
+    <div class="q-text" id="q-text"></div>
+    <div class="choices" id="choices"></div>
+    <div class="fb" id="fb">
+      <div class="fb-head" id="fb-head"></div>
+      <div class="fb-body" id="fb-exp"></div>
+      <button class="btn" id="next-btn" onclick="nextQuestion()">次の問題へ →</button>
+    </div>
+  </div>
+
+  <!-- ============ RESULT ============ -->
+  <div class="screen" id="screen-result">
+    <div class="result-hero">
+      <div class="label">YOUR SCORE</div>
+      <div class="score-big" id="r-score">0<span>点</span></div>
+      <div class="score-sub" id="r-correct">20問中0問正解</div>
+      <div class="level-badge" id="r-level">—</div>
+      <div class="level-msg" id="r-msg"></div>
+    </div>
+
+    <h2 class="sec">📣 結果をシェアする</h2>
+    <div class="share-row">
+      <a class="share-btn" id="share-x" href="#" target="_blank" rel="noopener">Xでシェア</a>
+      <a class="share-btn" id="share-line" href="#" target="_blank" rel="noopener">LINEで送る</a>
+    </div>
+
+    <h2 class="sec">📚 もっと知りたい人へ</h2>
+    <div class="cta">
+      <p>クイズで気になったことは、こちらでもっと詳しく話しています。</p>
+      <ul class="link-list">
+        <li>🎙 <a href="https://voicy.jp/channel/959858" target="_blank" rel="noopener">Voicy「スナックなつこ」（毎朝6時）</a></li>
+        <li>📷 <a href="https://www.instagram.com/natsuko_bio" target="_blank" rel="noopener">Instagram @natsuko_bio</a></li>
+        <li>🌏 <a href="https://iob.bio/" target="_blank" rel="noopener">オーガニックビジネス研究所（iob.bio）</a></li>
+      </ul>
+      <div class="mail-box">
+        <input type="email" id="email-input" placeholder="メールアドレス（任意）">
+        <button class="btn sub" onclick="saveEmail()">結果を記録する</button>
+        <p class="mini">※ 差し支えなければ、今後の講座やお知らせのご案内に使わせていただきます。入力しなくても結果はそのままご覧いただけます。</p>
+        <p class="msg" id="email-msg"></p>
+      </div>
+    </div>
+
+    <h2 class="sec">🔍 全20問の答えと解説</h2>
+    <div id="review"></div>
+
+    <button class="btn sub" onclick="location.reload()" style="margin-top:20px;">もう一度チャレンジする</button>
+
+    <footer>
+      監修：レムケなつこ（オーガニックビジネス研究所）<br>
+      出典：『オーガニック入門書』ほか<br>
+      <a href="https://iob.bio/" target="_blank" rel="noopener">iob.bio</a>
+    </footer>
+  </div>
+
+</div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="questions.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyB9MDI8rsd1NRscUtUt0sbXLP_4HVZwXEA",
+  authDomain: "organic-knowledge-assessment.firebaseapp.com",
+  projectId: "organic-knowledge-assessment",
+  storageBucket: "organic-knowledge-assessment.firebasestorage.app",
+  messagingSenderId: "522044690677",
+  appId: "1:522044690677:web:eadb0e866fecd525c835bc"
+};
+let db = null;
+try {
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.firestore();
+} catch (e) {
+  console.warn('Firebase 初期化スキップ:', e);
+}
+const COLLECTION = 'public-quiz-responses';
+
+let idx = 0;
+let answers = {};      // {qid: choiceIndex}
+let correctCount = 0;
+let answered = false;
+let docId = null;
+const SHARE_URL = 'https://iobschool.github.io/os-quiz/general/';
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function startQuiz(){
+  document.getElementById('progress-wrap').style.display='block';
+  showScreen('quiz');
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const q = QUESTIONS[idx];
+  answered = false;
+  document.getElementById('q-num').textContent = 'Q'+(idx+1);
+  document.getElementById('q-text').textContent = q.q;
+
+  const box = document.getElementById('choices');
+  box.innerHTML = '';
+  q.choices.forEach((c,i)=>{
+    const b = document.createElement('button');
+    b.className = 'choice';
+    b.type = 'button';
+    b.innerHTML = '<span class="mark">'+String.fromCharCode(65+i)+'</span><span>'+c+'</span>';
+    b.onclick = ()=>selectChoice(i);
+    box.appendChild(b);
+  });
+
+  document.getElementById('fb').classList.remove('show');
+  document.getElementById('next-btn').textContent = (idx === QUESTIONS.length-1) ? '結果を見る →' : '次の問題へ →';
+  updateProgress();
+}
+
+function updateProgress(){
+  const pct = (idx / QUESTIONS.length) * 100;
+  document.getElementById('bar').style.width = pct+'%';
+  document.getElementById('bar-count').textContent = (idx+1)+' / '+QUESTIONS.length+'問';
+  document.getElementById('bar-score').textContent = '正解 '+correctCount;
+}
+
+function selectChoice(i){
+  if (answered) return;
+  answered = true;
+  const q = QUESTIONS[idx];
+  answers[q.id] = i;
+  const isOk = (i === q.correct);
+  if (isOk) correctCount++;
+
+  const nodes = document.querySelectorAll('#choices .choice');
+  nodes.forEach((n,ni)=>{
+    n.classList.add('locked');
+    if (ni === q.correct){
+      n.classList.add('correct');
+      n.querySelector('.mark').textContent = '○';
+    } else if (ni === i){
+      n.classList.add('wrong');
+      n.querySelector('.mark').textContent = '×';
+    } else {
+      n.classList.add('dim');
+    }
+  });
+
+  const head = document.getElementById('fb-head');
+  head.className = 'fb-head ' + (isOk ? 'ok' : 'ng');
+  head.textContent = isOk ? '⭕️ 正解！' : '❌ 残念…';
+  document.getElementById('fb-exp').textContent = q.exp;
+  document.getElementById('fb').classList.add('show');
+  document.getElementById('bar-score').textContent = '正解 '+correctCount;
+
+  setTimeout(()=>{
+    document.getElementById('fb').scrollIntoView({behavior:'smooth', block:'nearest'});
+  }, 120);
+}
+
+function nextQuestion(){
+  if (idx < QUESTIONS.length-1){
+    idx++;
+    renderQuestion();
+  } else {
+    finish();
+  }
+}
+
+function finish(){
+  document.getElementById('bar').style.width='100%';
+  document.getElementById('progress-wrap').style.display='none';
+
+  const score = Math.round((correctCount / QUESTIONS.length) * 100);
+  const level = LEVELS.find(l => score >= l.min);
+
+  document.getElementById('r-score').innerHTML = score+'<span>点</span>';
+  document.getElementById('r-correct').textContent = QUESTIONS.length+'問中'+correctCount+'問正解';
+  document.getElementById('r-level').textContent = level.emoji+' '+level.name;
+  document.getElementById('r-msg').textContent = level.msg;
+
+  const text = encodeURIComponent('オーガニック理解度クイズ、'+score+'点でした！（'+level.name+'）\nあなたは何点？');
+  document.getElementById('share-x').href = 'https://twitter.com/intent/tweet?text='+text+'&url='+encodeURIComponent(SHARE_URL);
+  document.getElementById('share-line').href = 'https://social-plugins.line.me/lineit/share?url='+encodeURIComponent(SHARE_URL)+'&text='+text;
+
+  const rv = document.getElementById('review');
+  rv.innerHTML = QUESTIONS.map((q,i)=>{
+    const mine = answers[q.id];
+    const ok = mine === q.correct;
+    return '<div class="review-item">'
+      + '<div class="review-q"><span class="ico">'+(ok?'⭕️':'❌')+'</span><span>Q'+(i+1)+'　'+q.q+'</span></div>'
+      + '<div class="review-ans">あなたの答え：'+String.fromCharCode(65+mine)+'　／　正解：<b>'+String.fromCharCode(65+q.correct)+'. '+q.choices[q.correct]+'</b></div>'
+      + '<div class="review-exp">'+q.exp+'</div>'
+      + '</div>';
+  }).join('');
+
+  showScreen('result');
+  saveResult(score);
+}
+
+async function saveResult(score){
+  if (!db) return;
+  try{
+    const ref = await db.collection(COLLECTION).add({
+      timestamp: new Date().toISOString(),
+      score: score,
+      correct: correctCount,
+      total: QUESTIONS.length,
+      answers: answers,
+      email: '',
+      ua: navigator.userAgent.slice(0,120)
+    });
+    docId = ref.id;
+  }catch(err){
+    console.error('保存エラー:', err);
+  }
+}
+
+async function saveEmail(){
+  const el = document.getElementById('email-input');
+  const msg = document.getElementById('email-msg');
+  const mail = el.value.trim();
+  if (!mail || mail.indexOf('@') < 1){
+    msg.className='msg ng'; msg.textContent='メールアドレスをご確認ください。';
+    return;
+  }
+  if (!db || !docId){
+    msg.className='msg ng'; msg.textContent='ただいま記録できませんでした。時間をおいてお試しください。';
+    return;
+  }
+  try{
+    await db.collection(COLLECTION).doc(docId).update({ email: mail });
+    msg.className='msg ok'; msg.textContent='ありがとうございます。記録しました。';
+    el.disabled = true;
+  }catch(err){
+    console.error(err);
+    msg.className='msg ng'; msg.textContent='記録できませんでした。時間をおいてお試しください。';
+  }
+}
+</script>
+</body>
+</html>
