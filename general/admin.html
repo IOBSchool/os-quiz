@@ -78,6 +78,11 @@ td.score{font-weight:700;}
       </div>
     </header>
 
+    <div id="setup-warn" style="display:none;background:#fff6ec;border:1px solid #f0c9a8;border-radius:14px;padding:16px 18px;margin-top:18px;font-size:13.5px;line-height:1.9;">
+      <b>⚠️ まだ回答データを集める設定が済んでいません。</b><br>
+      Firebase（データの保管庫）で、このクイズ用の保存先を許可する必要があります。設定が終わるまで、受けた人の点数はここに表示されません。クイズ自体はふつうに動いていて、受けた人には点数と解説がちゃんと出ています。
+    </div>
+
     <div class="stats">
       <div class="stat"><div class="n" id="s-count">0</div><div class="l">回答数</div></div>
       <div class="stat"><div class="n" id="s-avg">0</div><div class="l">平均点</div></div>
@@ -137,13 +142,17 @@ function login(){
 }
 
 async function loadData(){
+  const warn = document.getElementById('setup-warn');
   try{
     const snap = await db.collection(COLLECTION).orderBy('timestamp','desc').get();
     rows = snap.docs.map(d=>({id:d.id, ...d.data()}));
+    warn.style.display = 'none';
     render();
   }catch(e){
     console.error(e);
-    alert('データの取得に失敗しました：'+e.message);
+    rows = [];
+    warn.style.display = 'block';
+    render();
   }
 }
 
