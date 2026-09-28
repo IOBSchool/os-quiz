@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>振り返りの確認問題 | ドイツIOBオーガニックスクール</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green-dark:#2d5a3d; --green-mid:#4a7c59; --green-light:#7aaa8a; --green-pale:#e8f2eb;
+  --beige:#f7f4ef; --cream:#fdfcf9; --gold:#c9a84c;
+  --text-dark:#1a2e22; --text-mid:#4a5e52; --text-light:#8a9e92; --white:#fff;
+  --red:#c0392b; --red-pale:#fdf2f2; --orange:#d68910; --orange-pale:#fef9e7;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--beige);color:var(--text-dark);min-height:100vh;line-height:1.7}
+header{background:linear-gradient(135deg,var(--green-dark),var(--green-mid));padding:18px 20px;text-align:center;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(45,90,61,.2)}
+header .label{color:var(--green-light);font-size:11px;letter-spacing:3px}
+header h1{color:#fff;font-family:'Noto Serif JP',serif;font-size:17px;font-weight:600;margin-top:4px}
+.progress-wrap{max-width:720px;margin:0 auto;padding:14px 20px 0}
+.progress-bar{height:6px;background:var(--green-pale);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--green-mid),var(--green-light));width:0;transition:width .4s}
+.progress-text{display:flex;justify-content:space-between;font-size:12px;color:var(--text-light);margin-top:6px}
+main{max-width:720px;margin:0 auto;padding:18px 20px 60px}
+.card{background:var(--white);border-radius:14px;padding:26px 22px;box-shadow:0 2px 12px rgba(45,90,61,.07)}
+.course-tag{display:inline-block;background:var(--green-pale);color:var(--green-dark);font-size:12px;font-weight:500;padding:4px 12px;border-radius:20px;margin-bottom:14px}
+.q-num{font-size:12px;color:var(--text-light);margin-bottom:6px}
+.q-text{font-size:17px;font-weight:500;line-height:1.75;margin-bottom:8px}
+.q-hint{font-size:12.5px;color:var(--orange);background:var(--orange-pale);padding:7px 12px;border-radius:8px;margin-bottom:18px;display:inline-block}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{display:flex;align-items:flex-start;gap:11px;padding:14px 15px;border:2px solid var(--green-pale);border-radius:10px;cursor:pointer;transition:.15s;background:var(--cream);font-size:15px;text-align:left;line-height:1.65}
+.opt:hover:not(.locked){border-color:var(--green-light);background:var(--green-pale)}
+.opt.sel{border-color:var(--green-mid);background:var(--green-pale)}
+.opt .box{flex:0 0 20px;height:20px;border:2px solid var(--green-light);border-radius:5px;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;background:#fff}
+.opt.sel .box{background:var(--green-mid);border-color:var(--green-mid)}
+.opt.correct{border-color:var(--green-mid);background:var(--green-pale)}
+.opt.wrong{border-color:var(--red);background:var(--red-pale)}
+.opt.locked{cursor:default}
+.opt .mark{margin-left:auto;font-weight:700;font-size:15px}
+.opt.correct .mark{color:var(--green-dark)}
+.opt.wrong .mark{color:var(--red)}
+.btn{display:block;width:100%;padding:15px;border:none;border-radius:10px;background:var(--green-mid);color:#fff;font-size:16px;font-weight:500;font-family:inherit;cursor:pointer;margin-top:20px;transition:.15s}
+.btn:hover{background:var(--green-dark)}
+.btn:disabled{background:#c9d6cd;cursor:not-allowed}
+.result{margin-top:20px;padding:18px;border-radius:10px;animation:fade .3s}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.result.ok{background:var(--green-pale);border-left:4px solid var(--green-mid)}
+.result.ng{background:var(--red-pale);border-left:4px solid var(--red)}
+.result .verdict{font-weight:700;font-size:16px;margin-bottom:8px}
+.result.ok .verdict{color:var(--green-dark)}
+.result.ng .verdict{color:var(--red)}
+.result .exp{font-size:14.5px;color:var(--text-mid);line-height:1.85}
+.intro h2{font-family:'Noto Serif JP',serif;font-size:21px;color:var(--green-dark);margin-bottom:14px;line-height:1.6}
+.intro p{font-size:15px;color:var(--text-mid);margin-bottom:14px}
+.intro ul{margin:0 0 16px 20px;font-size:14.5px;color:var(--text-mid)}
+.intro li{margin-bottom:7px}
+.note{background:var(--green-pale);padding:14px 16px;border-radius:10px;font-size:14px;color:var(--text-mid);margin-bottom:8px}
+.score-hero{text-align:center;padding:14px 0 22px}
+.score-num{font-family:'Noto Serif JP',serif;font-size:52px;color:var(--green-dark);line-height:1.1}
+.score-num small{font-size:22px;color:var(--text-light)}
+.score-msg{font-size:15px;color:var(--text-mid);margin-top:10px}
+.review-title{font-weight:700;color:var(--green-dark);margin:24px 0 10px;font-size:16px}
+.review-item{background:var(--cream);border:1px solid var(--green-pale);border-radius:9px;padding:12px 14px;margin-bottom:9px;font-size:14.5px}
+.review-item b{color:var(--green-dark)}
+.review-item .qq{color:var(--text-mid);font-size:13.5px;margin-top:4px;display:block}
+.perfect{background:var(--green-pale);padding:16px;border-radius:10px;font-size:15px;color:var(--green-dark);text-align:center}
+footer{text-align:center;padding:24px 20px 40px;font-size:12px;color:var(--text-light)}
+@media(max-width:520px){.card{padding:20px 16px}.q-text{font-size:16px}.opt{font-size:14.5px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="label">ORGANIC EXPERT COURSE</div>
+  <h1 id="ttl">振り返りの確認問題</h1>
+</header>
+<div class="progress-wrap" id="pw" style="display:none">
+  <div class="progress-bar"><div class="progress-fill" id="pf"></div></div>
+  <div class="progress-text"><span id="pt"></span><span id="ps">正解 0</span></div>
+</div>
+<main id="app"></main>
+<footer>ドイツIOBオーガニックスクール<br>Copyright ©2026 Institut für Organic Business GmbH.</footer>
+
+<script>
+const app=document.getElementById('app'),pw=document.getElementById('pw'),pf=document.getElementById('pf'),pt=document.getElementById('pt'),ps=document.getElementById('ps');
+let QS=[],idx=0,score=0,sel=[],answered=false,wrongs=[];
+
+const DAYS={1:{label:'振り返り 1日目（10/5）',c:[1,6]},2:{label:'振り返り 2日目（10/6）',c:[2,7,8]},3:{label:'振り返り 3日目（10/7）',c:[3,5,9]},4:{label:'振り返り 4日目（10/8）',c:[10,11]},5:{label:'振り返り 5日目（10/9）',c:[13,14,15,16,17,18,19,20]}};
+const OUT_OF_SCOPE=[4,12,21];
+// 10/9（講座13〜20）は1講座1問の8問にしぼる
+const SKIP_IDS=[34,36,38,40,42,44,48];
+const D=DAYS[new URLSearchParams(location.search).get('d')]||null;
+fetch('questions.json').then(r=>r.json()).then(d=>{QS=d.filter(q=>!OUT_OF_SCOPE.includes(q.course)&&!SKIP_IDS.includes(q.id)&&(!D||D.c.includes(q.course))).sort((a,b)=>a.course-b.course).map(shuf);renderIntro();}).catch(()=>{app.innerHTML='<div class="card"><p>問題の読み込みに失敗しました。ページを再読み込みしてください。</p></div>';});
+
+function renderIntro(){
+  const range=D?(D.c.length>4?`講座${D.c[0]}〜${D.c[D.c.length-1]}`:D.c.map(c=>'講座'+c).join('・')):'出題範囲の18講座';
+  app.innerHTML=`<div class="card intro">
+    <h2>${D?esc(D.label)+'<br>':''}${range}の確認問題（${QS.length}問）</h2>
+    <p>これまでの講座を振り返るための確認問題です。認定試験を予定している方の準備にも使えます。点数を競うものではありません。<b>間違えたところが、そのまま「見直す場所」になります。</b></p>
+    <ul>
+      <li>${range}から${QS.length}問です</li>
+      <li>当てはまるものを<b>すべて選ぶ</b>形式です</li>
+      <li>1問ごとに正誤と解説が出ます</li>
+      <li>最後に、見直したい講座の一覧が表示されます</li>
+    </ul>
+    <div class="note">選択肢は1つとは限りません。ひとつでも取りこぼすと不正解になります。あいまいなまま進めず、ひとつずつ確かめながら進めてみてください。</div>
+    <button class="btn" onclick="start()">はじめる</button>
+  </div>`;
+}
+function start(){idx=0;score=0;wrongs=[];pw.style.display='block';renderQ();}
+function renderQ(){
+  const q=QS[idx];sel=[];answered=false;
+  pf.style.width=((idx)/QS.length*100)+'%';
+  pt.textContent=`${idx+1} / ${QS.length}`;ps.textContent=`正解 ${score}`;
+  app.innerHTML=`<div class="card">
+    <span class="course-tag">講座${q.course}　${esc(q.courseTitle)}</span>
+    <div class="q-num">第${idx+1}問</div>
+    <div class="q-text">${esc(q.q)}</div>
+    <div class="q-hint">当てはまるものを、すべて選んでください</div>
+    <div class="opts" id="opts">${q.options.map((o,i)=>
+      `<button class="opt" data-i="${i}" onclick="toggle(${i})"><span class="box"></span><span>${esc(o)}</span></button>`).join('')}</div>
+    <button class="btn" id="submit" disabled onclick="submit()">回答する</button>
+    <div id="res"></div></div>`;
+  window.scrollTo(0,0);
+}
+function toggle(i){
+  if(answered)return;
+  const el=document.querySelector(`.opt[data-i="${i}"]`);
+  if(sel.includes(i)){sel=sel.filter(x=>x!==i);el.classList.remove('sel');el.querySelector('.box').textContent='';}
+  else{sel.push(i);el.classList.add('sel');el.querySelector('.box').textContent='✓';}
+  document.getElementById('submit').disabled=sel.length===0;
+}
+function submit(){
+  if(answered)return;answered=true;
+  const q=QS[idx],corr=q.correct.slice().sort().join(','),mine=sel.slice().sort().join(',');
+  const ok=corr===mine;if(ok)score++;else wrongs.push(q);
+  document.querySelectorAll('.opt').forEach(el=>{
+    const i=+el.dataset.i;el.classList.add('locked');el.classList.remove('sel');
+    const isC=q.correct.includes(i),picked=sel.includes(i);
+    if(isC){el.classList.add('correct');el.insertAdjacentHTML('beforeend','<span class="mark">正</span>');}
+    else if(picked){el.classList.add('wrong');el.insertAdjacentHTML('beforeend','<span class="mark">誤</span>');}
+    el.querySelector('.box').textContent=picked?'✓':'';
+  });
+  ps.textContent=`正解 ${score}`;
+  document.getElementById('res').innerHTML=`<div class="result ${ok?'ok':'ng'}">
+    <div class="verdict">${ok?'正解です':'惜しい、不正解です'}</div>
+    <div class="exp">${esc(q.exp)}</div></div>`;
+  const b=document.getElementById('submit');
+  b.disabled=false;b.textContent=(idx===QS.length-1)?'結果を見る':'次の問題へ';
+  b.onclick=()=>{idx++;(idx>=QS.length)?renderResult():renderQ();};
+}
+function renderResult(){
+  pf.style.width='100%';pt.textContent=`${QS.length} / ${QS.length}`;
+  const nC=new Set(wrongs.map(q=>q.course)).size;
+  const msg=(nC?`見直しておきたい講座が${nC}講座ありました。`:'')+'この結果は、認定試験の合否を予測するものではありません。';
+  const byCourse={};
+  wrongs.forEach(q=>{(byCourse[q.course]=byCourse[q.course]||{t:q.courseTitle,qs:[]}).qs.push(q.q);});
+  const keys=Object.keys(byCourse).map(Number).sort((a,b)=>a-b);
+  app.innerHTML=`<div class="card">
+    <div class="score-hero">
+      <div style="font-size:13px;color:var(--text-light)">今回の確認結果</div><div class="score-num">${score}<small> / ${QS.length}問</small></div>
+      <div class="score-msg">${msg}</div>
+    </div>
+    ${keys.length?`<div class="review-title">見直したい講座（${keys.length}講座）</div>
+      ${keys.map(c=>`<div class="review-item"><b>講座${c}　${esc(byCourse[c].t)}</b>
+        ${byCourse[c].qs.map(t=>`<span class="qq">・${esc(t)}</span>`).join('')}</div>`).join('')}
+      <div class="note" style="margin-top:14px">全部を復習し直す必要はありません。間違えたところだけ、資料や動画で確認すれば十分です。</div>`
+      :`<div class="perfect">全問確認できました。今回の範囲で、見直しが必要な講座はありません。<br>ほかの日の確認問題でも、覚えているか確かめてみてください。</div>`}
+    <button class="btn" onclick="start()">もう一度挑戦する</button>
+    <p style="text-align:center;margin-top:16px;font-size:14px"><a href="../b-map/" style="color:var(--green-dark)">🗺 試験準備の地図にもどる</a></p>
+  </div>`;
+  window.scrollTo(0,0);
+}
+function shuf(q){const o=q.options.map((t,i)=>({t,c:q.correct.includes(i)}));for(let i=o.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[o[i],o[j]]=[o[j],o[i]];}return Object.assign({},q,{options:o.map(x=>x.t),correct:o.map((x,i)=>x.c?i:-1).filter(i=>i>=0)});}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+</script>
+</body>
+</html>
