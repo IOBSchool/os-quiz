@@ -119,7 +119,7 @@ footer{text-align:center;font-size:11.5px;color:var(--text-light);padding:30px 1
 </footer>
 
 <script>
-const NOTE='本試験の出題形式をもとに、講座で学んだ内容を言い換えや売場の場面にあてはめて確かめられるよう作成した練習問題です。本試験とは別の問題で、正解数から本試験の合否を予測するものではありません。間違えた問題を、次に見直す場所を見つける手がかりとして使ってください。';
+const NOTE='本試験の出題形式をもとに、講座で学んだ内容を、言い換えや日々の仕事の場面にあてはめて確かめられるよう作成した練習問題です。本試験とは別の問題で、正解数から本試験の合否を予測するものではありません。間違えた問題を、次に見直す場所を見つける手がかりとして使ってください。';
 const L='abcdefgh';
 const app=document.getElementById('app'),pw=document.getElementById('pw'),pf=document.getElementById('pf'),pt=document.getElementById('pt'),pa=document.getElementById('pa');
 let DATA=null,QS=[],ESSAY=null,idx=0,picks=[],essayText='';
@@ -137,7 +137,7 @@ function renderIntro(){
   pw.style.display='none';
   app.innerHTML=`<div class="card intro">
     <h2>本番形式・実力確認テスト<br>（選択35問＋記述1問）</h2>
-    <p>講座1〜20のうち、出題範囲の18講座（講座4・12を除く）の内容を、本番と同じ出題形式で確かめられます。講座で学んだ内容を、言い換えや売場での場面にあてはめながら考えてみてください。</p>
+    <p>講座1〜20のうち、出題範囲の18講座（講座4・12を除く）の内容を、本番と同じ出題形式で確かめられます。職種にかかわらず、講座で学んだ知識をさまざまな場面でどう活かせるかを確認する問題です。実際の認定試験と同様、お客様からの質問を想定した問題も含まれます。</p>
     <ul>
       <li>選択問題は、問題文に合わせて<b>「正しいものをすべて」</b>または<b>「誤っているものをすべて」</b>選びます。問題文をよく読んでから選んでください</li>
       <li>選択肢は1つとは限りません。1つでも過不足があると不正解になります</li>
