@@ -2,205 +2,303 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
 <title>試験準備の地図 | ドイツIOBオーガニックスクール</title>
+<meta name="theme-color" content="#1583c4">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%231583c4'/%3E%3Cpath d='M90 44 C58 66 58 110 90 140 C122 110 122 66 90 44 Z' fill='white'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%231583c4'/%3E%3Cpath d='M90 44 C58 66 58 110 90 140 C122 110 122 66 90 44 Z' fill='white'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@400;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --green-dark:#2d5a3d; --green-mid:#4a7c59; --green-light:#7aaa8a; --green-pale:#e8f2eb;
-  --beige:#f7f4ef; --cream:#fdfcf9; --gold:#c9a84c;
-  --text-dark:#1a2e22; --text-mid:#4a5e52; --text-light:#8a9e92; --white:#fff;
+  /* IOB 動画視聴ページ配色（既存変数名にマッピング） */
+  --blue:#1583c4; --blue-dark:#0f6ba3; --blue-pale:#e7f1f8;
+  --green-dark:#0f6ba3; --green-mid:#1583c4; --green-light:#9ac4e0; --green-pale:#e7f1f8;
+  --beige:#f7f4ec; --cream:#fbf9f3; --gold:#e8743c;
+  --text-dark:#3d2a1e; --text-mid:#6b5544; --text-light:#8a7565; --white:#fff;
+  --muted:#b89a6f; --tan:#b89a6f; --tan-line:#e3d8c4;
+  --orange:#e8743c; --orange-dark:#cf5f2b;
+  --shadow:0 4px 20px rgba(61,42,30,.08); --shadow-lg:0 12px 40px rgba(61,42,30,.14);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Noto Sans JP',sans-serif;background:var(--beige);color:var(--text-dark);min-height:100vh;line-height:1.8}
-header{background:linear-gradient(135deg,var(--green-dark),var(--green-mid));padding:18px 20px;text-align:center}
-header .label{color:var(--green-light);font-size:11px;letter-spacing:3px}
-header h1{color:#fff;font-family:'Noto Serif JP',serif;font-size:19px;font-weight:600;margin-top:4px}
-main{max-width:720px;margin:0 auto;padding:18px 16px 60px}
-.lead{background:var(--white);border-radius:14px;padding:22px 20px;box-shadow:0 2px 12px rgba(45,90,61,.07);margin-bottom:16px;font-size:15px;color:var(--text-mid)}
-.lead p+p{margin-top:8px}
-nav.toc{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}
-nav.toc a{display:block;background:var(--green-pale);color:var(--green-dark);text-decoration:none;border-radius:10px;padding:10px 12px;font-size:14px;font-weight:500}
-section{background:var(--white);border-radius:14px;padding:22px 20px;box-shadow:0 2px 12px rgba(45,90,61,.07);margin-bottom:16px}
-h2{font-family:'Noto Serif JP',serif;font-size:19px;color:var(--green-dark);margin-bottom:12px;line-height:1.5}
-h2 .no{display:inline-block;background:var(--green-mid);color:#fff;border-radius:50%;width:28px;height:28px;text-align:center;line-height:28px;font-size:14px;margin-right:8px;font-family:'Noto Sans JP',sans-serif}
-h3{font-size:15.5px;color:var(--green-dark);margin:16px 0 8px}
-p{font-size:15px;color:var(--text-mid)}
-p+p{margin-top:8px}
-.chap{margin-top:10px}
-.chap-title{font-size:13px;font-weight:700;color:var(--text-light);letter-spacing:1px;margin:14px 0 6px}
-ul.courses{list-style:none}
-ul.courses li{border-bottom:1px solid var(--green-pale);padding:9px 0;font-size:14.5px;display:flex;justify-content:space-between;gap:10px;align-items:center}
-ul.courses li:last-child{border-bottom:none}
-ul.courses a{flex:0 0 auto;font-size:13px;color:var(--green-dark);background:var(--green-pale);border-radius:8px;padding:4px 10px;text-decoration:none;white-space:nowrap}
-.out{background:var(--cream);border:1px solid var(--green-pale);border-radius:10px;padding:14px 16px;margin-top:12px}
-.out dt{font-weight:700;color:var(--green-dark);font-size:14.5px;margin-top:10px}
-.out dt:first-child{margin-top:0}
-.out dd{font-size:14px;color:var(--text-mid);margin-top:2px}
-.step{display:flex;gap:12px;margin-top:14px}
-.step .dt{flex:0 0 76px;font-weight:700;color:var(--green-dark);font-size:14px;padding-top:1px}
-.step .bd{flex:1;font-size:14.5px;color:var(--text-mid)}
-.step .bd b{color:var(--text-dark)}
-.links{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.links a{font-size:13px;color:#fff;background:var(--green-mid);border-radius:8px;padding:6px 10px;text-decoration:none}
-.btn.off{background:#c9d6cd;color:#fff;cursor:default}
-.btn{display:block;text-align:center;background:var(--green-mid);color:#fff;border-radius:10px;padding:13px;text-decoration:none;font-weight:500;margin-top:12px}
-.today{background:#fff8e6;border:2px solid var(--gold);border-radius:14px;padding:14px 16px;margin-bottom:16px;font-size:15px;color:var(--text-dark)}
-.today b{color:var(--green-dark)}
-.today a{color:var(--green-dark);font-weight:700}
-.note{background:var(--green-pale);padding:14px 16px;border-radius:10px;font-size:14px;color:var(--text-mid);margin-top:14px}
-.info{font-size:14px;color:var(--text-mid)}
-.info a{color:var(--green-dark)}
-footer{text-align:center;padding:24px 20px 40px;font-size:12px;color:var(--text-light)}
-@media(max-width:420px){nav.toc{grid-template-columns:1fr}.step .dt{flex-basis:64px}}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--beige);color:var(--text-dark);min-height:100vh;line-height:1.85;-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased;padding-bottom:env(safe-area-inset-bottom)}
+.serif{font-family:'Noto Serif JP',serif}
+a{color:inherit}
+header{background:var(--blue);color:#fff;padding:calc(26px + env(safe-area-inset-top)) 20px 26px;position:relative;overflow:hidden}
+header .inner{max-width:720px;margin:0 auto}
+header .label{font-size:11px;font-weight:500;letter-spacing:.14em;opacity:.92}
+header h1{font-family:'Noto Serif JP',serif;font-size:clamp(22px,6vw,30px);font-weight:700;margin-top:8px;line-height:1.3}
+header .lead-h{font-size:13.5px;opacity:.94;margin-top:12px;max-width:560px}
+header .logo-img{height:24px;width:auto;display:block;margin-top:18px}
+main{max-width:720px;margin:0 auto;padding:20px 16px 60px}
+
+/* 現在地バナー */
+.today{background:linear-gradient(180deg,#fff,#fff9f5);border:2px solid var(--orange);border-radius:14px;padding:14px 16px;margin-bottom:16px;font-size:14.5px;color:var(--text-dark);box-shadow:0 8px 24px rgba(232,116,60,.12)}
+.today .pin{font-weight:700;color:var(--orange-dark);display:block;font-size:12.5px;letter-spacing:.06em;margin-bottom:2px}
+.today a{color:var(--orange-dark);font-weight:700}
+
+/* 概要 */
+.lead{background:var(--white);border:1px solid var(--tan-line);border-radius:14px;padding:20px;box-shadow:var(--shadow);margin-bottom:16px;font-size:15px;color:var(--text-mid)}
+.lead p+p{margin-top:6px}
+.lead b{color:var(--text-dark)}
+
+/* 4つの入口 */
+.entry-head{font-size:14px;font-weight:700;color:var(--blue-dark);margin:6px 2px 10px}
+.entry-note{font-size:13px;color:var(--text-light);font-weight:400;margin-top:2px}
+nav.entries{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px}
+nav.entries a{display:flex;gap:11px;align-items:flex-start;background:var(--white);border:1px solid var(--tan-line);border-radius:12px;padding:13px 13px;text-decoration:none;box-shadow:var(--shadow);transition:transform .12s,box-shadow .12s,border-color .12s}
+nav.entries a:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);border-color:var(--blue)}
+nav.entries a:active{transform:scale(.98)}
+nav.entries .n{flex:0 0 26px;height:26px;background:var(--blue);color:#fff;border-radius:50%;text-align:center;line-height:26px;font-size:14px;font-weight:700}
+nav.entries .t{font-size:14.5px;font-weight:700;color:var(--blue-dark);line-height:1.45}
+nav.entries .s{display:block;font-size:12.5px;font-weight:400;color:var(--text-mid);margin-top:3px;line-height:1.5}
+
+section{background:var(--white);border:1px solid var(--tan-line);border-radius:14px;padding:22px 20px;box-shadow:var(--shadow);margin-bottom:14px;scroll-margin-top:12px}
+h2{font-family:'Noto Serif JP',serif;font-size:18px;color:var(--blue-dark);margin-bottom:12px;line-height:1.5;display:flex;align-items:center;gap:9px}
+h2 .no{flex:0 0 28px;background:var(--blue);color:#fff;border-radius:50%;width:28px;height:28px;text-align:center;line-height:28px;font-size:14px;font-family:'Noto Sans JP',sans-serif;font-weight:700}
+p{font-size:14.5px;color:var(--text-mid)}
+p+p{margin-top:6px}
+p b{color:var(--text-dark)}
+
+/* 復習ルート */
+.route{margin-top:6px}
+.route .step{display:flex;gap:12px;align-items:flex-start;padding:2px 0}
+.route .step .dot{flex:0 0 22px;height:22px;border-radius:50%;background:var(--blue-pale);color:var(--blue-dark);font-size:12px;font-weight:700;text-align:center;line-height:22px;margin-top:2px}
+.route .step .tx{font-size:14.5px;color:var(--text-dark)}
+.route .bar{width:2px;height:12px;background:var(--green-light);margin-left:10px}
+.note{background:var(--blue-pale);border:1px solid #cfe3f1;padding:12px 14px;border-radius:10px;font-size:13.5px;color:var(--text-mid);margin-top:14px}
+.sub{font-size:13px;color:var(--text-light);margin-top:10px}
+
+/* 動画・資料 */
+.open{background:var(--cream);border:1px solid var(--tan-line);border-radius:10px;padding:12px 14px;margin-top:12px}
+.open .st{display:flex;gap:9px;font-size:14px;color:var(--text-dark);padding:3px 0}
+.open .st b{color:var(--blue-dark);flex:0 0 auto}
+.open .hint{font-size:12.5px;color:var(--text-light);margin-top:6px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;text-align:center;background:var(--blue);color:#fff;border-radius:999px;padding:13px 26px;text-decoration:none;font-weight:700;margin-top:14px;font-size:15px;box-shadow:0 6px 18px rgba(21,131,196,.25);transition:.15s}
+.btn:hover{background:var(--blue-dark);transform:translateY(-2px)}
+.btn.off{background:#cdbfa8;cursor:default;font-weight:500;box-shadow:none;pointer-events:none}
+
+/* 出題範囲マップ */
+.legend{display:flex;gap:16px;align-items:center;font-size:12.5px;color:var(--text-mid);margin:2px 0 12px}
+.legend .k{display:inline-flex;align-items:center;gap:5px}
+.zone{margin-top:12px}
+.zone .zt{font-size:12px;font-weight:700;color:var(--blue-dark);letter-spacing:.04em;margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{width:34px;height:34px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:13.5px;font-weight:700}
+.chip.in{background:var(--blue);color:#fff}
+.chip.out{background:var(--white);color:var(--muted);border:1.5px dashed var(--muted)}
+.dotm{width:12px;height:12px;border-radius:50%;display:inline-block}
+.dotm.in{background:var(--blue)}
+.dotm.out{background:var(--white);border:1.5px dashed var(--muted)}
+details.acc{margin-top:14px;border-top:1px solid var(--tan-line);padding-top:10px}
+details.acc summary{font-size:14px;font-weight:700;color:var(--blue-dark);cursor:pointer;list-style:none}
+details.acc summary::-webkit-details-marker{display:none}
+details.acc summary::before{content:"▶ ";font-size:10px;color:var(--blue)}
+details.acc[open] summary::before{content:"▼ "}
+details.acc dl{margin-top:10px}
+details.acc dt{font-weight:700;color:var(--text-dark);font-size:14px;margin-top:10px}
+details.acc dt:first-child{margin-top:0}
+details.acc dd{font-size:13.5px;color:var(--text-mid);margin-top:2px}
+
+/* タイムライン */
+.tl{margin-top:4px;position:relative}
+.tl .row{display:flex;gap:13px;padding:2px 0 14px;position:relative}
+.tl .row:last-child{padding-bottom:0}
+.tl .d{flex:0 0 84px;font-size:13px;font-weight:700;color:var(--blue-dark);padding-top:2px}
+.tl .c{flex:1;border-left:2px solid var(--tan-line);padding:0 0 2px 14px;margin-left:-2px;position:relative}
+.tl .c::before{content:"";position:absolute;left:-7px;top:5px;width:11px;height:11px;border-radius:50%;background:var(--blue);border:2px solid var(--white)}
+.tl .row.exam .c::before{background:var(--orange)}
+.tl .ttl{font-size:14.5px;font-weight:700;color:var(--text-dark)}
+.tl .bd{font-size:13.5px;color:var(--text-mid);margin-top:2px}
+.tl .links{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
+.tl .links a{font-size:12.5px;color:var(--blue-dark);background:var(--blue-pale);border:1px solid var(--tan-line);border-radius:8px;padding:5px 10px;text-decoration:none;white-space:nowrap;font-weight:600}
+.tl .links a:hover{background:#fff;border-color:var(--blue)}
+.tl .mini{font-size:12px;color:var(--text-light);margin-top:5px}
+.tl .mockwrap{margin-top:8px}
+.tl .mockwrap a.mk{display:inline-block;font-size:13px;color:#fff;background:var(--orange);border-radius:999px;padding:8px 16px;text-decoration:none;font-weight:700;box-shadow:0 4px 12px rgba(232,116,60,.28)}
+.tl .mockwrap a.mk:hover{background:var(--orange-dark)}
+.tl .mockwrap .off{display:inline-block;font-size:12.5px;color:var(--text-light);background:var(--cream);border:1px solid var(--tan-line);border-radius:999px;padding:8px 14px}
+.exam-link{display:block;margin-top:14px;text-align:center;font-size:13.5px;color:var(--blue-dark);font-weight:700;background:var(--blue-pale);border:1px solid var(--tan-line);border-radius:10px;padding:11px;text-decoration:none;transition:.15s}
+.exam-link:hover{background:#fff;border-color:var(--blue)}
+.disc{background:var(--blue-pale);border:1px solid #cfe3f1;padding:12px 14px;border-radius:10px;font-size:13px;color:var(--text-mid);margin-top:14px}
+
+footer{text-align:center;padding:30px 20px calc(40px + env(safe-area-inset-bottom));font-size:11.5px;color:var(--text-light);border-top:1px solid var(--tan-line);line-height:1.9}
+.foot-logo{height:28px;width:auto;display:block;margin:0 auto 12px;opacity:.95}
+@media(max-width:430px){nav.entries{grid-template-columns:1fr}.tl .d{flex-basis:70px}}
 </style>
 </head>
 <body>
 <header>
-  <div class="label">ORGANIC EXPERT COURSE</div>
-  <h1>試験準備の地図</h1>
+  <div class="inner">
+    <div class="label">ドイツIOBオーガニックスクール</div>
+    <h1 class="serif">試験準備の地図</h1>
+    <p class="lead-h">講座1〜20の復習と試験準備を、ひと目で見渡す地図です。</p>
+    <img class="logo-img" src="../assets/iob-logo-white.png" alt="Institut für Organic Business">
+  </div>
 </header>
 <main>
 
-<div class="lead">
-  <p><b>受験する・しないにかかわらず使える、講座1〜20の復習ガイドです。</b></p>
-  <p>ここまで学んできたことを「何から見直せばいいか迷った」ときに使ってください。認定試験を予定している方は、そのまま試験の準備にも使えます。</p>
-</div>
-
+<!-- 現在地バナー -->
 <div class="today" id="today" hidden></div>
 
-<nav class="toc">
-  <a href="#order">① まず、どこから見直す？</a>
-  <a href="#what">② 何を見ればいい？</a>
-  <a href="#scope">③ 認定試験の出題範囲</a>
-  <a href="#check">④ 今後のスケジュール</a>
+<!-- 1. この地図について -->
+<div class="lead">
+  <p>認定試験を受ける方も、今回は受けない方も、今確認したいところから使ってください。</p>
+</div>
+
+<!-- 2. 今、知りたいのはどれ？ -->
+<div class="entry-head">今、知りたいのはどれ？<span class="entry-note">全部を順番に読む必要はありません。今知りたいところからどうぞ。</span></div>
+<nav class="entries">
+  <a href="#s1"><span class="n">1</span><span><span class="t">まず、どこから見直す？</span><span class="s">第1章・第2章から始める復習ルート</span></span></a>
+  <a href="#s2"><span class="n">2</span><span><span class="t">動画・資料はどこにある？</span><span class="s">動画視聴ページと資料の開き方</span></span></a>
+  <a href="#s3"><span class="n">3</span><span><span class="t">試験には何が出る？</span><span class="s">出題18講座を一覧で確認</span></span></a>
+  <a href="#s4"><span class="n">4</span><span><span class="t">これから、いつ何をする？</span><span class="s">10/1〜25の予定を時系列で確認</span></span></a>
 </nav>
 
-<section id="order">
+<!-- ① どこから見直す -->
+<section id="s1">
   <h2><span class="no">1</span>まず、どこから見直す？</h2>
-  <p>見直す時間が限られているときは、<b>第1章・第2章から</b>始めてみてください。学び始めてから時間がたっている範囲で、講座の数も多いためです。</p>
-  <p>第3章は、まず各講座の要点を一つずつ思い出すところから始めてください。</p>
-  <p>メールレッスンでは、10月5日〜9日の5日間で、第1章・第2章を中心に、これまでの講座を一巡します。</p>
-  <p>全部を最初からやり直す必要はありません。思い出せないところ、説明しにくいところを見つけて、そこに戻る。その使い方で大丈夫です。</p>
+  <p>時間が限られているときは、<b>第1章・第2章から</b>。</p>
+  <div class="route">
+    <div class="step"><span class="dot">1</span><span class="tx">第1章・第2章から振り返る</span></div>
+    <div class="bar"></div>
+    <div class="step"><span class="dot">2</span><span class="tx">思い出せない講座を見つける</span></div>
+    <div class="bar"></div>
+    <div class="step"><span class="dot">3</span><span class="tx">その講座の動画を見る。必要なら資料も確認する</span></div>
+    <div class="bar"></div>
+    <div class="step"><span class="dot">4</span><span class="tx">第3章は、各講座の要点を一つずつ思い出す</span></div>
+  </div>
+  <div class="note">全部やり直す必要はありません。思い出せないところ、説明しにくいところに戻れば大丈夫です。</div>
 </section>
 
-<section id="what">
-  <h2><span class="no">2</span>何を見ればいい？</h2>
-  <p>まずは、各講座の動画を見直してください。動画で分かりにくかったところや、内容をもう一度確かめたいところは、講義資料も使えます。資料を最初からすべて読み直す必要はありません。</p>
-  <p>動画も講義資料も、<b>いつもの動画視聴ページ</b>から見られます。講義資料は、講座ごとに分けて軽くしました（スマホからも開けます）。各章の動画一覧の下、または各講座のところから開けます。</p>
-  <div class="note">
-    <b>動画視聴ページの開き方</b><br>
-    ① 下のボタンから動画視聴ページを開く<br>
-    ② パスワードを入力する（動画を見るときと同じパスワードです）<br>
-    <span style="font-size:13px;color:var(--text-light)">パスワードがわからない場合は、Teams「メールレッスン」の事務局からのご案内をご確認ください。</span>
+<!-- ② 動画・資料の場所 -->
+<section id="s2">
+  <h2><span class="no">2</span>動画・資料はどこにある？</h2>
+  <p>動画と講義資料は、いつもの<b>動画視聴ページ</b>から確認できます。講義資料は、各章の動画一覧の下から開けます。</p>
+  <div class="open">
+    <div class="st"><b>①</b><span>下のボタンから動画視聴ページを開く</span></div>
+    <div class="st"><b>②</b><span>パスワードを入力する（動画を見るときと同じパスワードです）</span></div>
+    <div class="hint">パスワードが分からない場合は、Teams「メールレッスン」の事務局からのご案内をご確認ください。</div>
   </div>
-  <a class="btn" href="https://iob.bio/biocboncourse" target="_blank" rel="noopener">動画視聴ページをひらく</a>
+  <a class="btn" href="https://iob.bio/biocboncourse" target="_blank" rel="noopener">動画・講義資料をひらく</a>
 </section>
 
-<section id="scope">
-  <h2><span class="no">3</span>認定試験の出題範囲</h2>
-  <p>認定試験は、講座1〜20のうち、講座4・12を除く18講座から出題されます。講座21からの出題はありません。</p>
-  <div class="chap">
-    <div class="chap-title">第1章</div>
-    <ul class="courses">
-      <li>講座1　有機農業の原理</li>
-      <li>講座2　オーガニック製品はどう作られるのか（前半）</li>
-      <li>講座3　有害化学物質</li>
-      <li>講座5　オーガニックコスメとは（基礎）</li>
-    </ul>
-    <div class="chap-title">第2章</div>
-    <ul class="courses">
-      <li>講座6　オーガニック製品はどう作られるのか（後半）</li>
-      <li>講座7　オーガニック認証①食品・繊維・ホテル</li>
-      <li>講座8　オーガニック認証②コスメ</li>
-      <li>講座9　オーガニックと栄養素</li>
-      <li>講座10　オーガニックと疾病予防</li>
-      <li>講座11　オーガニックと遺伝子組み換え・ゲノム編集</li>
-    </ul>
-    <div class="chap-title">第3章</div>
-    <ul class="courses">
-      <li>講座13　オーガニックとSDGs</li>
-      <li>講座14　オーガニックと環境</li>
-      <li>講座15　オーガニックとエシカル生産・消費</li>
-      <li>講座16　オーガニック研究</li>
-      <li>講座17　みんなの問いに答えられる専門家になる</li>
-      <li>講座18　トゥルーコストアカウンティング</li>
-      <li>講座19　バイオダイナミック農法</li>
-      <li>講座20　世界のオーガニック統計データ</li>
-    </ul>
+<!-- ③ 出題範囲 -->
+<section id="s3">
+  <h2><span class="no">3</span>試験には何が出る？</h2>
+  <p>認定試験は、講座1〜20のうち、<b>講座4・12を除く18講座</b>から出題します。講座21は出題範囲外です。</p>
+  <div class="legend">
+    <span class="k"><span class="dotm in"></span>出題範囲</span>
+    <span class="k"><span class="dotm out"></span>出題範囲外</span>
   </div>
-
-  
-  <h3>出題範囲に含まれていない3講座について</h3>
-  <dl class="out">
-    <dt>講座4　世界に存在するオーガニック商品を知る</dt>
-    <dd>どんな商品がオーガニックの対象になるのかを、実際の商品を通して見渡す講座です。規格の内容そのものは講座2・6で学ぶため、試験では講座2・6で学んだ内容の中で確認します。講座4で見た商品の知識が、ほかの問題を考えるときの参考になることはあります。</dd>
-    <dt>講座12　オーガニックコスメ 海外・国内市場とトレンド</dt>
-    <dd>この講座は、市場規模の数字そのものを覚えることより、国内外の市場がどう変化しているかを読み取り、最新の動きを自分で追っていくための視点を身につけることを目的としています。そのため、講座12そのものは出題範囲に含めていません。</dd>
-    <dt>講座21　オーガニック学校給食ムーブメント</dt>
-    <dd>ここまでの20講座で学んだ知識をもとに、各地で今まさに動いている取り組みを見ながら、「自分はどう関わるか」を考える講座です。知識を確かめる認定試験とは役割が異なるため、出題範囲には含めていません。講座21は、試験期間後にお届けします。</dd>
-  </dl>
+  <div class="zone">
+    <div class="zt">第1章</div>
+    <div class="chips">
+      <span class="chip in">1</span><span class="chip in">2</span><span class="chip in">3</span><span class="chip out">4</span><span class="chip in">5</span>
+    </div>
+  </div>
+  <div class="zone">
+    <div class="zt">第2章</div>
+    <div class="chips">
+      <span class="chip in">6</span><span class="chip in">7</span><span class="chip in">8</span><span class="chip in">9</span><span class="chip in">10</span><span class="chip in">11</span><span class="chip out">12</span>
+    </div>
+  </div>
+  <div class="zone">
+    <div class="zt">第3章</div>
+    <div class="chips">
+      <span class="chip in">13</span><span class="chip in">14</span><span class="chip in">15</span><span class="chip in">16</span><span class="chip in">17</span><span class="chip in">18</span><span class="chip in">19</span><span class="chip in">20</span>
+    </div>
+  </div>
+  <details class="acc">
+    <summary>出題範囲外の講座について</summary>
+    <dl>
+      <dt>講座4　世界に存在するオーガニック商品を知る</dt>
+      <dd>規格の内容そのものは講座2・6で学ぶため、試験では講座2・6で学んだ内容の中で確認します。</dd>
+      <dt>講座12　オーガニックコスメ 海外・国内市場とトレンド</dt>
+      <dd>市場規模の数字を覚えることより、市場の変化を読む視点を身につけることが目的のため、出題範囲外です。</dd>
+      <dt>講座21　オーガニック学校給食ムーブメント</dt>
+      <dd>試験期間後に配信するため、出題範囲外です。</dd>
+    </dl>
+  </details>
 </section>
 
-<section id="check">
-  <h2><span class="no">4</span>今後のスケジュール</h2>
-  <p>「覚えているつもり」ではなく、実際に問題を解いてみると、戻る場所が見つけやすくなります。10月1日から、少しずつ確かめられるようにしています。</p>
-
-  <div class="step">
-    <div class="dt">10/1〜4</div>
-    <div class="bd"><b>本番と同じ出題形式の練習問題</b><br>毎日のメールに1問ずつ入っています。答えと解説は、翌日のメールの最初にお届けします。まずは1問ずつ、問題の形式に慣れながら確かめてみてください。</div>
-  </div>
-
-  <div class="step">
-    <div class="dt">10/5〜9</div>
-    <div class="bd"><b>振り返りの確認問題</b><br>その日に振り返る講座の確認問題です。間違えたところ、答えに迷ったところが、次に見直す場所です。
-      <div class="links">
-        <a href="../b-review/?d=1">10/5 講座1・6</a>
-        <a href="../b-review/?d=2">10/6 講座2・7・8</a>
-        <a href="../b-review/?d=3">10/7 講座3・5・9</a>
-        <a href="../b-review/?d=4">10/8 講座10・11</a>
-        <a href="../b-review/?d=5">10/9 講座13〜20</a>
+<!-- ④ これからの予定 -->
+<section id="s4">
+  <h2><span class="no">4</span>これから、いつ何をする？</h2>
+  <div class="tl">
+    <div class="row">
+      <div class="d">10/1〜4</div>
+      <div class="c">
+        <div class="ttl">練習問題</div>
+        <div class="bd">本番と同じ出題形式の問題が、毎日のメールに1問ずつ入っています。答えと解説は、翌日のメールで確認できます。</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="d">10/5〜9</div>
+      <div class="c">
+        <div class="ttl">振り返りの確認問題</div>
+        <div class="bd">その日に振り返る講座の確認問題です。間違えたところが、次に見直す場所です。</div>
+        <div class="links">
+          <a href="../b-review/?d=1">10/5 講座1・6</a>
+          <a href="../b-review/?d=2">10/6 講座2・7・8</a>
+          <a href="../b-review/?d=3">10/7 講座3・5・9</a>
+          <a href="../b-review/?d=4">10/8 講座10・11</a>
+          <a href="../b-review/?d=5">10/9 講座13〜20</a>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="d">10/10〜</div>
+      <div class="c">
+        <div class="ttl">本番形式・実力確認テスト</div>
+        <div class="bd">本番形式で何度でも確認できます。</div>
+        <div class="mockwrap">
+          <a class="mk" id="mockBtn" href="../b-mock/">実力確認テストをひらく</a>
+          <span class="off" id="mockOff" hidden>10月10日（土）から利用できます</span>
+        </div>
+        <div class="mini">結果や回答は、どこにも送信・保存されません。</div>
+      </div>
+    </div>
+    <div class="row exam">
+      <div class="d">10/16</div>
+      <div class="c"><div class="ttl">認定試験 お申し込み締切</div></div>
+    </div>
+    <div class="row exam">
+      <div class="d">10/17〜25</div>
+      <div class="c">
+        <div class="ttl">認定試験</div>
+        <div class="bd">認定試験は、学んできた専門知識を形にしたい方が選べます。今回受けない場合も、このページはそのまま復習に使えます。試験期間中も見られます。</div>
       </div>
     </div>
   </div>
-
-  <div class="step">
-    <div class="dt">10/10〜</div>
-    <div class="bd"><b>本番形式・実力確認テスト</b><br>本番と同じ出題形式で取り組める確認テストです。何度でも取り組めます。結果では、講座ごとの理解の状況、もう一度戻るとよい講座、各問の解説を確認できます。最後に正解数も表示されます。回答は、どこにも送信・保存されません。
-      <a class="btn" id="mockBtn" href="../b-mock/">実力確認テストをひらく</a>
-      <span class="btn off" id="mockOff" hidden>10月10日（土）から利用できます</span>
-    </div>
-  </div>
-
-  <div class="note">これらの問題やテストは、合否を予測するためのものではありません。ここまで学んできたことの中から、「どこは分かっているか」「どこに戻ればいいか」を自分で確かめるための道具として使ってください。</div>
-</section>
-
-<section>
-  <h2>認定試験について</h2>
-  <p>認定試験は、ここまで学んできた専門知識を形にしたい方が選べるものです。今回受験しない場合も、このページはそのまま復習に使えます。試験期間中（10月17日〜25日）も、このページは見られます。</p>
-  <p class="info" style="margin-top:10px">お申し込み締切：10月16日（金）<br>試験期間：10月17日（土）〜25日（日）<br><a href="https://iob.bio/biocboncourse/exam-info.html" target="_blank" rel="noopener">認定試験の日程・詳細を見る</a></p>
+  <a class="exam-link" href="https://iob.bio/biocboncourse/exam-info.html" target="_blank" rel="noopener">認定試験の日程・詳細を見る →</a>
+  <div class="disc">練習問題やテストは、合否予測ではなく「どこを見直すか」を確かめるためのものです。</div>
 </section>
 
 </main>
-<footer>ドイツIOBオーガニックスクール<br>Copyright ©2026 Institut für Organic Business GmbH.</footer>
+<footer>
+  <img class="foot-logo" src="../assets/iob-logo-orange.png" alt="Institut für Organic Business">
+  ドイツIOBオーガニックスクール<br>Copyright ©2026 Institut für Organic Business GmbH.
+</footer>
 <script>
 // 実力確認テストは 2026-10-10 00:00（日本時間）から開く
 (function(){var open=Date.UTC(2026,9,9,15,0,0);if(Date.now()<open){var b=document.getElementById('mockBtn'),o=document.getElementById('mockOff');if(b&&o){b.hidden=true;b.style.display='none';o.hidden=false;}}})();
 </script>
 <script>
-// 今日やること（日本時間の日付で自動切替）
+// 📍今日の現在地（日本時間の日付で自動切替）
 (function(){
   var now=new Date(Date.now()+9*3600*1000); var m=now.getUTCMonth()+1, d=now.getUTCDate(), y=now.getUTCFullYear();
   if(y!==2026||m!==10) return;
   var R={5:['講座1・6',1],6:['講座2・7・8',2],7:['講座3・5・9',3],8:['講座10・11',4],9:['講座13〜20',5]};
-  var h='';
-  if(d>=1&&d<=4) h='<b>今日やること</b>　今日のメールの「本番と同じ出題形式の練習問題」に1問だけ挑戦してみてください。';
-  else if(R[d]) h='<b>今日やること</b>　'+R[d][0]+'を振り返る日です。<a href="../b-review/?d='+R[d][1]+'">今日の確認問題 →</a>';
-  else if(d>=10&&d<=16) h='<b>今日の理解度確認</b>　<a href="../b-mock/">本番形式・実力確認テスト →</a>　結果で「戻るとよい講座」が分かったら、その講座の動画に戻ってみてください。';
-  else if(d>=17&&d<=25) h='<b>試験期間中です</b>　見直したい講座があれば、下の「何を見ればいい？」から動画と資料に戻れます。';
-  if(h){var el=document.getElementById('today'); el.innerHTML=h; el.hidden=false;}
+  var pin='',h='';
+  if(d>=1&&d<=4){pin='練習問題に取り組む期間';h='<a href="#s4">今後の予定を見る →</a>';}
+  else if(R[d]){pin=R[d][0]+'を振り返る日';h='<a href="../b-review/?d='+R[d][1]+'">確認問題へ →</a>';}
+  else if(d>=10&&d<=16){pin='実力確認テストの期間';h='<a href="../b-mock/">テストをひらく →</a>';}
+  else if(d>=17&&d<=25){pin='認定試験期間';h='<a href="#s4">試験の案内を確認 →</a>';}
+  if(pin){var el=document.getElementById('today'); el.innerHTML='<span class="pin">📍 今日：'+pin+'</span>'+h; el.hidden=false;}
 })();
 </script>
 </body>
