@@ -125,6 +125,18 @@ details.acc dd{font-size:13.5px;color:var(--text-mid);margin-top:2px}
 .exam-link:hover{background:#fff;border-color:var(--blue)}
 .disc{background:var(--blue-pale);border:1px solid #cfe3f1;padding:12px 14px;border-radius:10px;font-size:13px;color:var(--text-mid);margin-top:14px}
 
+/* 戻るならの目印（講座別カード） */
+.guide{margin-top:10px}
+.guide .grp{margin-top:18px}
+.guide .grp:first-child{margin-top:12px}
+.guide .gh{font-size:12.5px;font-weight:700;color:var(--blue-dark);letter-spacing:.06em;margin-bottom:9px;padding-left:9px;border-left:3px solid var(--blue)}
+.guide .lc{background:var(--cream);border:1px solid var(--tan-line);border-radius:11px;padding:11px 13px 12px;margin-bottom:8px}
+.guide .lc-h{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.guide .lc-n{flex:0 0 auto;background:var(--blue);color:#fff;font-size:12px;font-weight:700;border-radius:6px;padding:3px 9px;letter-spacing:.02em;line-height:1.2}
+.guide .lc-t{font-size:14px;font-weight:700;color:var(--text-dark);line-height:1.45}
+.guide .lc-a{font-size:13px;color:var(--text-mid);line-height:1.65;margin-top:8px;padding-top:8px;border-top:1px dashed var(--tan-line)}
+.guide .lc-lab{display:inline-block;font-size:11px;font-weight:700;color:var(--blue-dark);background:var(--blue-pale);border:1px solid #cfe3f1;border-radius:5px;padding:1px 7px;margin-right:7px;white-space:nowrap}
+
 footer{text-align:center;padding:30px 20px calc(40px + env(safe-area-inset-bottom));font-size:11.5px;color:var(--text-light);border-top:1px solid var(--tan-line);line-height:1.9}
 .foot-logo{height:28px;width:auto;display:block;margin:0 auto 12px;opacity:.95}
 @media(max-width:430px){nav.entries{grid-template-columns:1fr}.tl .d{flex-basis:70px}}
@@ -135,7 +147,7 @@ footer{text-align:center;padding:30px 20px calc(40px + env(safe-area-inset-botto
   <div class="inner">
     <div class="label">ドイツIOBオーガニックスクール</div>
     <h1 class="serif">試験準備の地図</h1>
-    <p class="lead-h">講座1〜20の復習と試験準備を、ひと目で見渡す地図です。</p>
+    <p class="lead-h">今までのメールレッスンの復習と試験準備を、ひと目で見渡す地図です。</p>
     <img class="logo-img" src="../assets/iob-logo-white.png" alt="Institut für Organic Business">
   </div>
 </header>
@@ -152,32 +164,52 @@ footer{text-align:center;padding:30px 20px calc(40px + env(safe-area-inset-botto
 <!-- 2. 今、知りたいのはどれ？ -->
 <div class="entry-head">今、知りたいのはどれ？<span class="entry-note">全部を順番に読む必要はありません。今知りたいところからどうぞ。</span></div>
 <nav class="entries">
-  <a href="#s1"><span class="n">1</span><span><span class="t">まず、どこから見直す？</span><span class="s">第1章・第2章から始める復習ルート</span></span></a>
+  <a href="#s1"><span class="n">1</span><span><span class="t">まず、どこから見直す？</span><span class="s">講座ごとの「戻るなら、これが言えるか」</span></span></a>
   <a href="#s2"><span class="n">2</span><span><span class="t">動画・資料はどこにある？</span><span class="s">動画視聴ページと資料の開き方</span></span></a>
-  <a href="#s3"><span class="n">3</span><span><span class="t">試験には何が出る？</span><span class="s">出題18講座を一覧で確認</span></span></a>
+  <a href="#s3"><span class="n">3</span><span><span class="t">試験には何が出る？</span><span class="s">全21講座のうち、範囲は18講座</span></span></a>
   <a href="#s4"><span class="n">4</span><span><span class="t">これから、いつ何をする？</span><span class="s">10/1〜25の予定を時系列で確認</span></span></a>
 </nav>
 
 <!-- ① どこから見直す -->
 <section id="s1">
   <h2><span class="no">1</span>まず、どこから見直す？</h2>
-  <p>時間が限られているときは、<b>第1章・第2章から</b>。</p>
-  <div class="route">
-    <div class="step"><span class="dot">1</span><span class="tx">第1章・第2章から振り返る</span></div>
-    <div class="bar"></div>
-    <div class="step"><span class="dot">2</span><span class="tx">思い出せない講座を見つける</span></div>
-    <div class="bar"></div>
-    <div class="step"><span class="dot">3</span><span class="tx">その講座の動画を見る。必要なら資料も確認する</span></div>
-    <div class="bar"></div>
-    <div class="step"><span class="dot">4</span><span class="tx">第3章は、各講座の要点を一つずつ思い出す</span></div>
+  <p><b>実力確認テスト</b>を受けると、戻るとよい講座が分かります。その講座を下の表から探して、「戻るなら」の一文を、自分の言葉で説明してみてください。すらすら言えたら、次の講座へ。言葉に詰まったら、動画で見直します。</p>
+  <div class="guide">
+    <div class="grp">
+      <div class="gh">第1章</div>
+      <div class="lc"><div class="lc-h"><span class="lc-n">講座1</span><span class="lc-t">有機農業の原理</span></div><div class="lc-a"><span class="lc-lab">戻るなら</span>オーガニックの定義と4つの原理（何に貢献するか）を説明できるか</div></div>
+      <div class="lc"><div class="lc-h"><span class="lc-n">講座2</span><span class="lc-t">オーガニック製品はどう作られるのか《前半》</span></div><div class="lc-a"><span class="lc-lab">戻るなら</span>生産から販売までで、推奨されること・禁止されることを説明できるか</div></div>
+      <div class="lc"><div class="lc-h"><span class="lc-n">講座3</span><span class="lc-t">有害化学物質</span></div><div class="lc-a"><span class="lc-lab">戻るなら</span>有害物質の種類とリスクを例で挙げ、身を守る方法を伝えられるか</div></div>
+      <div class="lc"><div class="lc-h"><span class="lc-n">講座5</span><span class="lc-t">オーガニックコスメとは《基礎》</span></div><div class="lc-a"><span class="lc-lab">戻るなら</span>肌の構造・機能と、オーガニック／石油系コスメの違いを説明できるか</div></div>
+    </div>
+    <div class="grp">
+      <div class="gh">第2章</div>
+      <div class="lc"><div class="lc-h"><span class="lc-n">講座6</span><span class="lc-t">オーガニック製品はどう作られるのか《後半》</span></div><div class="lc-a"><span class="lc-lab">戻るなら</span>オーガニック規格とは何かを、過去と比べて説明できるか</div></div>
+      <div class="lc"><div class="lc-h"><span class="lc-n">講座7</span><span class="lc-t">オーガニック認証①（食品・繊維・ホテル）</span></div><div class="lc-a"><span class="lc-lab">戻るなら</span>主な認証が「何に対する認証か」を説明できるか</div></div>
+      <div class="lc"><div class="lc-h"><span class="lc-n">講座8</span><span class="lc-t">オーガニック認証②（コスメ）</span></div><div class="lc-a"><span class="lc-lab">戻るなら</span>主なコスメ認証の種類と、その特徴を説明できるか</div></div>
+      <div class="lc"><div class="lc-h"><span class="lc-n">講座9</span><span class="lc-t">オーガニックと栄養素</span></div><div class="lc-a"><span class="lc-lab">戻るなら</span>何が栄養に影響するのかを、エビデンスで説明できるか</div></div>
+      <div class="lc"><div class="lc-h"><span class="lc-n">講座10</span><span class="lc-t">オーガニックと疾病予防</span></div><div class="lc-a"><span class="lc-lab">戻るなら</span>重金属・抗菌剤のリスクと、オーガニックが予防する疾患を説明できるか</div></div>
+      <div class="lc"><div class="lc-h"><span class="lc-n">講座11</span><span class="lc-t">オーガニックと遺伝子組み換え・ゲノム編集</span></div><div class="lc-a"><span class="lc-lab">戻るなら</span>想定されるメリット・デメリットを説明できるか</div></div>
+    </div>
+    <div class="grp">
+      <div class="gh">第3章</div>
+      <div class="lc"><div class="lc-h"><span class="lc-n">講座13</span><span class="lc-t">オーガニックとSDGs</span></div><div class="lc-a"><span class="lc-lab">戻るなら</span>オーガニックがSDGsにどうつながるかを説明できるか</div></div>
+      <div class="lc"><div class="lc-h"><span class="lc-n">講座14</span><span class="lc-t">オーガニックと環境</span></div><div class="lc-a"><span class="lc-lab">戻るなら</span>いま環境対策が必要な理由と、有機農業の可能性を説明できるか</div></div>
+      <div class="lc"><div class="lc-h"><span class="lc-n">講座15</span><span class="lc-t">オーガニックとエシカル生産・消費</span></div><div class="lc-a"><span class="lc-lab">戻るなら</span>エシカルとは何か、なぜオーガニックがそこにつながるかを説明できるか</div></div>
+      <div class="lc"><div class="lc-h"><span class="lc-n">講座16</span><span class="lc-t">オーガニック研究</span></div><div class="lc-a"><span class="lc-lab">戻るなら</span>情報源の信頼性を見分け、正確な情報を集める方法を説明できるか</div></div>
+      <div class="lc"><div class="lc-h"><span class="lc-n">講座17</span><span class="lc-t">みんなの問いに答えられる専門家になる！</span></div><div class="lc-a"><span class="lc-lab">戻るなら</span>お客様から必ず出る定番の疑問に、根拠を添えて迷わず答えられるか</div></div>
+      <div class="lc"><div class="lc-h"><span class="lc-n">講座18</span><span class="lc-t">トゥルーコストアカウンティング</span></div><div class="lc-a"><span class="lc-lab">戻るなら</span>「オーガニックは高い」に、価格の裏側から答えられるか</div></div>
+      <div class="lc"><div class="lc-h"><span class="lc-n">講座19</span><span class="lc-t">バイオダイナミック農法</span></div><div class="lc-a"><span class="lc-lab">戻るなら</span>その特徴と、他の農法と比べた利点を説明できるか</div></div>
+      <div class="lc"><div class="lc-h"><span class="lc-n">講座20</span><span class="lc-t">世界のオーガニック統計データ</span></div><div class="lc-a"><span class="lc-lab">戻るなら</span>面積・生産者数・市場規模から世界の傾向を説明でき、日本と比べられるか</div></div>
+    </div>
   </div>
-  <div class="note">全部やり直す必要はありません。思い出せない、説明しにくいところに戻れば大丈夫です。</div>
+  <div class="note">18講座を一から見直す必要はありません。実力確認テストの結果を手がかりに、優先順位の高い講座から見直していきましょう。</div>
 </section>
 
 <!-- ② 動画・資料の場所 -->
 <section id="s2">
   <h2><span class="no">2</span>動画・資料はどこにある？</h2>
-  <p>動画と講義資料は、いつもの<b>動画視聴ページ</b>にあります。講義資料は、各章の動画一覧の下から開けます。今回から、章ごとに加えて講座ごとの資料もご用意しています。</p>
+  <p>動画と講義資料は、いつもの<b>動画視聴ページ</b>にあります。資料は、各章の動画一覧の下から開けます。今回から、章ごとに加えて、講座ごとの資料もご用意しました。</p>
   <div class="open">
     <div class="st"><b>①</b><span>下のボタンから動画視聴ページを開く</span></div>
     <div class="st"><b>②</b><span>パスワードを入力する（動画を見るときと同じパスワードです）</span></div>
@@ -189,7 +221,7 @@ footer{text-align:center;padding:30px 20px calc(40px + env(safe-area-inset-botto
 <!-- ③ 出題範囲 -->
 <section id="s3">
   <h2><span class="no">3</span>試験には何が出る？</h2>
-  <p>認定試験は、講座1〜20のうち、<b>講座4・12を除く18講座</b>から出題します。講座21は出題範囲外です。</p>
+  <p>オーガニック専門家コースは、全21講座です。このうち、今回の認定試験の範囲は<b>18講座</b>。範囲外は<b>3講座（講座4・12・21）</b>です。</p>
   <div class="legend">
     <span class="k"><span class="dotm in"></span>出題範囲</span>
     <span class="k"><span class="dotm out"></span>出題範囲外</span>
@@ -220,7 +252,7 @@ footer{text-align:center;padding:30px 20px calc(40px + env(safe-area-inset-botto
       <dt>講座12　オーガニックコスメ 海外・国内市場とトレンド</dt>
       <dd>市場規模の数字を覚えることより、市場の変化を読む視点を身につけることが目的のため、出題範囲外です。</dd>
       <dt>講座21　オーガニック学校給食ムーブメント</dt>
-      <dd>試験期間後に配信するため、出題範囲外です。</dd>
+      <dd>ここまでの20講座で学んだ知識をもとに、各地で今まさに動いている取り組みを見ながら、「自分はどう関わるか」を考える講座です。知識を確かめる認定試験とは役割が異なるため、出題範囲には含めていません。講座21は、試験期間後にお届けします。</dd>
     </dl>
   </details>
 </section>
@@ -232,35 +264,20 @@ footer{text-align:center;padding:30px 20px calc(40px + env(safe-area-inset-botto
     <div class="row">
       <div class="d">10/1〜4</div>
       <div class="c">
-        <div class="ttl">練習問題</div>
-        <div class="bd">本番と同じ出題形式の問題が、毎日のメールに1問ずつ入っています。答えと解説は、翌日のメールで確認できます。</div>
+        <div class="ttl">講義（講座20まで）</div>
+        <div class="bd">試験前にメールレッスンで新しく学ぶ講座は、講座20「世界のオーガニック統計データ」が最後です。毎日のメールでお届けします。</div>
       </div>
     </div>
     <div class="row">
-      <div class="d">10/5〜9</div>
+      <div class="d">10/5〜</div>
       <div class="c">
-        <div class="ttl">振り返りの確認問題</div>
-        <div class="bd">その日に振り返る講座の確認問題です。間違えたところが、次に見直す場所です。</div>
-        <div class="links">
-          <a href="../b-review/?d=1">10/5 講座1・6</a>
-          <a href="../b-review/?d=2">10/6 講座2・7・8</a>
-          <a href="../b-review/?d=3">10/7 講座3・5・9</a>
-          <a href="../b-review/?d=4">10/8 講座10・11</a>
-          <a href="../b-review/?d=5">10/9 講座13〜20</a>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="d">10/10〜</div>
-      <div class="c">
-        <div class="ttl">本番形式・実力確認テスト</div>
-        <div class="bd">本番形式で何度でも確認できます。</div>
+        <div class="ttl">実力確認テスト → 結果に出た講座へ戻る</div>
+        <div class="bd">講義は前日までに終わり、この日から実力確認テストが始まります。点数を競うためではなく、本試験までに「どの講座へ戻るか」を確かめるためのテストです。何度でも受けられます。結果に出た講座を目印に、動画と資料で見直していきましょう。</div>
         <div class="mockwrap">
           <a class="mk" id="mockBtn" href="../b-mock/">実力確認テストをひらく</a>
-          <span class="off" id="mockOff" hidden>10月10日（土）から利用できます</span>
+          <span class="off" id="mockOff" hidden>10月5日（月）から利用できます</span>
         </div>
-        <div class="mini">結果や回答は、どこにも送信・保存されません。</div>
-      </div>
+        <div class="mini">結果や回答は、どこにも送信・保存されません。</div>      </div>
     </div>
     <div class="row exam">
       <div class="d">10/16</div>
@@ -270,12 +287,12 @@ footer{text-align:center;padding:30px 20px calc(40px + env(safe-area-inset-botto
       <div class="d">10/17〜25</div>
       <div class="c">
         <div class="ttl">認定試験</div>
-        <div class="bd">学んできた専門知識を形にしたい方が選べます。試験期間中も、このページを利用できます。</div>
+        <div class="bd">学んできた成果を、資格という形にできる試験です。</div>
       </div>
     </div>
   </div>
   <a class="exam-link" href="https://iob.bio/biocboncourse/exam-info.html" target="_blank" rel="noopener">認定試験の日程・詳細を見る →</a>
-  <div class="disc">練習問題やテストは、合否予測ではなく「どこを見直すか」を確かめるためのものです。</div>
+  <div class="disc">実力確認テストは、合否予測ではなく「どこを見直すか」を確かめるためのものです。</div>
 </section>
 
 </main>
@@ -284,19 +301,17 @@ footer{text-align:center;padding:30px 20px calc(40px + env(safe-area-inset-botto
   ドイツIOBオーガニックスクール<br>Copyright ©2026 Institut für Organic Business GmbH.
 </footer>
 <script>
-// 実力確認テストは 2026-10-10 00:00（日本時間）から開く
-(function(){var open=Date.UTC(2026,9,9,15,0,0);if(Date.now()<open){var b=document.getElementById('mockBtn'),o=document.getElementById('mockOff');if(b&&o){b.hidden=true;b.style.display='none';o.hidden=false;}}})();
+// 実力確認テストは 2026-10-05 00:00（日本時間）から開く
+(function(){var open=Date.UTC(2026,9,4,15,0,0);if(Date.now()<open){var b=document.getElementById('mockBtn'),o=document.getElementById('mockOff');if(b&&o){b.hidden=true;b.style.display='none';o.hidden=false;}}})();
 </script>
 <script>
 // 📍今日の現在地（日本時間の日付で自動切替）
 (function(){
   var now=new Date(Date.now()+9*3600*1000); var m=now.getUTCMonth()+1, d=now.getUTCDate(), y=now.getUTCFullYear();
   if(y!==2026||m!==10) return;
-  var R={5:['講座1・6',1],6:['講座2・7・8',2],7:['講座3・5・9',3],8:['講座10・11',4],9:['講座13〜20',5]};
   var pin='',h='';
-  if(d>=1&&d<=4){pin='練習問題に取り組む期間';h='<a href="#s4">今後の予定を見る →</a>';}
-  else if(R[d]){pin=R[d][0]+'を振り返る日';h='<a href="../b-review/?d='+R[d][1]+'">確認問題へ →</a>';}
-  else if(d>=10&&d<=16){pin='実力確認テストの期間';h='<a href="../b-mock/">テストをひらく →</a>';}
+  if(d>=1&&d<=4){pin='講義（講座20）の期間';h='<a href="#s4">今後の予定を見る →</a>';}
+  else if(d>=5&&d<=16){pin='実力確認テストで現在地を確認 → 結果の講座へ戻る期間';h='<a href="../b-mock/">実力確認テストをひらく →</a>';}
   else if(d>=17&&d<=25){pin='認定試験期間';h='<a href="#s4">試験の案内を確認 →</a>';}
   if(pin){var el=document.getElementById('today'); el.innerHTML='<span class="pin">📍 今日：'+pin+'</span>'+h; el.hidden=false;}
 })();
