@@ -64,33 +64,79 @@ textarea:focus{outline:none;border-color:var(--blue)}
 .count{font-size:12px;color:var(--text-light);text-align:right;margin-top:4px}
 .sec-title{font-family:'Noto Serif JP',serif;font-size:18px;color:var(--blue-dark);margin-bottom:6px}
 .sec-lead{font-size:13.5px;color:var(--text-mid);margin-bottom:14px}
-.crow{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--tan-line);font-size:14px}
-.crow:last-child{border-bottom:none}
-.crow .nm{flex:1;min-width:0}
-.crow .nm small{display:block;color:var(--text-light);font-size:12px}
-.dots{display:flex;gap:4px;flex:0 0 auto}
-.dot{width:14px;height:14px;border-radius:50%;background:var(--blue)}
-.dot.x{background:#fff;border:2px solid var(--red)}
-.st{flex:0 0 auto;font-size:12px;padding:3px 9px;border-radius:12px;background:var(--blue-pale);color:var(--blue-dark);white-space:nowrap}
-.st.w{background:var(--orange-pale);color:var(--orange)}
-.st.r{background:var(--red-pale);color:var(--red)}
-.back{padding:12px 14px;border-left:4px solid var(--orange);background:var(--orange-pale);border-radius:0 9px 9px 0;margin-bottom:10px;font-size:14px}
-.back b{color:var(--text-dark)}
-.back .qs{font-size:12.5px;color:var(--text-mid);display:block;margin-top:2px}
-.rv{border:1px solid var(--tan-line);border-radius:10px;margin-bottom:10px;background:var(--cream);overflow:hidden}
-.rv summary{list-style:none;cursor:pointer;padding:12px 14px;font-size:14px;display:flex;gap:10px;align-items:flex-start}
+/* 見直すマップ（結果の主役）— 点数ではなく「どこに戻るか」を瞬時に */
+.rc{padding:15px 16px;border:1px solid #eab38f;border-left:5px solid var(--orange);background:var(--orange-pale);border-radius:0 13px 13px 0;margin-bottom:12px}
+.rc-h{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.rc-c{font-family:'Noto Serif JP',serif;font-weight:700;font-size:18px;color:var(--text-dark)}
+.rc-t{flex:1;min-width:0;font-size:13px;color:var(--text-mid)}
+.rc-b{flex:0 0 auto;font-size:11.5px;font-weight:700;color:var(--orange);background:#fff;border:1px solid #eab38f;border-radius:20px;padding:2px 10px}
+.rc-l{font-size:12.5px;font-weight:700;color:var(--orange);margin:12px 0 8px;display:flex;align-items:center;gap:5px}
+.rc-chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:baseline;gap:7px;background:#fff;border:1.5px solid #e79b6a;border-radius:10px;padding:8px 13px;font-size:13px;line-height:1.35;color:var(--text-dark);max-width:100%}
+.chip b{color:var(--orange);font-weight:700;font-size:15px;white-space:nowrap;font-family:'Noto Serif JP',serif}
+.rc-q{font-size:11.5px;color:var(--text-light);margin-top:10px}
+.oktag{font-size:13px;color:var(--blue-dark);background:var(--blue-pale);border:1px solid #cfe3f1;border-radius:10px;padding:11px 13px;margin-top:8px;line-height:1.75}
+.allok{font-size:14.5px;color:var(--blue-dark);background:var(--blue-pale);border:1px solid #cfe3f1;border-radius:11px;padding:16px;line-height:1.9}
+.scoreline{text-align:center;font-size:14px;color:var(--text-mid);margin-bottom:4px}
+.scoreline b{font-size:20px;color:var(--blue-dark);font-family:'Noto Serif JP',serif}
+/* 各問レビュー */
+.rv{border:1px solid var(--tan-line);border-radius:11px;margin-bottom:10px;background:var(--cream);overflow:hidden}
+.rv.ng{border-color:#e0a99f;background:var(--red-pale)}
+.rv.ng summary{border-left:5px solid var(--red)}
+.rv.ok summary{border-left:5px solid var(--green-light)}
+.rv .meta{font-size:13px;color:var(--text-mid);font-weight:600}
+.rvst{font-size:11px;font-weight:700;padding:1px 8px;border-radius:7px;white-space:nowrap}
+.rvst.ng{background:var(--red);color:#fff}
+.rvst.ok{background:var(--blue-pale);color:var(--blue-dark)}
+.rv summary{list-style:none;cursor:pointer;padding:13px 14px;font-size:14px;display:flex;gap:11px;align-items:flex-start}
 .rv summary::-webkit-details-marker{display:none}
-.rv .mk{flex:0 0 auto;font-weight:700;width:1.4em;text-align:center}
+.rv .mk{flex:0 0 auto;font-weight:700;width:1.4em;text-align:center;font-size:18px}
 .rv.ok .mk{color:var(--blue)} .rv.ng .mk{color:var(--red)}
-.rv .body{padding:0 14px 14px;font-size:14px;color:var(--text-mid)}
-.rv .body .qq{color:var(--text-dark);margin-bottom:10px;font-weight:500}
-.ro{padding:9px 11px;border-radius:8px;margin-bottom:7px;background:#fff;border:1px solid var(--tan-line)}
-.ro .h{font-size:12px;font-weight:700;margin-bottom:2px}
-.ro.ans{border-color:var(--blue)}
-.ro .h .t{color:var(--blue-dark)} .ro .h .f{color:var(--red)}
-.ro .why{font-size:13px;color:var(--text-mid);margin-top:3px}
-.ro .you{font-size:11.5px;color:var(--text-light)}
-.rv .goto{font-size:13px;margin-top:8px;color:var(--orange)}
+.rv .stt{flex:1;min-width:0;line-height:1.55;color:var(--text-dark)}
+.rv .stt small{color:var(--text-light);font-size:12px;font-weight:600}
+.rv .tog{flex:0 0 auto;align-self:center;font-size:11.5px;font-weight:700;color:var(--blue-dark);background:var(--blue-pale);border:1px solid #cfe3f1;border-radius:8px;padding:4px 9px;white-space:nowrap}
+.rv .tog::before{content:'＋ 開く'}
+.rv[open] .tog::before{content:'− 閉じる'}
+.rv[open] .tog{color:var(--text-light);background:var(--beige);border-color:var(--tan-line)}
+.rv .body{padding:2px 14px 14px}
+.rv .ansline{font-size:12.5px;color:var(--text-light);margin-bottom:10px;font-weight:600}
+.ro{padding:10px 12px;border-radius:9px;margin-bottom:8px;background:#fff;border:1px solid var(--tan-line);font-size:14px;line-height:1.7}
+.ro.ans{border-color:var(--blue);background:var(--blue-pale)}
+.ro.mywrong{border-color:#e0a99f;background:var(--red-pale)}
+.ro .h{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-bottom:4px}
+.ro .lb{font-weight:700;color:var(--text-mid)}
+.ro .tf{font-size:12px;font-weight:700}
+.ro .tf.t{color:var(--blue-dark)} .ro .tf.f{color:var(--red)}
+.ro .tag{font-size:11px;font-weight:700;padding:1px 8px;border-radius:7px}
+.ro .tag.ans{background:var(--blue);color:#fff}
+.ro .tag.you{background:var(--red);color:#fff}
+.ro .rt{color:var(--text-dark)}
+.ro .why{font-size:12.5px;color:var(--text-mid);margin-top:6px;padding-top:6px;border-top:1px dashed var(--tan-line)}
+.goto{font-size:13px;margin-top:9px;color:var(--orange)}
+/* 講座カードに内包する「まちがえた問題の解説」（低彩度・すっきり） */
+.rc-qs{margin-top:13px;border-top:1px dashed #e6c9ae;padding-top:12px}
+.rc-ql{font-size:12px;font-weight:700;color:var(--text-mid);margin-bottom:9px}
+.qd{background:#fff;border:1px solid var(--tan-line);border-radius:9px;margin-bottom:7px;overflow:hidden}
+.qd summary{list-style:none;cursor:pointer;padding:11px 12px;display:flex;gap:9px;align-items:baseline;font-size:13.5px}
+.qd summary::-webkit-details-marker{display:none}
+.qd .qn{flex:0 0 auto;font-weight:700;color:var(--red)}
+.qd .qs2{flex:1;min-width:0;color:var(--text-dark);line-height:1.55}
+.qd .tog2{flex:0 0 auto;align-self:center;font-size:15px;font-weight:700;color:var(--blue-dark);line-height:1}
+.qd .tog2::before{content:'＋'}
+.qd[open] .tog2::before{content:'－'}
+.qd[open] .tog2{color:var(--text-light)}
+.qb{padding:0 13px 13px}
+.kd{font-size:12.5px;color:var(--text-mid);margin:2px 0 10px;font-weight:600}
+.ansk{font-weight:700;color:var(--text-dark);background:#fde6bd;padding:2px 9px;border-radius:6px}
+.ro2{font-size:13.5px;line-height:1.75;color:var(--text-dark);padding:6px 0 6px 11px;border-left:3px solid #ece3d3;margin-bottom:5px}
+.ro2.a{border-left-color:var(--blue)}
+.ro2.w{border-left-color:var(--red)}
+.ro2 .lb2{font-weight:700;color:var(--text-mid);margin-right:5px}
+.t2{font-size:11px;font-weight:700;color:#fff;background:var(--blue);padding:1px 7px;border-radius:6px;margin-right:6px}
+.w2{font-size:11px;font-weight:700;color:#fff;background:var(--red);padding:1px 7px;border-radius:6px;margin-right:6px}
+.me2{font-size:11px;font-weight:700;color:var(--text-mid);border:1px solid var(--tan-line);padding:1px 7px;border-radius:6px;margin-right:6px}
+.lg2{font-size:11.5px;color:var(--text-light);margin:0 0 11px;line-height:1.7}
+.why2{font-size:12.5px;color:var(--text-mid);margin-top:4px}
 .final{text-align:center;padding:10px 0 4px}
 .final .n{font-family:'Noto Serif JP',serif;font-size:40px;color:var(--blue-dark);font-weight:700}
 .final .n small{font-size:18px;color:var(--text-light)}
@@ -148,11 +194,18 @@ function renderIntro(){
     </ul>
     <div class="note">${esc(NOTE)}</div>
     <button class="btn" onclick="start()">はじめる</button>
+    <p style="text-align:center;margin-top:12px"><a href="#" onclick="demoResult();return false" style="font-size:13px;color:var(--text-light)">結果ページの見本を見る（仮の回答で表示）</a></p>
   </div>`;
 }
 function start(){
   QS=DATA.questions.map(shuffleQ);picks=QS.map(()=>[]);essayText='';idx=0;
   pw.style.display='block';renderQ();
+}
+function demoResult(){
+  QS=DATA.questions.map(shuffleQ);
+  picks=QS.map((q,i)=>{ if(i%3!==0)return q.answer.slice(); const w=q.options.map((_,k)=>k).find(k=>!q.answer.includes(k)); return w!=null?[w]:[]; });
+  essayText='オーガニックは、自分の体によいだけでなく、作る人や環境、次の世代まで含めて考える仕組みです。（※これは結果ページ確認用の見本の本文です）';
+  pw.style.display='block';renderResult();
 }
 function setProg(){
   const done=picks.filter(p=>p.length).length;
@@ -206,38 +259,63 @@ function finish(){
 function renderResult(){
   pf.style.width='100%';pt.textContent='結果';pa.textContent='';
   const res=QS.map((q,i)=>{const a=q.answer.slice().sort().join(','),m=picks[i].slice().sort().join(',');return a===m;});
-  // ① 講座別
-  const byC={};QS.forEach((q,i)=>{(byC[q.course]=byC[q.course]||{t:q.courseTitle,r:[],backs:[]}).r.push(res[i]);if(!res[i])byC[q.course].backs.push({n:i+1,b:q.back});});
-  const cs=Object.keys(byC).map(Number).sort((a,b)=>a-b);
-  const stat=o=>{const w=o.r.filter(x=>!x).length;return w===0?['今回は確認できました','']:(w<o.r.length?['ここをもう一度確認','w']:['この講座に戻ると整理しやすい','r']);};
-  const s1=cs.map(c=>{const o=byC[c],s=stat(o);return `<div class="crow"><div class="nm">講座${c}<small>${esc(o.t)}</small></div><div class="dots">${o.r.map(x=>`<span class="dot ${x?'':'x'}"></span>`).join('')}</div><span class="st ${s[1]}">${s[0]}</span></div>`;}).join('');
-  // ② 戻るとよい講座
-  const weak=cs.filter(c=>byC[c].backs.length);
-  const s2=weak.length?weak.map(c=>{const o=byC[c];const uniq=[...new Set(o.backs.map(b=>b.b))];
-    return `<div class="back"><b>講座${c}　${esc(o.t)}</b><span class="qs">見直す動画：${uniq.map(esc).join('／')}</span><span class="qs">該当：問題${o.backs.map(b=>b.n).join('・')}</span></div>`;}).join('')
-    :'<div class="note">今回、見直しが必要な講座はありませんでした。時間をおいてもう一度受けると、選択肢の順番が変わった状態で確かめられます。</div>';
-  // ③ 各問
-  const s3=QS.map((q,i)=>{
-    const ok=res[i];
-    const rows=q.options.map((o,k)=>{
-      const isAns=q.answer.includes(k),mine=picks[i].includes(k);
-      return `<div class="ro ${isAns?'ans':''}"><div class="h">${L[k]}. ${q.truth[k]?'<span class="t">この文は正しい</span>':'<span class="f">この文は誤り</span>'}　${isAns?'（選ぶ選択肢）':''} <span class="you">${mine?'← あなたが選んだ':''}</span></div>${esc(o)}${(!q.truth[k]&&q.notes[k])?`<div class="why">なぜ違うか：${esc(q.notes[k])}</div>`:''}</div>`;}).join('');
-    return `<details class="rv ${ok?'ok':'ng'}" ${ok?'':'open'}><summary><span class="mk">${ok?'○':'×'}</span><span>問題${i+1}（講座${q.course}）${esc(q.q.length>46?q.q.slice(0,46)+'…':q.q)}</span></summary>
-      <div class="body"><div class="qq">${esc(q.q)}<br><small>${q.kind==='F'?'「誤っているもの」を選ぶ問題':'「正しいもの」を選ぶ問題'}／正解：${q.answer.map(k=>L[k]).join('・')}</small></div>${rows}<div class="goto">戻るならこの講座：${esc(q.back)}</div></div></details>`;}).join('');
   const correct=res.filter(x=>x).length;
+  // 講座ごとに集計
+  const byC={};
+  QS.forEach((q,i)=>{const o=(byC[q.course]=byC[q.course]||{t:q.courseTitle,total:0,wrongIdx:[],backs:[]});o.total++;if(!res[i]){o.wrongIdx.push(i);o.backs.push(q.back);}});
+  const cs=Object.keys(byC).map(Number).sort((a,b)=>a-b);
+  const weakCs=cs.filter(c=>byC[c].wrongIdx.length),okCs=cs.filter(c=>!byC[c].wrongIdx.length);
+  // 章コードをチップで視覚化し「この講座のこの部分」を瞬時に
+  const chipsOf=backs=>{const seen=new Set(),out=[];backs.forEach(bs=>{const re=/「([^」]+)」/g;let m;while(m=re.exec(bs)){const c=m[1];if(seen.has(c))continue;seen.add(c);const mm=c.match(/^([0-9]+(?:-[0-9]+)*)\.?\s*(.*)$/);out.push(mm?{code:mm[1],title:mm[2]}:{code:'',title:c});}});return out;};
+  // まちがえた1問の解説（低彩度・講座カードに内包）
+  const qDetail=i=>{
+    const q=QS[i];
+    const rows=q.options.map((op,k)=>{
+      const isAns=q.answer.includes(k),mine=picks[i].includes(k);
+      const cls=isAns?'a':(mine?'w':'');
+      let tag=isAns?'<span class="t2">✓ 正解</span>':'';
+      if(mine)tag+=isAns?'<span class="me2">あなたの回答</span>':'<span class="w2">✕ あなたの回答（まちがい）</span>';
+      return `<div class="ro2 ${cls}"><span class="lb2">${L[k]}.</span>${tag}${esc(op)}${(!q.truth[k]&&q.notes[k])?`<div class="why2">→ ${esc(q.notes[k])}</div>`:''}</div>`;}).join('');
+    const short=esc(q.q.length>32?q.q.slice(0,32)+'…':q.q);
+    return `<details class="qd"><summary><span class="qn">問題${i+1}</span><span class="qs2">${short}</span><span class="tog2"></span></summary>
+      <div class="qb"><div class="kd">${q.kind==='F'?'誤っているものを選ぶ問題':'正しいものを選ぶ問題'}　／　<span class="ansk">正解：${q.answer.map(k=>L[k]).join('・')}</span></div><div class="lg2"><span class="t2">✓ 正解</span>＝選ぶべき選択肢　／　<span class="w2">✕ あなたの回答</span>＝あなたが選んで誤ったもの</div>${rows}</div></details>`;
+  };
+  // 見直すとよい講座（唯一の主役）。章チップ＋その講座でまちがえた問題の解説を内包
+  let review;
+  if(weakCs.length){
+    review=weakCs.map(c=>{const o=byC[c];
+      const chips=chipsOf(o.backs).map(ch=>`<span class="chip">${ch.code?`<b>${esc(ch.code)}</b>`:''}${ch.title?`<span>${esc(ch.title)}</span>`:''}</span>`).join('');
+      const qs=o.wrongIdx.map(qDetail).join('');
+      return `<div class="rc">
+        <div class="rc-h"><span class="rc-c">講座${c}</span><span class="rc-t">${esc(o.t)}</span><span class="rc-b">まちがい${o.wrongIdx.length}問</span></div>
+        <div class="rc-l">📺 この講座の、ここを見直す</div>
+        <div class="rc-chips">${chips}</div>
+        <div class="rc-qs"><div class="rc-ql">まちがえた問題（タップで解説）</div>${qs}</div>
+      </div>`;}).join('');
+  }else{
+    review='<div class="allok">今回はすべて確認できました。よく整理できています。<br>時間をおいてもう一度受けると、選択肢の順番が変わった状態で確かめられます。</div>';
+  }
+  const okLine=(weakCs.length&&okCs.length)?`<div class="oktag">✓ 今回すべて正解だった講座：${okCs.map(c=>'講座'+c).join('・')}（この範囲はいまの理解でだいじょうぶそうです）</div>`:'';
   app.innerHTML=`
-  <div class="card"><div class="sec-title">① 今回の回答から見える復習の目安</div><div class="sec-lead">●は正解、○は不正解の問題です。講座ごとに1〜数問からの目安なので、理解度を判定するものではありません。</div>${s1}</div>
-  <div class="card"><div class="sec-title">② 戻るとよい講座</div><div class="sec-lead">間違えた問題があった講座です。講座番号の小さい順に並んでいます。</div>${s2}</div>
-  <div class="card"><div class="sec-title">③ 各問の正誤と解説</div><div class="sec-lead">間違えた問題は開いた状態で表示しています。タップで開閉できます。</div>${s3}</div>
-  <div class="card"><div class="sec-title">記述問題の見直し</div><div class="sec-lead">このテストの記述問題は、自分で見直す形です。次の観点で、書いた文章を見直してみてください。</div>
+  <div class="card">
+    <div class="sec-title">まずは、ここを見直しましょう</div>
+    <div class="sec-lead">大事なのは点数ではなく「どこに戻るか」。まちがえた問題があった講座ごとに、見直すとよい章と、その問題の解説をまとめました。</div>
+    ${review}
+    ${okLine}
+  </div>
+  <div class="card">
+    <div class="sec-title">記述問題の見直し</div>
+    <div class="sec-lead">記述問題は、自分で見直す形です。次の観点で、書いた文章を読み返してみてください。</div>
     ${essayText.trim()?`<div class="mine">${esc(essayText)}</div>`:''}
     <ul class="pt">${ESSAY.points.map(p=>`<li>${esc(p)}</li>`).join('')}</ul>
-    <div class="goto" style="font-size:13px;color:var(--orange)">戻るならこの講座：${esc(ESSAY.back)}</div></div>
-  <div class="card"><div class="sec-title">④ 正解数</div>
-    <div class="final"><div class="n">${correct}<small> / ${QS.length}問</small></div></div>
-    <div class="note">${esc(NOTE)}</div>
-    <button class="btn" onclick="renderIntro()">もう一度受ける（選択肢の順番が変わります）</button>
-    <p style="text-align:center;margin-top:16px;font-size:14px"><a href="../b-map/" style="color:var(--blue-dark);font-weight:600">🗺 試験準備の地図にもどる</a></p></div>`;
+    <div class="goto">戻るならこの講座：${esc(ESSAY.back)}</div>
+  </div>
+  <div class="card" style="text-align:center">
+    <div class="scoreline">今回の答え合わせ：<b>${correct}</b> / ${QS.length}問</div>
+    <div class="note" style="text-align:left;margin-top:10px">${esc(NOTE)}</div>
+    <button class="btn" onclick="renderIntro()" style="margin-top:4px">もう一度受ける（選択肢の順番が変わります）</button>
+    <p style="margin-top:14px;font-size:14px"><a href="../b-map/" style="color:var(--blue-dark);font-weight:600">🗺 試験準備の地図にもどる</a></p>
+  </div>`;
   window.scrollTo(0,0);
 }
 </script>
