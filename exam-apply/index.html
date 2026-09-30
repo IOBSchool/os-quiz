@@ -38,6 +38,8 @@
   .field .hint{font-size:12px;color:var(--brown-mid);font-weight:400;margin-top:4px;}
   .field input,.field select{width:100%;font-size:15px;font-family:inherit;color:var(--brown);padding:12px 14px;border:1px solid var(--tan-line);border-radius:8px;background:#fffdf9;}
   .field input:focus,.field select:focus{outline:2px solid var(--blue);outline-offset:1px;}
+  .fielderr{font-size:12.5px;font-weight:700;color:#b23b3b;margin-top:6px;display:none;}
+  .field input.ng{border-color:#d98b8b;background:#fff7f7;}
   .submit-btn{width:100%;background:var(--orange);color:#fff;border:none;text-decoration:none;font-weight:700;font-size:16px;padding:16px 20px;border-radius:999px;box-shadow:0 8px 22px rgba(232,116,60,.32);cursor:pointer;transition:transform .15s,background .15s,opacity .15s;}
   .submit-btn:hover{background:var(--orange-dark);transform:translateY(-2px);}
   .submit-btn:disabled{opacity:.55;cursor:default;transform:none;}
@@ -86,9 +88,13 @@
     <h2>お申込みフォーム</h2>
     <form id="applyForm">
       <div class="field">
-        <label for="fName">お名前</label>
-        <input type="text" id="fName" required autocomplete="name" placeholder="例：Taro Sato">
-        <div class="hint">資格証明書に使用しますので、<strong>ローマ字（パスポート表記）</strong>でご記入ください。</div>
+        <label for="fName">お名前（ローマ字）</label>
+        <input type="text" id="fName" required autocomplete="name" autocapitalize="words" spellcheck="false"
+               pattern=" *[A-Za-z][A-Za-z '\-]* *"
+               placeholder="例：Natsuko Lempke"
+               aria-describedby="nameHint nameErr">
+        <div class="hint" id="nameHint">合格された方の資格証明書（PDF）は、ここにご入力いただいたお名前をそのまま印字して発行します。<strong>パスポートと同じローマ字表記</strong>で、姓と名の間に半角スペースを入れてご記入ください。<br>入力例：<strong>Natsuko Lempke</strong>（漢字・ひらがな・カタカナではご入力いただけません）</div>
+        <div class="fielderr" id="nameErr">お名前はローマ字（半角アルファベット）でご入力ください。例：Natsuko Lempke</div>
       </div>
       <div class="field">
         <label for="fDept">部署・所属</label>
@@ -152,11 +158,76 @@
     document.getElementById('testbar').style.display = 'block';
   }
 
+  /* ▼ ローマ字氏名チェック（2026-09-24追加）
+     合格者の資格証明書PDFは入力されたローマ字をそのまま印字するため、
+     アルファベット以外が混じった申込を受け付けない。半角スペース・ハイフン・
+     アポストロフィのみ同伴を許可する。
+     pattern属性だけに頼らない理由：iOSのSafariなど、pattern不一致のときに
+     ブラウザ標準の吹き出しを出さず「ボタンを押しても何も起きない」挙動になる
+     環境があるため、invalidイベントを拾って欄の下に日本語のエラーを必ず出す。 */
+  var ROMAJI_RE = /^[A-Za-z][A-Za-z '\-]*$/;
+  var NAME_NG_MSG = 'お名前はローマ字（半角アルファベット）でご入力ください。例：Natsuko Lempke';
+  var nameEl = document.getElementById('fName');
+  var nameErrEl = document.getElementById('nameErr');
+
+  function isRomaji(v){ return ROMAJI_RE.test(v); }
+
+  // 全角で打たれたアルファベット・スペースは半角に直してから判定する
+  // （「Ｔａｒｏ　Ｓａｔｏ」を弾くのではなく「Taro Sato」として通す。漢字・かなは対象外＝弾く）
+  function normalizeRomaji(v){
+    return v
+      .replace(/[\uFF21-\uFF3A\uFF41-\uFF5A]/g, function(c){ return String.fromCharCode(c.charCodeAt(0) - 0xFEE0); })
+      .replace(/[\u3000\u00A0]/g, ' ')
+      .replace(/[\u2010-\u2015\uFF0D]/g, '-')
+      .replace(/[\u2018\u2019\uFF07]/g, "'")
+      .replace(/ +/g, ' ')
+      .trim();
+  }
+
+  function setNameError(show, msg){
+    nameErrEl.textContent = msg || NAME_NG_MSG;
+    nameErrEl.style.display = show ? 'block' : 'none';
+    if(show){ nameEl.classList.add('ng'); } else { nameEl.classList.remove('ng'); }
+  }
+
+  // 標準の吹き出し文言も日本語に差し替える（出る環境では出る・出ない環境は上のエラー表示で担保）
+  function refreshNameValidity(){
+    var v = nameEl.value.trim();
+    if(v !== '' && !isRomaji(v)){
+      nameEl.setCustomValidity(NAME_NG_MSG);
+      return false;
+    }
+    nameEl.setCustomValidity('');   // 空欄のときはrequiredの標準メッセージに任せる
+    return v !== '';
+  }
+
+  nameEl.addEventListener('input', function(){
+    refreshNameValidity();
+    if(nameEl.value.trim() === '' || isRomaji(nameEl.value.trim())) setNameError(false);
+  });
+  nameEl.addEventListener('blur', function(){
+    nameEl.value = normalizeRomaji(nameEl.value);   // 全角→半角・前後スペース落とし
+    if(!refreshNameValidity() && nameEl.value !== '') setNameError(true);
+  });
+  nameEl.addEventListener('invalid', function(){
+    if(nameEl.value.trim() !== '') setNameError(true);
+  });
+
   document.getElementById('applyForm').addEventListener('submit', function(e){
     e.preventDefault();
     var btn = document.getElementById('submitBtn');
     var err = document.getElementById('errMsg');
     err.style.display = 'none';
+    nameEl.value = normalizeRomaji(nameEl.value);
+    if(!isRomaji(nameEl.value)){
+      refreshNameValidity();
+      setNameError(true);
+      nameEl.focus();
+      nameEl.scrollIntoView({behavior:'smooth', block:'center'});
+      return;   // 送信しない
+    }
+    setNameError(false);
+
     btn.disabled = true;
     btn.textContent = '送信中…';
 
@@ -206,7 +277,14 @@
       } else {
         btn.disabled = false;
         btn.textContent = '送信して申込む →';
-        err.style.display = 'block';
+        if(res && res.error === 'name_not_romaji'){
+          // サーバ側（GAS）でも同じ判定をしている。念のためこちらでも案内を出す
+          setNameError(true, res.message || NAME_NG_MSG);
+          nameEl.focus();
+          nameEl.scrollIntoView({behavior:'smooth', block:'center'});
+        } else {
+          err.style.display = 'block';
+        }
       }
     };
 
